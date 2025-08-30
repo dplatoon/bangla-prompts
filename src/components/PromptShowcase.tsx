@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
 import { mockPrompts, type PromptData } from "@/data/mockPrompts";
-import { ArrowRight, Filter, TrendingUp } from "lucide-react";
+import { ArrowRight, Filter, TrendingUp, Search } from "lucide-react";
 
 interface PromptShowcaseProps {
   language: 'bn' | 'en';
@@ -12,13 +14,15 @@ interface PromptShowcaseProps {
 export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
   const [selectedPrompt, setSelectedPrompt] = useState<PromptData | null>(null);
   const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [sortBy, setSortBy] = useState('popular');
 
   const handleTryPrompt = (promptData: PromptData) => {
     setSelectedPrompt(promptData);
     setIsPlaygroundOpen(true);
   };
   
-  const [selectedCategory, setSelectedCategory] = useState('all');
 
   const text = {
     bn: {
@@ -26,35 +30,85 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       subtitle: "কমিউনিটির পছন্দের প্রম্পট টেমপ্লেটগুলি দেখুন",
       categories: {
         all: "সব",
-        content: "কন্টেন্ট",
-        marketing: "মার্কেটিং", 
-        code: "কোড",
-        image: "ইমেজ"
+        "Content Writing": "কন্টেন্ট রাইটিং",
+        "Social Media": "সোশ্যাল মিডিয়া",
+        "E-commerce": "ই-কমার্স",
+        "Email Marketing": "ইমেইল মার্কেটিং",
+        "Creative Writing": "সৃজনশীল লেখা",
+        "Technical Writing": "প্রযুক্তিগত লেখা"
       },
+      sortOptions: {
+        popular: "জনপ্রিয়তা",
+        rating: "রেটিং",
+        newest: "সর্বশেষ",
+        price: "মূল্য"
+      },
+      searchPlaceholder: "প্রম্পট খুঁজুন...",
       viewAll: "সব প্রম্পট দেখুন",
-      trending: "ট্রেন্ডিং"
+      trending: "ট্রেন্ডিং",
+      sortBy: "সাজান"
     },
     en: {
       title: "Popular Prompts",
       subtitle: "Discover community favorite prompt templates",
       categories: {
         all: "All",
-        content: "Content",
-        marketing: "Marketing",
-        code: "Code", 
-        image: "Image"
+        "Content Writing": "Content Writing",
+        "Social Media": "Social Media",
+        "E-commerce": "E-commerce",
+        "Email Marketing": "Email Marketing",
+        "Creative Writing": "Creative Writing",
+        "Technical Writing": "Technical Writing"
       },
+      sortOptions: {
+        popular: "Popular",
+        rating: "Rating",
+        newest: "Newest",
+        price: "Price"
+      },
+      searchPlaceholder: "Search prompts...",
       viewAll: "View All Prompts",
-      trending: "Trending"
+      trending: "Trending",
+      sortBy: "Sort by"
     }
   };
 
   const currentText = text[language];
 
-  // Use mock data
-  const prompts = mockPrompts;
+  // Filter and sort prompts
+  const filteredAndSortedPrompts = mockPrompts
+    .filter(prompt => {
+      // Search filter
+      const searchLower = searchQuery.toLowerCase();
+      const matchesSearch = !searchQuery || 
+        prompt.title.toLowerCase().includes(searchLower) ||
+        (prompt.titleBn && prompt.titleBn.toLowerCase().includes(searchLower)) ||
+        prompt.description.toLowerCase().includes(searchLower) ||
+        (prompt.descriptionBn && prompt.descriptionBn.toLowerCase().includes(searchLower)) ||
+        prompt.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
+        (prompt.tagsBn && prompt.tagsBn.some(tag => tag.toLowerCase().includes(searchLower)));
+
+      // Category filter
+      const matchesCategory = selectedCategory === 'all' || prompt.category === selectedCategory;
+      
+      return matchesSearch && matchesCategory;
+    })
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'rating':
+          return b.rating - a.rating;
+        case 'newest':
+          return parseInt(b.id) - parseInt(a.id); // Assuming higher ID = newer
+        case 'price':
+          return a.price - b.price;
+        case 'popular':
+        default:
+          return b.usageCount - a.usageCount;
+      }
+    });
 
   const categories = Object.entries(currentText.categories);
+  const sortOptions = Object.entries(currentText.sortOptions);
 
   return (
     <section className="py-20 bg-muted/20">
@@ -76,33 +130,90 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
           </p>
         </div>
 
-        {/* Category Filter */}
-        <div className="flex justify-center mb-12">
-          <div className="inline-flex bg-card rounded-lg p-1 border border-border">
-            {categories.map(([key, label]) => (
-              <Button
-                key={key}
-                variant={selectedCategory === key ? 'default' : 'ghost'}
-                size="sm"
-                onClick={() => setSelectedCategory(key)}
-                className={`${language === 'bn' ? 'font-bengali' : ''} transition-all`}
-              >
-                {label}
-              </Button>
-            ))}
+        {/* Search and Filters */}
+        <div className="space-y-6 mb-12">
+          {/* Search Bar */}
+          <div className="max-w-2xl mx-auto">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
+              <Input
+                placeholder={currentText.searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={`pl-10 ${language === 'bn' ? 'font-bengali' : ''}`}
+              />
+            </div>
           </div>
+
+          {/* Category Filter and Sort */}
+          <div className="flex flex-col lg:flex-row justify-center items-center gap-4">
+            {/* Category Pills */}
+            <div className="flex flex-wrap justify-center gap-2">
+              {categories.map(([key, label]) => (
+                <Button
+                  key={key}
+                  variant={selectedCategory === key ? 'default' : 'outline'}
+                  size="sm"
+                  onClick={() => setSelectedCategory(key)}
+                  className={`${language === 'bn' ? 'font-bengali' : ''} transition-all`}
+                >
+                  {label}
+                </Button>
+              ))}
+            </div>
+
+            {/* Sort Dropdown */}
+            <div className="flex items-center space-x-2">
+              <span className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {currentText.sortBy}:
+              </span>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {sortOptions.map(([key, label]) => (
+                    <SelectItem key={key} value={key} className={language === 'bn' ? 'font-bengali' : ''}>
+                      {label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+        </div>
+
+        {/* Results Info */}
+        <div className="text-center mb-6">
+          <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+            {language === 'bn' 
+              ? `${filteredAndSortedPrompts.length}টি প্রম্পট পাওয়া গেছে`
+              : `${filteredAndSortedPrompts.length} prompts found`
+            }
+          </p>
         </div>
 
         {/* Prompt Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {prompts.map((prompt) => (
-            <PromptCard
-              key={prompt.id}
-              promptData={prompt}
-              language={language}
-              onTryClick={handleTryPrompt}
-            />
-          ))}
+          {filteredAndSortedPrompts.length > 0 ? (
+            filteredAndSortedPrompts.map((prompt) => (
+              <PromptCard
+                key={prompt.id}
+                promptData={prompt}
+                language={language}
+                onTryClick={handleTryPrompt}
+              />
+            ))
+          ) : (
+            <div className="col-span-full text-center py-12">
+              <p className={`text-muted-foreground text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {language === 'bn' 
+                  ? 'কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।'
+                  : 'No prompts found. Try different search terms.'
+                }
+              </p>
+            </div>
+          )}
         </div>
       </div>
 

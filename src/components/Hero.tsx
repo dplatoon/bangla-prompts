@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Sparkles, Copy, Play } from "lucide-react";
+import { romanToBangla } from "@/utils/transliteration";
+import { useToast } from "@/hooks/use-toast";
 
 interface HeroProps {
   language: 'bn' | 'en';
@@ -9,6 +11,13 @@ interface HeroProps {
 
 export const Hero = ({ language }: HeroProps) => {
   const [translitInput, setTranslitInput] = useState("");
+  const [banglaOutput, setBanglaOutput] = useState("");
+  const { toast } = useToast();
+
+  const handleTranslitChange = (value: string) => {
+    setTranslitInput(value);
+    setBanglaOutput(romanToBangla(value));
+  };
 
   const text = {
     bn: {
@@ -114,10 +123,29 @@ export const Hero = ({ language }: HeroProps) => {
                     {language === 'bn' ? 'লাইভ ট্রান্সলিটেরেশন' : 'Live Transliteration'}
                   </h3>
                   <div className="flex space-x-2">
-                    <Button size="sm" variant="ghost">
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={async () => {
+                        if (banglaOutput) {
+                          await navigator.clipboard.writeText(banglaOutput);
+                          toast({
+                            title: language === 'bn' ? "কপি হয়েছে!" : "Copied!",
+                            description: language === 'bn' ? "বাংলা টেক্সট কপি হয়েছে" : "Bangla text copied"
+                          });
+                        }
+                      }}
+                    >
                       <Copy className="w-4 h-4" />
                     </Button>
-                    <Button size="sm" variant="ghost">
+                    <Button 
+                      size="sm" 
+                      variant="ghost"
+                      onClick={() => {
+                        setTranslitInput("ami bangla likhte pari");
+                        setBanglaOutput(romanToBangla("ami bangla likhte pari"));
+                      }}
+                    >
                       <Play className="w-4 h-4" />
                     </Button>
                   </div>
@@ -127,14 +155,13 @@ export const Hero = ({ language }: HeroProps) => {
                   <Input
                     placeholder={language === 'bn' ? 'Roman bangla likhun...' : 'Type in Roman Bangla...'}
                     value={translitInput}
-                    onChange={(e) => setTranslitInput(e.target.value)}
+                    onChange={(e) => handleTranslitChange(e.target.value)}
                     className="border-border/50 focus:border-primary"
                   />
                   
                   <div className="bg-muted/50 rounded-lg p-4 min-h-[60px] border border-border/30">
-                    <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
-                      {translitInput ? 
-                        (language === 'bn' ? 'আপনার বাংলা টেক্সট এখানে দেখাবে...' : 'Your Bangla text will appear here...') : 
+                    <p className={`text-sm font-bengali text-bengali ${banglaOutput ? 'text-foreground' : 'text-muted-foreground'}`}>
+                      {banglaOutput || 
                         (language === 'bn' ? 'Roman Bangla টাইপ করুন এবং বাংলায় দেখুন' : 'Type in Roman Bangla to see Bengali output')
                       }
                     </p>
