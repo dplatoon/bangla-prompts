@@ -1,0 +1,21 @@
+{
+  "name": "bdprompt.com - বাংলা AI প্রম্পট হাব",
+  "short_name": "bdprompt",
+  "description": "বাংলা প্রম্পট টেমপ্লেট — কন্টেন্ট, ইমেজ, কোড, মার্কেটিং। এক ক্লিকে কপি করে প্রয়োগ করুন।",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#0f766e",
+  "background_color": "#ffffff",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    }
+  ],
+  "categories": ["education", "productivity", "utilities"],
+  "lang": "bn",
+  "scope": "/",
+  "prefer_related_applications": false
+}
