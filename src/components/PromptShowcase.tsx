@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { PromptCard } from "@/components/PromptCard";
+import { PromptCard } from "./PromptCard";
+import { PlaygroundModal } from "./PlaygroundModal";
+import { mockPrompts, type PromptData } from "@/data/mockPrompts";
 import { ArrowRight, Filter, TrendingUp } from "lucide-react";
 
 interface PromptShowcaseProps {
@@ -8,6 +10,14 @@ interface PromptShowcaseProps {
 }
 
 export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
+  const [selectedPrompt, setSelectedPrompt] = useState<PromptData | null>(null);
+  const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
+
+  const handleTryPrompt = (promptData: PromptData) => {
+    setSelectedPrompt(promptData);
+    setIsPlaygroundOpen(true);
+  };
+  
   const [selectedCategory, setSelectedCategory] = useState('all');
 
   const text = {
@@ -41,71 +51,10 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
 
   const currentText = text[language];
 
-  // Sample prompt data
-  const samplePrompts = [
-    {
-      id: "1",
-      title: "Blog Post Writer",
-      titleBn: "ব্লগ পোস্ট রাইটার",
-      description: "Create engaging blog posts on any topic with proper structure",
-      descriptionBn: "যেকোনো বিষয়ে আকর্ষণীয় ব্লগ পোস্ট লিখুন সঠিক গঠনের সাথে",
-      category: language === 'bn' ? 'কন্টেন্ট' : 'Content',
-      tags: ["blog", "writing", "SEO"],
-      price: 0,
-      rating: 4.8,
-      usageCount: 1240,
-      author: "Rashid Ahmed"
-    },
-    {
-      id: "2", 
-      title: "Social Media Caption Generator",
-      titleBn: "সোশ্যাল মিডিয়া ক্যাপশন জেনারেটর",
-      description: "Generate catchy captions for Facebook, Instagram and Twitter",
-      descriptionBn: "ফেসবুক, ইনস্টাগ্রাম ও টুইটারের জন্য আকর্ষণীয় ক্যাপশন তৈরি করুন",
-      category: language === 'bn' ? 'মার্কেটিং' : 'Marketing',
-      tags: ["social", "marketing", "engagement"],
-      price: 5,
-      rating: 4.6,
-      usageCount: 890,
-      author: "Fatima Khan"
-    },
-    {
-      id: "3",
-      title: "React Component Builder", 
-      titleBn: "রিয়্যাক্ট কম্পোনেন্ট বিল্ডার",
-      description: "Generate React components with TypeScript and best practices",
-      descriptionBn: "টাইপস্ক্রিপ্ট ও বেস্ট প্র্যাকটিস সহ রিয়্যাক্ট কম্পোনেন্ট তৈরি করুন",
-      category: language === 'bn' ? 'কোড' : 'Code',
-      tags: ["react", "typescript", "frontend"],
-      price: 10,
-      rating: 4.9,
-      usageCount: 567,
-      author: "Shakib Hassan"
-    },
-    {
-      id: "4",
-      title: "DALL-E Image Prompt Creator",
-      titleBn: "DALL-E ইমেজ প্রম্পট ক্রিয়েটর", 
-      description: "Create detailed prompts for AI image generation",
-      descriptionBn: "AI ইমেজ জেনারেশনের জন্য বিস্তারিত প্রম্পট তৈরি করুন",
-      category: language === 'bn' ? 'ইমেজ' : 'Image',
-      tags: ["dall-e", "midjourney", "art"],
-      price: 0,
-      rating: 4.7,
-      usageCount: 2150,
-      author: "Nadia Rahman"
-    }
-  ];
+  // Use mock data
+  const prompts = mockPrompts;
 
   const categories = Object.entries(currentText.categories);
-
-  const handleCopy = (id: string) => {
-    console.log(`Copying prompt ${id}`);
-  };
-
-  const handleTry = (id: string) => {
-    console.log(`Trying prompt ${id}`);
-  };
 
   return (
     <section className="py-20 bg-muted/20">
@@ -145,26 +94,24 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
         </div>
 
         {/* Prompt Grid */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          {samplePrompts.map((prompt) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {prompts.map((prompt) => (
             <PromptCard
               key={prompt.id}
-              {...prompt}
+              promptData={prompt}
               language={language}
-              onCopyClick={handleCopy}
-              onTryClick={handleTry}
+              onTryClick={handleTryPrompt}
             />
           ))}
         </div>
-
-        {/* View All Button */}
-        <div className="text-center">
-          <Button size="lg" variant="outline" className={`group ${language === 'bn' ? 'font-bengali' : ''}`}>
-            {currentText.viewAll}
-            <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Button>
-        </div>
       </div>
+
+      <PlaygroundModal
+        open={isPlaygroundOpen}
+        onOpenChange={setIsPlaygroundOpen}
+        promptData={selectedPrompt || undefined}
+        language={language}
+      />
     </section>
   );
 };
