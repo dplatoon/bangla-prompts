@@ -6,8 +6,9 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Copy, Play, Loader2, Download, Wand2 } from "lucide-react";
+import { Copy, Play, Loader2, Download, Wand2, Sparkles } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
 
 interface PlaygroundModalProps {
   open: boolean;
@@ -33,7 +34,9 @@ export const PlaygroundModal = ({
   const [variableValues, setVariableValues] = useState<Record<string, string>>({});
   const [output, setOutput] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
-  const [model, setModel] = useState("gpt-3.5-turbo");
+  const [isSuggesting, setIsSuggesting] = useState(false);
+  const [suggestions, setSuggestions] = useState("");
+  const [model, setModel] = useState("google/gemini-2.5-flash");
   const [temperature, setTemperature] = useState([0.7]);
   const [maxTokens, setMaxTokens] = useState([500]);
   const { toast } = useToast();
@@ -56,7 +59,10 @@ export const PlaygroundModal = ({
       outputPlaceholder: 'আউটপুট এখানে দেখাবে...',
       copied: 'কপি করা হয়েছে!',
       downloaded: 'ডাউনলোড করা হয়েছে!',
-      variablePlaceholder: 'এর জন্য মান লিখুন'
+      variablePlaceholder: 'এর জন্য মান লিখুন',
+      getSuggestions: 'AI পরামর্শ পান',
+      suggestions: 'AI পরামর্শ',
+      gettingSuggestions: 'পরামর্শ তৈরি করা হচ্ছে...'
     },
     en: {
       title: 'AI Playground',
@@ -75,7 +81,10 @@ export const PlaygroundModal = ({
       outputPlaceholder: 'Output will appear here...',
       copied: 'Copied!',
       downloaded: 'Downloaded!',
-      variablePlaceholder: 'Enter value for'
+      variablePlaceholder: 'Enter value for',
+      getSuggestions: 'Get AI Suggestions',
+      suggestions: 'AI Suggestions',
+      gettingSuggestions: 'Getting suggestions...'
     }
   };
 
@@ -95,18 +104,51 @@ export const PlaygroundModal = ({
     return text.replace(new RegExp(`\\{${variable}\\}`, 'g'), value);
   }, promptText);
 
+  const handleGetSuggestions = async () => {
+    if (!promptText.trim()) return;
+    
+    setIsSuggesting(true);
+    setSuggestions("");
+    
+    try {
+      const { data, error } = await supabase.functions.invoke('suggest-prompt', {
+        body: { prompt: promptText, language }
+      });
+      
+      if (error) throw error;
+      setSuggestions(data.suggestions);
+    } catch (error) {
+      console.error('Suggestions error:', error);
+      toast({
+        title: language === 'bn' ? 'ত্রুটি' : 'Error',
+        description: language === 'bn' ? 'পরামর্শ পাওয়া যায়নি। আবার চেষ্টা করুন।' : 'Failed to get suggestions. Please try again.',
+        variant: "destructive",
+      });
+    } finally {
+      setIsSuggesting(false);
+    }
+  };
+
   const handleRun = async () => {
     if (!processedPrompt.trim()) return;
     
     setIsGenerating(true);
+    setOutput("");
     
-    // Simulate AI generation (replace with actual API call)
     try {
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      const mockOutput = `Generated response for: "${processedPrompt.substring(0, 50)}..."\n\nThis is a simulated AI response. In a real implementation, this would connect to OpenAI API or other AI services.\n\nModel: ${model}\nTemperature: ${temperature[0]}\nMax Tokens: ${maxTokens[0]}`;
-      setOutput(mockOutput);
+      const { data, error } = await supabase.functions.invoke('generate-prompt', {
+        body: { 
+          prompt: processedPrompt,
+          temperature: temperature[0],
+          maxTokens: maxTokens[0]
+        }
+      });
+      
+      if (error) throw error;
+      setOutput(data.output);
     } catch (error) {
-      setOutput("Error generating response. Please try again.");
+      console.error('Generation error:', error);
+      setOutput(language === 'bn' ? 'প্রতিক্রিয়া তৈরি করতে ত্রুটি হয়েছে। আবার চেষ্টা করুন।' : 'Error generating response. Please try again.');
     } finally {
       setIsGenerating(false);
     }
@@ -159,13 +201,42 @@ export const PlaygroundModal = ({
                   {currentText.promptTemplate}
                 </CardTitle>
               </CardHeader>
-              <CardContent className="flex-1 flex flex-col">
+              <CardContent className="flex-1 flex flex-col space-y-3">
                 <Textarea
                   value={promptText}
                   onChange={(e) => setPromptText(e.target.value)}
                   placeholder={currentText.placeholder}
                   className={`flex-1 min-h-32 resize-none ${language === 'bn' ? 'font-bengali' : ''}`}
                 />
+                <Button
+                  onClick={handleGetSuggestions}
+                  disabled={isSuggesting || !promptText.trim()}
+                  variant="outline"
+                  size="sm"
+                  className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {isSuggesting ? (
+                    <>
+                      <Loader2 className="w-3 h-3 mr-2 animate-spin" />
+                      {currentText.gettingSuggestions}
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-3 h-3 mr-2" />
+                      {currentText.getSuggestions}
+                    </>
+                  )}
+                </Button>
+                {suggestions && (
+                  <div className="p-3 bg-primary/5 border border-primary/20 rounded-md">
+                    <p className={`text-xs font-semibold mb-2 text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {currentText.suggestions}
+                    </p>
+                    <p className={`text-xs text-muted-foreground whitespace-pre-wrap ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {suggestions}
+                    </p>
+                  </div>
+                )}
               </CardContent>
             </Card>
 
@@ -215,9 +286,10 @@ export const PlaygroundModal = ({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="gpt-3.5-turbo">GPT-3.5 Turbo</SelectItem>
-                      <SelectItem value="gpt-4">GPT-4</SelectItem>
-                      <SelectItem value="claude-3">Claude 3</SelectItem>
+                      <SelectItem value="google/gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
+                      <SelectItem value="google/gemini-2.5-pro">Gemini 2.5 Pro</SelectItem>
+                      <SelectItem value="openai/gpt-5-mini">GPT-5 Mini</SelectItem>
+                      <SelectItem value="openai/gpt-5">GPT-5</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
