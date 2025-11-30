@@ -5,6 +5,7 @@ import { FeatureGrid } from "@/components/FeatureGrid";
 import { PromptShowcase } from "@/components/PromptShowcase";
 import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
+import { ChatAssistant } from "@/components/ChatAssistant";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -43,6 +44,7 @@ const Index = () => {
         <CTA language={language} />
       </main>
       <Footer language={language} />
+      <ChatAssistant />
     </div>
   );
 };
