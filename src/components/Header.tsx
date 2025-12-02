@@ -1,14 +1,16 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Menu, X, ChevronDown } from "lucide-react";
+import { Search, Menu, X, ChevronDown, User, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useAuth } from "@/hooks/useAuth";
 
 interface HeaderProps {
   language: 'bn' | 'en';
@@ -19,6 +21,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
+  const { user, loading, signOut } = useAuth();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -187,6 +190,38 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               </Button>
             </div>
 
+            {/* Auth Button */}
+            {!loading && (
+              <div className="hidden sm:block">
+                {user ? (
+                  <DropdownMenu>
+                    <DropdownMenuTrigger asChild>
+                      <Button variant="ghost" size="sm">
+                        <User className="w-4 h-4 mr-2" />
+                        {user.email?.split('@')[0]}
+                      </Button>
+                    </DropdownMenuTrigger>
+                    <DropdownMenuContent align="end">
+                      <DropdownMenuItem className="text-muted-foreground text-sm">
+                        {user.email}
+                      </DropdownMenuItem>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem onClick={signOut} className="text-destructive">
+                        <LogOut className="w-4 h-4 mr-2" />
+                        {language === 'bn' ? 'লগআউট' : 'Logout'}
+                      </DropdownMenuItem>
+                    </DropdownMenuContent>
+                  </DropdownMenu>
+                ) : (
+                  <Link to="/auth">
+                    <Button variant="default" size="sm" className={language === 'bn' ? 'font-bengali' : ''}>
+                      {language === 'bn' ? 'লগইন' : 'Login'}
+                    </Button>
+                  </Link>
+                )}
+              </div>
+            )}
+
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
@@ -249,6 +284,31 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
                   {currentText.becomeCreator}
                 </Button>
               </Link>
+              
+              {/* Mobile Auth */}
+              {!loading && (
+                <>
+                  {user ? (
+                    <Button 
+                      variant="destructive" 
+                      className={`w-full justify-start ${language === 'bn' ? 'font-bengali' : ''}`}
+                      onClick={() => {
+                        signOut();
+                        setIsMenuOpen(false);
+                      }}
+                    >
+                      <LogOut className="w-4 h-4 mr-2" />
+                      {language === 'bn' ? 'লগআউট' : 'Logout'}
+                    </Button>
+                  ) : (
+                    <Link to="/auth" onClick={() => setIsMenuOpen(false)}>
+                      <Button variant="default" className={`w-full justify-start ${language === 'bn' ? 'font-bengali' : ''}`}>
+                        {language === 'bn' ? 'লগইন / সাইন আপ' : 'Login / Sign Up'}
+                      </Button>
+                    </Link>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}
