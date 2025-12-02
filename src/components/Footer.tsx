@@ -1,6 +1,7 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Github, Twitter, Facebook, Mail, ExternalLink } from "lucide-react";
+import { Github, Twitter, Facebook, Mail } from "lucide-react";
 
 interface FooterProps {
   language: 'bn' | 'en';
@@ -14,7 +15,7 @@ export const Footer = ({ language }: FooterProps) => {
         product: {
           title: "প্রোডাক্ট",
           links: [
-            { label: "প্রম্পট এক্সপ্লোর করুন", href: "/prompts" },
+            { label: "প্রম্পট এক্সপ্লোর করুন", href: "/explore" },
             { label: "প্লেগ্রাউন্ড", href: "/playground" },
             { label: "প্রম্পট প্যাকস", href: "/packs" },
             { label: "API", href: "/api" }
@@ -23,7 +24,7 @@ export const Footer = ({ language }: FooterProps) => {
         community: {
           title: "কমিউনিটি",
           links: [
-            { label: "ক্রিয়েটর হন", href: "/creators" },
+            { label: "ক্রিয়েটর হন", href: "/become-creator" },
             { label: "গাইডলাইনস", href: "/guidelines" },
             { label: "সাপোর্ট", href: "/support" },
             { label: "ব্লগ", href: "/blog" }
@@ -55,7 +56,7 @@ export const Footer = ({ language }: FooterProps) => {
         product: {
           title: "Product",
           links: [
-            { label: "Explore Prompts", href: "/prompts" },
+            { label: "Explore Prompts", href: "/explore" },
             { label: "Playground", href: "/playground" },
             { label: "Prompt Packs", href: "/packs" },
             { label: "API", href: "/api" }
@@ -64,7 +65,7 @@ export const Footer = ({ language }: FooterProps) => {
         community: {
           title: "Community",
           links: [
-            { label: "Become Creator", href: "/creators" },
+            { label: "Become Creator", href: "/become-creator" },
             { label: "Guidelines", href: "/guidelines" },
             { label: "Support", href: "/support" },
             { label: "Blog", href: "/blog" }
@@ -124,14 +125,14 @@ export const Footer = ({ language }: FooterProps) => {
           <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Brand */}
             <div className="lg:col-span-2 space-y-4">
-              <div className="flex items-center space-x-3">
+              <Link to="/" className="flex items-center space-x-3">
                 <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
                   <span className="text-primary-foreground font-bold text-xl">B</span>
                 </div>
                 <div>
                   <h3 className="font-bold text-lg text-primary">bdprompt.com</h3>
                 </div>
-              </div>
+              </Link>
               <p className={`text-muted-foreground max-w-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
                 {currentText.tagline}
               </p>
@@ -142,17 +143,25 @@ export const Footer = ({ language }: FooterProps) => {
                   {currentText.social}
                 </h4>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0">
-                    <Twitter className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                    <a href="https://twitter.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+                      <Twitter className="w-4 h-4" />
+                    </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0">
-                    <Facebook className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                    <a href="https://facebook.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+                      <Facebook className="w-4 h-4" />
+                    </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0">
-                    <Github className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                    <a href="https://github.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+                      <Github className="w-4 h-4" />
+                    </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0">
-                    <Mail className="w-4 h-4" />
+                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                    <a href="mailto:hello@bdprompt.com" aria-label="Email">
+                      <Mail className="w-4 h-4" />
+                    </a>
                   </Button>
                 </div>
               </div>
@@ -167,16 +176,12 @@ export const Footer = ({ language }: FooterProps) => {
                 <ul className="space-y-2">
                   {section.links.map((link, index) => (
                     <li key={index}>
-                      <Button 
-                        variant="link" 
-                        className={`h-auto p-0 text-muted-foreground hover:text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}
-                        asChild
+                      <Link 
+                        to={link.href}
+                        className={`text-sm text-muted-foreground hover:text-foreground transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
                       >
-                        <a href={link.href} className="flex items-center group">
-                          {link.label}
-                          <ExternalLink className="w-3 h-3 ml-1 opacity-0 group-hover:opacity-100 transition-opacity" />
-                        </a>
-                      </Button>
+                        {link.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
