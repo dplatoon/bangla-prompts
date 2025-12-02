@@ -5,6 +5,21 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Index from "./pages/Index";
 import PromptDetail from "./pages/PromptDetail";
+import Explore from "./pages/Explore";
+import Playground from "./pages/Playground";
+import PromptPacks from "./pages/PromptPacks";
+import API from "./pages/API";
+import Community from "./pages/Community";
+import BecomeCreator from "./pages/BecomeCreator";
+import Guidelines from "./pages/Guidelines";
+import Support from "./pages/Support";
+import Blog from "./pages/Blog";
+import Legal from "./pages/Legal";
+import Privacy from "./pages/Privacy";
+import Terms from "./pages/Terms";
+import Cookies from "./pages/Cookies";
+import DMCA from "./pages/DMCA";
+import Product from "./pages/Product";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -18,7 +33,21 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/prompt/:id" element={<PromptDetail />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/playground" element={<Playground />} />
+          <Route path="/packs" element={<PromptPacks />} />
+          <Route path="/api" element={<API />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/become-creator" element={<BecomeCreator />} />
+          <Route path="/guidelines" element={<Guidelines />} />
+          <Route path="/support" element={<Support />} />
+          <Route path="/blog" element={<Blog />} />
+          <Route path="/legal" element={<Legal />} />
+          <Route path="/privacy" element={<Privacy />} />
+          <Route path="/terms" element={<Terms />} />
+          <Route path="/cookies" element={<Cookies />} />
+          <Route path="/dmca" element={<DMCA />} />
+          <Route path="/product" element={<Product />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
