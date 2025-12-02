@@ -14,6 +14,8 @@ export const Hero = ({ language }: HeroProps) => {
   const [banglaOutput, setBanglaOutput] = useState("");
   const { toast } = useToast();
 
+  // Semantic HTML structure for SEO
+
   const handleTranslitChange = (value: string) => {
     setTranslitInput(value);
     setBanglaOutput(romanToBangla(value));
@@ -57,27 +59,39 @@ export const Hero = ({ language }: HeroProps) => {
   const currentText = text[language];
 
   return (
-    <section className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32">
+    <section 
+      className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32"
+      aria-labelledby="hero-heading"
+      itemScope 
+      itemType="https://schema.org/WebPageElement"
+    >
       {/* Background Pattern */}
-      <div className="absolute inset-0 bg-grid-pattern opacity-5"></div>
+      <div className="absolute inset-0 bg-grid-pattern opacity-5" aria-hidden="true"></div>
       
       <div className="container relative mx-auto px-4">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           {/* Left Content */}
-          <div className="space-y-8">
+          <header className="space-y-8">
             <div className="space-y-4">
-              <div className="inline-flex items-center space-x-2 bg-accent-light px-4 py-2 rounded-full">
-                <Sparkles className="w-4 h-4 text-accent" />
+              <div className="inline-flex items-center space-x-2 bg-accent-light px-4 py-2 rounded-full" role="status">
+                <Sparkles className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className={`text-sm font-medium text-accent-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {language === 'bn' ? 'নতুন প্রম্পট যোগ হচ্ছে প্রতিদিন' : 'New prompts added daily'}
                 </span>
               </div>
               
-              <h1 className={`text-4xl lg:text-6xl font-bold text-primary-foreground leading-tight ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              <h1 
+                id="hero-heading"
+                className={`text-4xl lg:text-6xl font-bold text-primary-foreground leading-tight ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                itemProp="headline"
+              >
                 {currentText.headline}
               </h1>
               
-              <p className={`text-xl text-primary-foreground/80 max-w-2xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              <p 
+                className={`text-xl text-primary-foreground/80 max-w-2xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                itemProp="description"
+              >
                 {currentText.subhead}
               </p>
             </div>
@@ -94,7 +108,7 @@ export const Hero = ({ language }: HeroProps) => {
             </div>
 
             {/* Stats */}
-            <div className="grid grid-cols-3 gap-6 pt-8">
+            <aside className="grid grid-cols-3 gap-6 pt-8" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
               {Object.entries(currentText.stats).reduce((acc, [key, value], index) => {
                 if (index % 2 === 0) {
                   const labelKey = currentText.stats[`${key}Label` as keyof typeof currentText.stats];
@@ -111,17 +125,17 @@ export const Hero = ({ language }: HeroProps) => {
                 }
                 return acc;
               }, [] as JSX.Element[])}
-            </div>
-          </div>
+            </aside>
+          </header>
 
           {/* Right Content - Live Demo */}
-          <div className="lg:pl-8">
-            <div className="bg-card/95 backdrop-blur-sm rounded-2xl shadow-elegant p-6 border border-border/20">
+          <aside className="lg:pl-8" aria-label={language === 'bn' ? 'ট্রান্সলিটেরেশন টুল' : 'Transliteration Tool'}>
+            <article className="bg-card/95 backdrop-blur-sm rounded-2xl shadow-elegant p-6 border border-border/20">
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className={`font-semibold text-card-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  <h2 className={`font-semibold text-card-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                     {language === 'bn' ? 'লাইভ ট্রান্সলিটেরেশন' : 'Live Transliteration'}
-                  </h3>
+                  </h2>
                   <div className="flex space-x-2">
                     <Button 
                       size="sm" 
@@ -152,14 +166,25 @@ export const Hero = ({ language }: HeroProps) => {
                 </div>
                 
                 <div className="space-y-3">
+                  <label htmlFor="translit-input" className="sr-only">
+                    {language === 'bn' ? 'Roman Bangla ইনপুট' : 'Roman Bangla Input'}
+                  </label>
                   <Input
+                    id="translit-input"
                     placeholder={language === 'bn' ? 'Roman bangla likhun...' : 'Type in Roman Bangla...'}
                     value={translitInput}
                     onChange={(e) => handleTranslitChange(e.target.value)}
                     className="border-border/50 focus:border-primary"
+                    aria-describedby="translit-output"
                   />
                   
-                  <div className="bg-muted/50 rounded-lg p-4 min-h-[60px] border border-border/30">
+                  <div 
+                    id="translit-output"
+                    className="bg-muted/50 rounded-lg p-4 min-h-[60px] border border-border/30"
+                    role="region"
+                    aria-live="polite"
+                    aria-label={language === 'bn' ? 'বাংলা আউটপুট' : 'Bengali Output'}
+                  >
                     <p className={`text-sm font-bengali text-bengali ${banglaOutput ? 'text-foreground' : 'text-muted-foreground'}`}>
                       {banglaOutput || 
                         (language === 'bn' ? 'Roman Bangla টাইপ করুন এবং বাংলায় দেখুন' : 'Type in Roman Bangla to see Bengali output')
@@ -172,8 +197,8 @@ export const Hero = ({ language }: HeroProps) => {
                   </Button>
                 </div>
               </div>
-            </div>
-          </div>
+            </article>
+          </aside>
         </div>
       </div>
     </section>
