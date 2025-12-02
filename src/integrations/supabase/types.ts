@@ -14,7 +14,160 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      categories: {
+        Row: {
+          created_at: string
+          description_bn: string | null
+          description_en: string | null
+          icon: string | null
+          id: string
+          name_bn: string
+          name_en: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description_bn?: string | null
+          description_en?: string | null
+          icon?: string | null
+          id?: string
+          name_bn: string
+          name_en: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description_bn?: string | null
+          description_en?: string | null
+          icon?: string | null
+          id?: string
+          name_bn?: string
+          name_en?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      prompts: {
+        Row: {
+          author_avatar: string | null
+          author_name: string | null
+          category_id: string | null
+          copy_count: number | null
+          created_at: string
+          description_bn: string | null
+          description_en: string | null
+          example_input: string | null
+          example_output: string | null
+          id: string
+          is_featured: boolean | null
+          is_free: boolean | null
+          is_published: boolean | null
+          price: number | null
+          prompt_template: string
+          rating: number | null
+          rating_count: number | null
+          slug: string
+          tags: string[] | null
+          title_bn: string
+          title_en: string
+          updated_at: string
+          use_case_bn: string | null
+          use_case_en: string | null
+          view_count: number | null
+        }
+        Insert: {
+          author_avatar?: string | null
+          author_name?: string | null
+          category_id?: string | null
+          copy_count?: number | null
+          created_at?: string
+          description_bn?: string | null
+          description_en?: string | null
+          example_input?: string | null
+          example_output?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          is_published?: boolean | null
+          price?: number | null
+          prompt_template: string
+          rating?: number | null
+          rating_count?: number | null
+          slug: string
+          tags?: string[] | null
+          title_bn: string
+          title_en: string
+          updated_at?: string
+          use_case_bn?: string | null
+          use_case_en?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          author_avatar?: string | null
+          author_name?: string | null
+          category_id?: string | null
+          copy_count?: number | null
+          created_at?: string
+          description_bn?: string | null
+          description_en?: string | null
+          example_input?: string | null
+          example_output?: string | null
+          id?: string
+          is_featured?: boolean | null
+          is_free?: boolean | null
+          is_published?: boolean | null
+          price?: number | null
+          prompt_template?: string
+          rating?: number | null
+          rating_count?: number | null
+          slug?: string
+          tags?: string[] | null
+          title_bn?: string
+          title_en?: string
+          updated_at?: string
+          use_case_bn?: string | null
+          use_case_en?: string | null
+          view_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      saved_prompts: {
+        Row: {
+          created_at: string
+          id: string
+          prompt_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          prompt_id: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          prompt_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "saved_prompts_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never

@@ -1,0 +1,241 @@
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from './useAuth';
+
+export interface Category {
+  id: string;
+  slug: string;
+  name_bn: string;
+  name_en: string;
+  description_bn: string | null;
+  description_en: string | null;
+  icon: string | null;
+}
+
+export interface Prompt {
+  id: string;
+  slug: string;
+  title_bn: string;
+  title_en: string;
+  description_bn: string | null;
+  description_en: string | null;
+  prompt_template: string;
+  category_id: string | null;
+  tags: string[];
+  use_case_bn: string | null;
+  use_case_en: string | null;
+  example_input: string | null;
+  example_output: string | null;
+  author_name: string | null;
+  author_avatar: string | null;
+  price: number;
+  is_free: boolean;
+  rating: number;
+  rating_count: number;
+  copy_count: number;
+  view_count: number;
+  is_featured: boolean;
+  created_at: string;
+  category?: Category;
+}
+
+export interface SavedPrompt {
+  id: string;
+  user_id: string;
+  prompt_id: string;
+  created_at: string;
+  prompt?: Prompt;
+}
+
+// Fetch all categories
+export const useCategories = () => {
+  return useQuery({
+    queryKey: ['categories'],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('*')
+        .order('name_en');
+      
+      if (error) throw error;
+      return data as Category[];
+    },
+  });
+};
+
+// Fetch all prompts with optional filters
+export const usePrompts = (options?: {
+  categorySlug?: string;
+  search?: string;
+  isFeatured?: boolean;
+  limit?: number;
+}) => {
+  return useQuery({
+    queryKey: ['prompts', options],
+    queryFn: async () => {
+      let query = supabase
+        .from('prompts')
+        .select(`
+          *,
+          category:categories(*)
+        `)
+        .eq('is_published', true);
+
+      if (options?.categorySlug) {
+        const { data: category } = await supabase
+          .from('categories')
+          .select('id')
+          .eq('slug', options.categorySlug)
+          .single();
+        
+        if (category) {
+          query = query.eq('category_id', category.id);
+        }
+      }
+
+      if (options?.search) {
+        query = query.or(`title_bn.ilike.%${options.search}%,title_en.ilike.%${options.search}%,description_bn.ilike.%${options.search}%,description_en.ilike.%${options.search}%`);
+      }
+
+      if (options?.isFeatured) {
+        query = query.eq('is_featured', true);
+      }
+
+      if (options?.limit) {
+        query = query.limit(options.limit);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data as Prompt[];
+    },
+  });
+};
+
+// Fetch single prompt by slug
+export const usePrompt = (slug: string) => {
+  return useQuery({
+    queryKey: ['prompt', slug],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('prompts')
+        .select(`
+          *,
+          category:categories(*)
+        `)
+        .eq('slug', slug)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return data as Prompt | null;
+    },
+    enabled: !!slug,
+  });
+};
+
+// Fetch user's saved prompts
+export const useSavedPrompts = () => {
+  const { user } = useAuth();
+  
+  return useQuery({
+    queryKey: ['savedPrompts', user?.id],
+    queryFn: async () => {
+      if (!user) return [];
+      
+      const { data, error } = await supabase
+        .from('saved_prompts')
+        .select(`
+          *,
+          prompt:prompts(
+            *,
+            category:categories(*)
+          )
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false });
+      
+      if (error) throw error;
+      return data as SavedPrompt[];
+    },
+    enabled: !!user,
+  });
+};
+
+// Check if prompt is saved
+export const useIsPromptSaved = (promptId: string) => {
+  const { user } = useAuth();
+  
+  return useQuery({
+    queryKey: ['isPromptSaved', promptId, user?.id],
+    queryFn: async () => {
+      if (!user) return false;
+      
+      const { data, error } = await supabase
+        .from('saved_prompts')
+        .select('id')
+        .eq('user_id', user.id)
+        .eq('prompt_id', promptId)
+        .maybeSingle();
+      
+      if (error) throw error;
+      return !!data;
+    },
+    enabled: !!user && !!promptId,
+  });
+};
+
+// Save/unsave prompt mutations
+export const useSavePrompt = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  
+  return useMutation({
+    mutationFn: async (promptId: string) => {
+      if (!user) throw new Error('Must be logged in');
+      
+      const { error } = await supabase
+        .from('saved_prompts')
+        .insert({ user_id: user.id, prompt_id: promptId });
+      
+      if (error) throw error;
+    },
+    onSuccess: (_, promptId) => {
+      queryClient.invalidateQueries({ queryKey: ['savedPrompts'] });
+      queryClient.invalidateQueries({ queryKey: ['isPromptSaved', promptId] });
+    },
+  });
+};
+
+export const useUnsavePrompt = () => {
+  const queryClient = useQueryClient();
+  const { user } = useAuth();
+  
+  return useMutation({
+    mutationFn: async (promptId: string) => {
+      if (!user) throw new Error('Must be logged in');
+      
+      const { error } = await supabase
+        .from('saved_prompts')
+        .delete()
+        .eq('user_id', user.id)
+        .eq('prompt_id', promptId);
+      
+      if (error) throw error;
+    },
+    onSuccess: (_, promptId) => {
+      queryClient.invalidateQueries({ queryKey: ['savedPrompts'] });
+      queryClient.invalidateQueries({ queryKey: ['isPromptSaved', promptId] });
+    },
+  });
+};
+
+// Increment copy count (no-op for now, can be tracked server-side later)
+export const useIncrementCopyCount = () => {
+  return useMutation({
+    mutationFn: async (_promptId: string) => {
+      // Copy tracking can be implemented server-side
+      return Promise.resolve();
+    },
+  });
+};
