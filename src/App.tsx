@@ -20,6 +20,7 @@ import Terms from "./pages/Terms";
 import Cookies from "./pages/Cookies";
 import DMCA from "./pages/DMCA";
 import Product from "./pages/Product";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -48,6 +49,7 @@ const App = () => (
           <Route path="/cookies" element={<Cookies />} />
           <Route path="/dmca" element={<DMCA />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/auth" element={<Auth />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
