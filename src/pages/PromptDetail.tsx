@@ -6,8 +6,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { PromptCard } from "@/components/PromptCard";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
+import { SEOHead, generatePromptStructuredData } from "@/components/SEOHead";
 import { 
   ArrowLeft, 
   Copy, 
@@ -16,7 +16,8 @@ import {
   Star, 
   User, 
   Eye,
-  MessageSquare
+  MessageSquare,
+  ChevronRight
 } from "lucide-react";
 import { mockPrompts, type PromptData, copyPromptToClipboard, isPromptSaved, savePromptToLocal, removePromptFromLocal } from "@/data/mockPrompts";
 import { useToast } from "@/hooks/use-toast";
@@ -145,6 +146,55 @@ const PromptDetail = () => {
 
   const currentText = text[language];
 
+  // Generate SEO data for the prompt
+  const getSEOData = () => {
+    if (!prompt) return null;
+    
+    const title = language === 'bn' && prompt.titleBn 
+      ? `${prompt.titleBn} | bdprompt.com` 
+      : `${prompt.title} | bdprompt.com`;
+    
+    const description = language === 'bn' && prompt.descriptionBn 
+      ? prompt.descriptionBn 
+      : prompt.description;
+    
+    const keywords = (language === 'bn' && prompt.tagsBn ? prompt.tagsBn : prompt.tags)
+      .concat(['bdprompt', 'AI prompt', 'বাংলা প্রম্পট'])
+      .join(', ');
+    
+    return { title, description, keywords };
+  };
+
+  const seoData = getSEOData();
+  
+  // Generate structured data for the prompt
+  const getStructuredData = () => {
+    if (!prompt) return null;
+    
+    return generatePromptStructuredData({
+      id: prompt.id,
+      title: prompt.title,
+      titleBn: prompt.titleBn,
+      description: language === 'bn' && prompt.descriptionBn ? prompt.descriptionBn : prompt.description,
+      category: prompt.category,
+      author: prompt.author,
+      rating: prompt.rating,
+      ratingCount: prompt.usageCount,
+      price: prompt.price,
+      currency: 'BDT'
+    });
+  };
+
+  // Generate breadcrumbs
+  const getBreadcrumbs = () => {
+    if (!prompt) return [];
+    return [
+      { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
+      { name: language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category, url: `https://bdprompt.com/category/${prompt.category.toLowerCase().replace(' ', '-')}` },
+      { name: language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title, url: `https://bdprompt.com/prompt/${prompt.id}` }
+    ];
+  };
+
   if (!prompt) {
     return (
       <div className="min-h-screen bg-background">
@@ -158,34 +208,81 @@ const PromptDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header language={language} onLanguageChange={handleLanguageChange} />
+    <>
+      {seoData && (
+        <SEOHead 
+          title={seoData.title}
+          description={seoData.description}
+          keywords={seoData.keywords}
+          canonicalUrl={`https://bdprompt.com/prompt/${prompt.id}`}
+          ogType="product"
+          language={language}
+          author={prompt.author}
+          breadcrumbs={getBreadcrumbs()}
+          structuredData={getStructuredData() || undefined}
+        />
+      )}
       
-      <main className="container mx-auto px-4 py-8">
-        {/* Back Button */}
-        <Button
-          variant="ghost"
-          onClick={() => navigate('/')}
-          className={`mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}
-        >
-          <ArrowLeft className="w-4 h-4 mr-2" />
-          {currentText.back}
-        </Button>
+      <div className="min-h-screen bg-background" itemScope itemType="https://schema.org/Product">
+        <Header language={language} onLanguageChange={handleLanguageChange} />
+        
+        <main className="container mx-auto px-4 py-8" role="main">
+          {/* Breadcrumb Navigation */}
+          <nav aria-label="Breadcrumb" className="mb-4">
+            <ol className="flex items-center space-x-2 text-sm text-muted-foreground" itemScope itemType="https://schema.org/BreadcrumbList">
+              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                <Link to="/" className="hover:text-primary transition-colors" itemProp="item">
+                  <span itemProp="name">{language === 'bn' ? 'হোম' : 'Home'}</span>
+                </Link>
+                <meta itemProp="position" content="1" />
+              </li>
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem">
+                <span className={`${language === 'bn' ? 'font-bengali' : ''}`} itemProp="name">
+                  {language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category}
+                </span>
+                <meta itemProp="position" content="2" />
+              </li>
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
+              <li itemProp="itemListElement" itemScope itemType="https://schema.org/ListItem" aria-current="page">
+                <span className={`text-foreground ${language === 'bn' ? 'font-bengali' : ''}`} itemProp="name">
+                  {language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title}
+                </span>
+                <meta itemProp="position" content="3" />
+              </li>
+            </ol>
+          </nav>
 
-        <div className="grid lg:grid-cols-3 gap-8">
-          {/* Main Content */}
-          <div className="lg:col-span-2 space-y-6">
-            {/* Header */}
-            <div className="space-y-4">
-              <div className="flex items-start justify-between gap-4">
-                <div className="space-y-2 flex-1">
-                  <h1 className={`text-3xl lg:text-4xl font-bold text-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
-                    {language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title}
-                  </h1>
-                  <p className={`text-lg text-muted-foreground ${language === 'bn' ? 'font-bengali text-bangali' : ''}`}>
-                    {language === 'bn' && prompt.descriptionBn ? prompt.descriptionBn : prompt.description}
-                  </p>
-                </div>
+          {/* Back Button */}
+          <Button
+            variant="ghost"
+            onClick={() => navigate('/')}
+            className={`mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}
+          >
+            <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
+            {currentText.back}
+          </Button>
+
+          <div className="grid lg:grid-cols-3 gap-8">
+            {/* Main Content */}
+            <article className="lg:col-span-2 space-y-6">
+              {/* Header */}
+              <header className="space-y-4">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="space-y-2 flex-1">
+                    <h1 
+                      className={`text-3xl lg:text-4xl font-bold text-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                      itemProp="name"
+                    >
+                      {language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title}
+                    </h1>
+                    <p 
+                      className={`text-lg text-muted-foreground ${language === 'bn' ? 'font-bengali text-bangali' : ''}`}
+                      itemProp="description"
+                    >
+                      {language === 'bn' && prompt.descriptionBn ? prompt.descriptionBn : prompt.description}
+                    </p>
+                  </div>
                 
                 <div className="flex items-center space-x-2">
                   <Button size="sm" variant="outline" onClick={handleSave}>
@@ -197,26 +294,34 @@ const PromptDetail = () => {
                 </div>
               </div>
 
-              {/* Meta Info */}
+              {/* Meta Info with Schema markup */}
               <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center space-x-1">
-                  <User className="w-4 h-4" />
-                  <span>{language === 'bn' && prompt.authorBn ? prompt.authorBn : prompt.author}</span>
+                <div className="flex items-center space-x-1" itemProp="author" itemScope itemType="https://schema.org/Person">
+                  <User className="w-4 h-4" aria-hidden="true" />
+                  <span itemProp="name">{language === 'bn' && prompt.authorBn ? prompt.authorBn : prompt.author}</span>
+                </div>
+                <div className="flex items-center space-x-1" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                  <Star className="w-4 h-4 fill-current text-yellow-500" aria-hidden="true" />
+                  <span itemProp="ratingValue">{prompt.rating}</span>
+                  <meta itemProp="bestRating" content="5" />
+                  <meta itemProp="ratingCount" content={String(prompt.usageCount)} />
                 </div>
                 <div className="flex items-center space-x-1">
-                  <Star className="w-4 h-4 fill-current text-yellow-500" />
-                  <span>{prompt.rating}</span>
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Eye className="w-4 h-4" />
+                  <Eye className="w-4 h-4" aria-hidden="true" />
                   <span>{prompt.usageCount.toLocaleString()}</span>
                 </div>
-                <Badge variant="secondary">
+                <Badge variant="secondary" itemProp="category">
                   {language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category}
                 </Badge>
-                <Badge variant="outline">
-                  {prompt.price === 0 ? currentText.free : `৳${prompt.price}`}
-                </Badge>
+                <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                  <Badge variant="outline">
+                    <span itemProp="price" content={String(prompt.price)}>
+                      {prompt.price === 0 ? currentText.free : `৳${prompt.price}`}
+                    </span>
+                  </Badge>
+                  <meta itemProp="priceCurrency" content="BDT" />
+                  <link itemProp="availability" href="https://schema.org/InStock" />
+                </div>
               </div>
 
               {/* Tags */}
@@ -227,7 +332,7 @@ const PromptDetail = () => {
                   </Badge>
                 ))}
               </div>
-            </div>
+              </header>
 
             {/* Action Buttons */}
             <div className="flex flex-wrap gap-3">
@@ -303,9 +408,9 @@ const PromptDetail = () => {
                 </CardContent>
               </Card>
             )}
-          </div>
+            </article>
 
-          {/* Sidebar */}
+            {/* Sidebar */}
           <div className="space-y-6">
             {/* Quick Actions */}
             <Card>
@@ -371,7 +476,8 @@ const PromptDetail = () => {
         promptData={prompt}
         language={language}
       />
-    </div>
+      </div>
+    </>
   );
 };
 
