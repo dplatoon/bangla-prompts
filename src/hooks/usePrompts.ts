@@ -1,6 +1,7 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from './useAuth';
+import type { PromptData } from '@/data/mockPrompts';
 
 export interface Category {
   id: string;
@@ -46,6 +47,44 @@ export interface SavedPrompt {
   created_at: string;
   prompt?: Prompt;
 }
+
+// Convert database Prompt to PromptData format for components
+export const promptToPromptData = (prompt: Prompt): PromptData => {
+  const categoryNameEn = prompt.category?.name_en || 'General';
+  const categoryNameBn = prompt.category?.name_bn || 'সাধারণ';
+  
+  // Extract variables from prompt template (e.g., {topic}, {tone})
+  const variableRegex = /\{(\w+)\}/g;
+  const variables: string[] = [];
+  let match;
+  while ((match = variableRegex.exec(prompt.prompt_template)) !== null) {
+    if (!variables.includes(match[1])) {
+      variables.push(match[1]);
+    }
+  }
+
+  return {
+    id: prompt.id,
+    title: prompt.title_en,
+    titleBn: prompt.title_bn,
+    description: prompt.description_en || '',
+    descriptionBn: prompt.description_bn || '',
+    content: prompt.prompt_template,
+    contentBn: prompt.prompt_template, // Using same template for both languages
+    category: categoryNameEn,
+    categoryBn: categoryNameBn,
+    tags: prompt.tags || [],
+    tagsBn: prompt.tags || [], // Can be extended to support Bengali tags
+    price: prompt.price || 0,
+    rating: prompt.rating || 0,
+    usageCount: prompt.copy_count || 0,
+    author: prompt.author_name || 'Anonymous',
+    authorBn: prompt.author_name || 'বেনামী',
+    variables: variables.length > 0 ? variables : undefined,
+    demoInput: prompt.example_input || undefined,
+    demoOutput: prompt.example_output || undefined,
+  };
+};
 
 // Fetch all categories
 export const useCategories = () => {

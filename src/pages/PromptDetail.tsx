@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useParams, Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead, generatePromptStructuredData } from "@/components/SEOHead";
+import { PromptCard } from "@/components/PromptCard";
 import { 
   ArrowLeft, 
   Copy, 
@@ -17,9 +18,11 @@ import {
   User, 
   Eye,
   MessageSquare,
-  ChevronRight
+  ChevronRight,
+  Loader2
 } from "lucide-react";
-import { mockPrompts, type PromptData, copyPromptToClipboard, isPromptSaved, savePromptToLocal, removePromptFromLocal } from "@/data/mockPrompts";
+import { usePrompt, usePrompts, promptToPromptData } from "@/hooks/usePrompts";
+import type { PromptData } from "@/data/mockPrompts";
 import { useToast } from "@/hooks/use-toast";
 
 const PromptDetail = () => {
@@ -27,9 +30,27 @@ const PromptDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
-  const [prompt, setPrompt] = useState<PromptData | null>(null);
   const [isSaved, setIsSaved] = useState(false);
   const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
+
+  // Fetch prompt by slug (id in URL is actually slug)
+  const { data: dbPrompt, isLoading, error } = usePrompt(id || '');
+  const { data: allPrompts } = usePrompts();
+
+  // Convert to PromptData format
+  const prompt = useMemo(() => {
+    if (!dbPrompt) return null;
+    return promptToPromptData(dbPrompt);
+  }, [dbPrompt]);
+
+  // Get related prompts
+  const relatedPrompts = useMemo(() => {
+    if (!allPrompts || !dbPrompt) return [];
+    return allPrompts
+      .filter(p => p.id !== dbPrompt.id && p.category_id === dbPrompt.category_id)
+      .slice(0, 3)
+      .map(promptToPromptData);
+  }, [allPrompts, dbPrompt]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
@@ -38,15 +59,17 @@ const PromptDetail = () => {
 
   useEffect(() => {
     if (id) {
-      const foundPrompt = mockPrompts.find(p => p.id === id);
-      if (foundPrompt) {
-        setPrompt(foundPrompt);
-        setIsSaved(isPromptSaved(id));
-      } else {
-        navigate('/');
-      }
+      const saved = localStorage.getItem('bdprompt-saved');
+      const savedList = saved ? JSON.parse(saved) : [];
+      setIsSaved(savedList.includes(id));
     }
-  }, [id, navigate]);
+  }, [id]);
+
+  useEffect(() => {
+    if (error) {
+      navigate('/');
+    }
+  }, [error, navigate]);
 
   const handleLanguageChange = (lang: 'bn' | 'en') => {
     setLanguage(lang);
@@ -56,12 +79,13 @@ const PromptDetail = () => {
   const handleCopy = async () => {
     if (!prompt) return;
     try {
-      await copyPromptToClipboard(prompt, language);
+      const content = language === 'bn' && prompt.contentBn ? prompt.contentBn : prompt.content;
+      await navigator.clipboard.writeText(content);
       toast({
         title: language === 'bn' ? "কপি সম্পন্ন!" : "Copied!",
         description: language === 'bn' ? "প্রম্পট ক্লিপবোর্ডে কপি হয়েছে" : "Prompt copied to clipboard"
       });
-    } catch (error) {
+    } catch (err) {
       toast({
         title: language === 'bn' ? "ত্রুটি!" : "Error!",
         description: language === 'bn' ? "কপি করতে ব্যর্থ" : "Failed to copy",
@@ -72,21 +96,25 @@ const PromptDetail = () => {
 
   const handleSave = () => {
     if (!prompt) return;
+    const saved = localStorage.getItem('bdprompt-saved');
+    let savedList = saved ? JSON.parse(saved) : [];
+    
     if (isSaved) {
-      removePromptFromLocal(prompt.id);
+      savedList = savedList.filter((savedId: string) => savedId !== prompt.id);
       setIsSaved(false);
       toast({
         title: language === 'bn' ? "সরানো হয়েছে" : "Removed",
         description: language === 'bn' ? "সেভ তালিকা থেকে সরানো হয়েছে" : "Removed from saved prompts"
       });
     } else {
-      savePromptToLocal(prompt.id);
+      savedList.push(prompt.id);
       setIsSaved(true);
       toast({
         title: language === 'bn' ? "সেভ করা হয়েছে!" : "Saved!",
         description: language === 'bn' ? "প্রম্পট সেভ তালিকায় যোগ হয়েছে" : "Added to saved prompts"
       });
     }
+    localStorage.setItem('bdprompt-saved', JSON.stringify(savedList));
   };
 
   const handleShare = () => {
@@ -99,9 +127,9 @@ const PromptDetail = () => {
     window.open(whatsappUrl, '_blank');
   };
 
-  const relatedPrompts = mockPrompts
-    .filter(p => p.id !== prompt?.id && p.category === prompt?.category)
-    .slice(0, 3);
+  const handleTryRelated = (p: PromptData) => {
+    navigate(`/prompt/${p.id}`);
+  };
 
   const text = {
     bn: {
@@ -121,7 +149,9 @@ const PromptDetail = () => {
       demoInput: "ডেমো ইনপুট",
       demoOutput: "ডেমো আউটপুট",
       relatedPrompts: "সম্পর্কিত প্রম্পট",
-      tags: "ট্যাগ"
+      tags: "ট্যাগ",
+      loading: "লোড হচ্ছে...",
+      notFound: "প্রম্পট পাওয়া যায়নি"
     },
     en: {
       back: "Go Back",
@@ -140,13 +170,15 @@ const PromptDetail = () => {
       demoInput: "Demo Input",
       demoOutput: "Demo Output",
       relatedPrompts: "Related Prompts",
-      tags: "Tags"
+      tags: "Tags",
+      loading: "Loading...",
+      notFound: "Prompt not found"
     }
   };
 
   const currentText = text[language];
 
-  // Generate SEO data for the prompt
+  // Generate SEO data
   const getSEOData = () => {
     if (!prompt) return null;
     
@@ -158,16 +190,14 @@ const PromptDetail = () => {
       ? prompt.descriptionBn 
       : prompt.description;
     
-    const keywords = (language === 'bn' && prompt.tagsBn ? prompt.tagsBn : prompt.tags)
-      .concat(['bdprompt', 'AI prompt', 'বাংলা প্রম্পট'])
-      .join(', ');
+    const keywords = prompt.tags.concat(['bdprompt', 'AI prompt', 'বাংলা প্রম্পট']).join(', ');
     
     return { title, description, keywords };
   };
 
   const seoData = getSEOData();
-  
-  // Generate structured data for the prompt
+
+  // Generate structured data
   const getStructuredData = () => {
     if (!prompt) return null;
     
@@ -191,16 +221,33 @@ const PromptDetail = () => {
     return [
       { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
       { name: language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category, url: `https://bdprompt.com/category/${prompt.category.toLowerCase().replace(' ', '-')}` },
-      { name: language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title, url: `https://bdprompt.com/prompt/${prompt.id}` }
+      { name: language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title, url: `https://bdprompt.com/prompt/${id}` }
     ];
   };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Header language={language} onLanguageChange={handleLanguageChange} />
+        <div className="container mx-auto px-4 py-20 flex justify-center">
+          <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        </div>
+        <Footer language={language} />
+      </div>
+    );
+  }
 
   if (!prompt) {
     return (
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className="text-2xl font-bold">Loading...</h1>
+          <h1 className={`text-2xl font-bold ${language === 'bn' ? 'font-bengali' : ''}`}>
+            {currentText.notFound}
+          </h1>
+          <Button onClick={() => navigate('/')} className="mt-4">
+            {currentText.back}
+          </Button>
         </div>
         <Footer language={language} />
       </div>
@@ -214,7 +261,7 @@ const PromptDetail = () => {
           title={seoData.title}
           description={seoData.description}
           keywords={seoData.keywords}
-          canonicalUrl={`https://bdprompt.com/prompt/${prompt.id}`}
+          canonicalUrl={`https://bdprompt.com/prompt/${id}`}
           ogType="product"
           language={language}
           author={prompt.author}
@@ -256,7 +303,7 @@ const PromptDetail = () => {
           {/* Back Button */}
           <Button
             variant="ghost"
-            onClick={() => navigate('/')}
+            onClick={() => navigate(-1)}
             className={`mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}
           >
             <ArrowLeft className="w-4 h-4 mr-2" aria-hidden="true" />
@@ -284,198 +331,196 @@ const PromptDetail = () => {
                     </p>
                   </div>
                 
-                <div className="flex items-center space-x-2">
-                  <Button size="sm" variant="outline" onClick={handleSave}>
-                    <Heart className={`w-4 h-4 ${isSaved ? 'fill-current text-red-500' : ''}`} />
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={handleShare}>
-                    <Share2 className="w-4 h-4" />
-                  </Button>
+                  <div className="flex items-center space-x-2">
+                    <Button size="sm" variant="outline" onClick={handleSave}>
+                      <Heart className={`w-4 h-4 ${isSaved ? 'fill-current text-red-500' : ''}`} />
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={handleShare}>
+                      <Share2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
-              </div>
 
-              {/* Meta Info with Schema markup */}
-              <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
-                <div className="flex items-center space-x-1" itemProp="author" itemScope itemType="https://schema.org/Person">
-                  <User className="w-4 h-4" aria-hidden="true" />
-                  <span itemProp="name">{language === 'bn' && prompt.authorBn ? prompt.authorBn : prompt.author}</span>
-                </div>
-                <div className="flex items-center space-x-1" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
-                  <Star className="w-4 h-4 fill-current text-yellow-500" aria-hidden="true" />
-                  <span itemProp="ratingValue">{prompt.rating}</span>
-                  <meta itemProp="bestRating" content="5" />
-                  <meta itemProp="ratingCount" content={String(prompt.usageCount)} />
-                </div>
-                <div className="flex items-center space-x-1">
-                  <Eye className="w-4 h-4" aria-hidden="true" />
-                  <span>{prompt.usageCount.toLocaleString()}</span>
-                </div>
-                <Badge variant="secondary" itemProp="category">
-                  {language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category}
-                </Badge>
-                <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
-                  <Badge variant="outline">
-                    <span itemProp="price" content={String(prompt.price)}>
-                      {prompt.price === 0 ? currentText.free : `৳${prompt.price}`}
-                    </span>
+                {/* Meta Info */}
+                <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground">
+                  <div className="flex items-center space-x-1" itemProp="author" itemScope itemType="https://schema.org/Person">
+                    <User className="w-4 h-4" aria-hidden="true" />
+                    <span itemProp="name">{language === 'bn' && prompt.authorBn ? prompt.authorBn : prompt.author}</span>
+                  </div>
+                  <div className="flex items-center space-x-1" itemProp="aggregateRating" itemScope itemType="https://schema.org/AggregateRating">
+                    <Star className="w-4 h-4 fill-current text-yellow-500" aria-hidden="true" />
+                    <span itemProp="ratingValue">{prompt.rating.toFixed(1)}</span>
+                    <meta itemProp="bestRating" content="5" />
+                    <meta itemProp="ratingCount" content={String(prompt.usageCount)} />
+                  </div>
+                  <div className="flex items-center space-x-1">
+                    <Eye className="w-4 h-4" aria-hidden="true" />
+                    <span>{prompt.usageCount.toLocaleString()}</span>
+                  </div>
+                  <Badge variant="secondary" itemProp="category">
+                    {language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category}
                   </Badge>
-                  <meta itemProp="priceCurrency" content="BDT" />
-                  <link itemProp="availability" href="https://schema.org/InStock" />
+                  <div itemProp="offers" itemScope itemType="https://schema.org/Offer">
+                    <Badge variant="outline">
+                      <span itemProp="price" content={String(prompt.price)}>
+                        {prompt.price === 0 ? currentText.free : `৳${prompt.price}`}
+                      </span>
+                    </Badge>
+                    <meta itemProp="priceCurrency" content="BDT" />
+                    <link itemProp="availability" href="https://schema.org/InStock" />
+                  </div>
                 </div>
-              </div>
 
-              {/* Tags */}
-              <div className="flex flex-wrap gap-2">
-                {(language === 'bn' && prompt.tagsBn ? prompt.tagsBn : prompt.tags).map((tag, index) => (
-                  <Badge key={index} variant="outline" className={language === 'bn' ? 'font-bengali' : ''}>
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-2">
+                  {(language === 'bn' && prompt.tagsBn ? prompt.tagsBn : prompt.tags).map((tag, index) => (
+                    <Badge key={index} variant="outline" className={language === 'bn' ? 'font-bengali' : ''}>
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
               </header>
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3">
-              <Button onClick={handleCopy} className={language === 'bn' ? 'font-bengali' : ''}>
-                <Copy className="w-4 h-4 mr-2" />
-                {currentText.copy}
-              </Button>
-              <Button 
-                variant="outline" 
-                onClick={() => setIsPlaygroundOpen(true)}
-                className={language === 'bn' ? 'font-bengali' : ''}
-              >
-                <MessageSquare className="w-4 h-4 mr-2" />
-                {currentText.tryPlayground}
-              </Button>
-            </div>
+              {/* Action Buttons */}
+              <div className="flex flex-wrap gap-3">
+                <Button onClick={handleCopy} className={language === 'bn' ? 'font-bengali' : ''}>
+                  <Copy className="w-4 h-4 mr-2" />
+                  {currentText.copy}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  onClick={() => setIsPlaygroundOpen(true)}
+                  className={language === 'bn' ? 'font-bengali' : ''}
+                >
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  {currentText.tryPlayground}
+                </Button>
+              </div>
 
-            <Separator />
+              <Separator />
 
-            {/* Prompt Content */}
-            <Card>
-              <CardHeader>
-                <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
-                  {language === 'bn' ? 'প্রম্পট টেমপ্লেট' : 'Prompt Template'}
-                </CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm">
-                  {language === 'bn' && prompt.contentBn ? prompt.contentBn : prompt.content}
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Variables */}
-            {prompt.variables && prompt.variables.length > 0 && (
-              <Card>
-                <CardHeader>
-                  <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>{currentText.variables}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-                    {prompt.variables.map((variable, index) => (
-                      <Badge key={index} variant="secondary" className="justify-center">
-                        {`{${variable}}`}
-                      </Badge>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            )}
-
-            {/* Demo */}
-            {prompt.demoInput && prompt.demoOutput && (
+              {/* Prompt Content */}
               <Card>
                 <CardHeader>
                   <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
-                    {language === 'bn' ? 'ডেমো উদাহরণ' : 'Demo Example'}
+                    {language === 'bn' ? 'প্রম্পট টেমপ্লেট' : 'Prompt Template'}
                   </CardTitle>
                 </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className={`font-medium mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>{currentText.demoInput}:</h4>
-                    <div className="bg-muted/30 rounded-lg p-3 text-sm">
-                      {prompt.demoInput}
-                    </div>
-                  </div>
-                  <div>
-                    <h4 className={`font-medium mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>{currentText.demoOutput}:</h4>
-                    <div className="bg-muted/30 rounded-lg p-3 text-sm">
-                      {prompt.demoOutput}
-                    </div>
+                <CardContent>
+                  <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm whitespace-pre-wrap">
+                    {language === 'bn' && prompt.contentBn ? prompt.contentBn : prompt.content}
                   </div>
                 </CardContent>
               </Card>
-            )}
+
+              {/* Variables */}
+              {prompt.variables && prompt.variables.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>{currentText.variables}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+                      {prompt.variables.map((variable, index) => (
+                        <Badge key={index} variant="secondary" className="justify-center">
+                          {`{${variable}}`}
+                        </Badge>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
+
+              {/* Demo */}
+              {prompt.demoInput && prompt.demoOutput && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                      {language === 'bn' ? 'ডেমো উদাহরণ' : 'Demo Example'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div>
+                      <h4 className={`font-medium mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>{currentText.demoInput}:</h4>
+                      <div className="bg-muted/30 rounded-lg p-3 text-sm">
+                        {prompt.demoInput}
+                      </div>
+                    </div>
+                    <div>
+                      <h4 className={`font-medium mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>{currentText.demoOutput}:</h4>
+                      <div className="bg-muted/30 rounded-lg p-3 text-sm">
+                        {prompt.demoOutput}
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </article>
 
             {/* Sidebar */}
-          <div className="space-y-6">
-            {/* Quick Actions */}
-            <Card>
-              <CardContent className="pt-6">
-                <div className="space-y-3">
-                  <Button 
-                    className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
-                    onClick={() => setIsPlaygroundOpen(true)}
-                  >
-                    {currentText.tryPlayground}
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
-                    onClick={handleCopy}
-                  >
-                    <Copy className="w-4 h-4 mr-2" />
-                    {currentText.copy}
-                  </Button>
-                  <Button 
-                    variant="outline" 
-                    className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
-                    onClick={handleShare}
-                  >
-                    <Share2 className="w-4 h-4 mr-2" />
-                    {currentText.share}
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Related Prompts */}
-            {relatedPrompts.length > 0 && (
+            <aside className="space-y-6">
+              {/* Quick Actions */}
               <Card>
-                <CardHeader>
-                  <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>{currentText.relatedPrompts}</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  {relatedPrompts.map((relatedPrompt) => (
-                    <Link key={relatedPrompt.id} to={`/prompt/${relatedPrompt.id}`}>
-                      <div className="border rounded-lg p-3 hover:bg-muted/50 transition-colors">
-                        <h4 className={`font-medium text-sm mb-1 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
-                          {language === 'bn' && relatedPrompt.titleBn ? relatedPrompt.titleBn : relatedPrompt.title}
-                        </h4>
-                        <p className="text-xs text-muted-foreground line-clamp-2">
-                          {language === 'bn' && relatedPrompt.descriptionBn ? relatedPrompt.descriptionBn : relatedPrompt.description}
-                        </p>
-                      </div>
-                    </Link>
-                  ))}
+                <CardContent className="pt-6">
+                  <div className="space-y-3">
+                    <Button 
+                      className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
+                      onClick={() => setIsPlaygroundOpen(true)}
+                    >
+                      {currentText.tryPlayground}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
+                      onClick={handleCopy}
+                    >
+                      <Copy className="w-4 h-4 mr-2" />
+                      {currentText.copy}
+                    </Button>
+                    <Button 
+                      variant="outline" 
+                      className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
+                      onClick={handleShare}
+                    >
+                      <Share2 className="w-4 h-4 mr-2" />
+                      {currentText.share}
+                    </Button>
+                  </div>
                 </CardContent>
               </Card>
-            )}
-          </div>
-        </div>
-      </main>
 
-      <Footer language={language} />
-      
-      <PlaygroundModal
-        open={isPlaygroundOpen}
-        onOpenChange={setIsPlaygroundOpen}
-        promptData={prompt}
-        language={language}
-      />
+              {/* Related Prompts */}
+              {relatedPrompts.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                      {currentText.relatedPrompts}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {relatedPrompts.map((relatedPrompt) => (
+                      <PromptCard 
+                        key={relatedPrompt.id} 
+                        promptData={relatedPrompt} 
+                        language={language}
+                        onTryClick={handleTryRelated}
+                      />
+                    ))}
+                  </CardContent>
+                </Card>
+              )}
+            </aside>
+          </div>
+        </main>
+
+        <Footer language={language} />
+        
+        <PlaygroundModal
+          open={isPlaygroundOpen}
+          onOpenChange={setIsPlaygroundOpen}
+          promptData={prompt}
+          language={language}
+        />
       </div>
     </>
   );
