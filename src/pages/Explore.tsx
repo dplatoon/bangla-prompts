@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
@@ -8,8 +8,9 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Search, Filter, Grid3X3, List } from "lucide-react";
-import { mockPrompts, type PromptData } from "@/data/mockPrompts";
+import { Search, Filter, Grid3X3, List, Loader2 } from "lucide-react";
+import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import type { PromptData } from "@/data/mockPrompts";
 
 const Explore = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -17,17 +18,32 @@ const Explore = () => {
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [sortBy, setSortBy] = useState<string>("popular");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [filteredPrompts, setFilteredPrompts] = useState<PromptData[]>(mockPrompts);
   const [selectedPrompt, setSelectedPrompt] = useState<PromptData | null>(null);
   const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
+
+  const { data: prompts, isLoading: promptsLoading } = usePrompts();
+  const { data: categories } = useCategories();
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
     setLanguage(savedLang);
   }, []);
 
-  useEffect(() => {
-    let filtered = [...mockPrompts];
+  const handleLanguageChange = (lang: 'bn' | 'en') => {
+    setLanguage(lang);
+    localStorage.setItem('bdprompt-language', lang);
+  };
+
+  const handleTryPrompt = (prompt: PromptData) => {
+    setSelectedPrompt(prompt);
+    setIsPlaygroundOpen(true);
+  };
+
+  // Convert and filter prompts
+  const filteredPrompts = useMemo(() => {
+    if (!prompts) return [];
+
+    let filtered = prompts.map(promptToPromptData);
     
     // Filter by search query
     if (searchQuery) {
@@ -37,8 +53,7 @@ const Explore = () => {
         p.titleBn.includes(query) ||
         p.description.toLowerCase().includes(query) ||
         p.descriptionBn.includes(query) ||
-        p.tags.some(t => t.toLowerCase().includes(query)) ||
-        p.tagsBn.some(t => t.includes(query))
+        p.tags.some(t => t.toLowerCase().includes(query))
       );
     }
     
@@ -56,27 +71,23 @@ const Explore = () => {
         filtered.sort((a, b) => b.rating - a.rating);
         break;
       case "newest":
-        filtered.sort((a, b) => parseInt(b.id) - parseInt(a.id));
+        // Already sorted by created_at from API
         break;
       case "free":
         filtered = filtered.filter(p => p.price === 0);
         break;
     }
     
-    setFilteredPrompts(filtered);
-  }, [searchQuery, selectedCategory, sortBy]);
+    return filtered;
+  }, [prompts, searchQuery, selectedCategory, sortBy]);
 
-  const handleLanguageChange = (lang: 'bn' | 'en') => {
-    setLanguage(lang);
-    localStorage.setItem('bdprompt-language', lang);
-  };
-
-  const handleTryPrompt = (prompt: PromptData) => {
-    setSelectedPrompt(prompt);
-    setIsPlaygroundOpen(true);
-  };
-
-  const categories = ["all", "Content Writing", "Social Media", "E-commerce", "Email Marketing", "Creative Writing", "Technical Writing"];
+  const categoryList = useMemo(() => {
+    if (!categories) return [];
+    return categories.map(cat => ({
+      value: cat.name_en.toLowerCase(),
+      label: language === 'bn' ? cat.name_bn : cat.name_en
+    }));
+  }, [categories, language]);
 
   const text = {
     bn: {
@@ -90,7 +101,8 @@ const Explore = () => {
       newest: "নতুন",
       free: "ফ্রি",
       results: "টি ফলাফল",
-      noResults: "কোনো প্রম্পট পাওয়া যায়নি"
+      noResults: "কোনো প্রম্পট পাওয়া যায়নি",
+      loading: "লোড হচ্ছে..."
     },
     en: {
       title: "Explore Prompts",
@@ -103,7 +115,8 @@ const Explore = () => {
       newest: "Newest",
       free: "Free",
       results: "results",
-      noResults: "No prompts found"
+      noResults: "No prompts found",
+      loading: "Loading..."
     }
   };
 
@@ -151,8 +164,8 @@ const Explore = () => {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">{currentText.allCategories}</SelectItem>
-                {categories.slice(1).map(cat => (
-                  <SelectItem key={cat} value={cat.toLowerCase()}>{cat}</SelectItem>
+                {categoryList.map(cat => (
+                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -190,12 +203,16 @@ const Explore = () => {
           {/* Results Count */}
           <div className="mb-6">
             <Badge variant="secondary" className={language === 'bn' ? 'font-bengali' : ''}>
-              {filteredPrompts.length} {currentText.results}
+              {promptsLoading ? currentText.loading : `${filteredPrompts.length} ${currentText.results}`}
             </Badge>
           </div>
 
           {/* Prompts Grid */}
-          {filteredPrompts.length > 0 ? (
+          {promptsLoading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : filteredPrompts.length > 0 ? (
             <div className={viewMode === 'grid' 
               ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
               : "space-y-4"

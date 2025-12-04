@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
-import { mockPrompts, type PromptData } from "@/data/mockPrompts";
-import { ArrowRight, Filter, TrendingUp, Search } from "lucide-react";
+import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import type { PromptData } from "@/data/mockPrompts";
+import { TrendingUp, Search, Loader2 } from "lucide-react";
 
 interface PromptShowcaseProps {
   language: 'bn' | 'en';
@@ -18,25 +19,19 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
 
+  const { data: prompts, isLoading: promptsLoading } = usePrompts();
+  const { data: categories } = useCategories();
+
   const handleTryPrompt = (promptData: PromptData) => {
     setSelectedPrompt(promptData);
     setIsPlaygroundOpen(true);
   };
-  
 
   const text = {
     bn: {
       title: "জনপ্রিয় প্রম্পটস",
       subtitle: "কমিউনিটির পছন্দের প্রম্পট টেমপ্লেটগুলি দেখুন",
-      categories: {
-        all: "সব",
-        "Content Writing": "কন্টেন্ট রাইটিং",
-        "Social Media": "সোশ্যাল মিডিয়া",
-        "E-commerce": "ই-কমার্স",
-        "Email Marketing": "ইমেইল মার্কেটিং",
-        "Creative Writing": "সৃজনশীল লেখা",
-        "Technical Writing": "প্রযুক্তিগত লেখা"
-      },
+      all: "সব",
       sortOptions: {
         popular: "জনপ্রিয়তা",
         rating: "রেটিং",
@@ -46,20 +41,15 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       searchPlaceholder: "প্রম্পট খুঁজুন...",
       viewAll: "সব প্রম্পট দেখুন",
       trending: "ট্রেন্ডিং",
-      sortBy: "সাজান"
+      sortBy: "সাজান",
+      loading: "লোড হচ্ছে...",
+      noResults: "কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।",
+      resultsFound: "টি প্রম্পট পাওয়া গেছে"
     },
     en: {
       title: "Popular Prompts",
       subtitle: "Discover community favorite prompt templates",
-      categories: {
-        all: "All",
-        "Content Writing": "Content Writing",
-        "Social Media": "Social Media",
-        "E-commerce": "E-commerce",
-        "Email Marketing": "Email Marketing",
-        "Creative Writing": "Creative Writing",
-        "Technical Writing": "Technical Writing"
-      },
+      all: "All",
       sortOptions: {
         popular: "Popular",
         rating: "Rating",
@@ -69,45 +59,61 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       searchPlaceholder: "Search prompts...",
       viewAll: "View All Prompts",
       trending: "Trending",
-      sortBy: "Sort by"
+      sortBy: "Sort by",
+      loading: "Loading...",
+      noResults: "No prompts found. Try different search terms.",
+      resultsFound: "prompts found"
     }
   };
 
   const currentText = text[language];
 
-  // Filter and sort prompts
-  const filteredAndSortedPrompts = mockPrompts
-    .filter(prompt => {
-      // Search filter
-      const searchLower = searchQuery.toLowerCase();
-      const matchesSearch = !searchQuery || 
-        prompt.title.toLowerCase().includes(searchLower) ||
-        (prompt.titleBn && prompt.titleBn.toLowerCase().includes(searchLower)) ||
-        prompt.description.toLowerCase().includes(searchLower) ||
-        (prompt.descriptionBn && prompt.descriptionBn.toLowerCase().includes(searchLower)) ||
-        prompt.tags.some(tag => tag.toLowerCase().includes(searchLower)) ||
-        (prompt.tagsBn && prompt.tagsBn.some(tag => tag.toLowerCase().includes(searchLower)));
+  // Convert prompts to PromptData format and apply filters
+  const filteredAndSortedPrompts = useMemo(() => {
+    if (!prompts) return [];
 
-      // Category filter
-      const matchesCategory = selectedCategory === 'all' || prompt.category === selectedCategory;
-      
-      return matchesSearch && matchesCategory;
-    })
-    .sort((a, b) => {
-      switch (sortBy) {
-        case 'rating':
-          return b.rating - a.rating;
-        case 'newest':
-          return parseInt(b.id) - parseInt(a.id); // Assuming higher ID = newer
-        case 'price':
-          return a.price - b.price;
-        case 'popular':
-        default:
-          return b.usageCount - a.usageCount;
-      }
-    });
+    const promptDataList = prompts.map(promptToPromptData);
 
-  const categories = Object.entries(currentText.categories);
+    return promptDataList
+      .filter(prompt => {
+        const searchLower = searchQuery.toLowerCase();
+        const matchesSearch = !searchQuery || 
+          prompt.title.toLowerCase().includes(searchLower) ||
+          prompt.titleBn.toLowerCase().includes(searchLower) ||
+          prompt.description.toLowerCase().includes(searchLower) ||
+          prompt.descriptionBn.toLowerCase().includes(searchLower) ||
+          prompt.tags.some(tag => tag.toLowerCase().includes(searchLower));
+
+        const matchesCategory = selectedCategory === 'all' || 
+          prompt.category.toLowerCase() === selectedCategory.toLowerCase();
+        
+        return matchesSearch && matchesCategory;
+      })
+      .sort((a, b) => {
+        switch (sortBy) {
+          case 'rating':
+            return b.rating - a.rating;
+          case 'newest':
+            return 0; // Already sorted by created_at from API
+          case 'price':
+            return a.price - b.price;
+          case 'popular':
+          default:
+            return b.usageCount - a.usageCount;
+        }
+      });
+  }, [prompts, searchQuery, selectedCategory, sortBy]);
+
+  const categoryOptions = useMemo(() => {
+    const options: [string, string][] = [['all', currentText.all]];
+    if (categories) {
+      categories.forEach(cat => {
+        options.push([cat.name_en, language === 'bn' ? cat.name_bn : cat.name_en]);
+      });
+    }
+    return options;
+  }, [categories, language, currentText.all]);
+
   const sortOptions = Object.entries(currentText.sortOptions);
 
   return (
@@ -132,7 +138,6 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
 
         {/* Search and Filters */}
         <div className="space-y-6 mb-12">
-          {/* Search Bar */}
           <div className="max-w-2xl mx-auto">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
@@ -145,11 +150,9 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
             </div>
           </div>
 
-          {/* Category Filter and Sort */}
           <div className="flex flex-col lg:flex-row justify-center items-center gap-4">
-            {/* Category Pills */}
             <div className="flex flex-wrap justify-center gap-2">
-              {categories.map(([key, label]) => (
+              {categoryOptions.map(([key, label]) => (
                 <Button
                   key={key}
                   variant={selectedCategory === key ? 'default' : 'outline'}
@@ -162,7 +165,6 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
               ))}
             </div>
 
-            {/* Sort Dropdown */}
             <div className="flex items-center space-x-2">
               <span className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.sortBy}:
@@ -186,35 +188,35 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
         {/* Results Info */}
         <div className="text-center mb-6">
           <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-            {language === 'bn' 
-              ? `${filteredAndSortedPrompts.length}টি প্রম্পট পাওয়া গেছে`
-              : `${filteredAndSortedPrompts.length} prompts found`
-            }
+            {promptsLoading ? currentText.loading : `${filteredAndSortedPrompts.length} ${currentText.resultsFound}`}
           </p>
         </div>
 
         {/* Prompt Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredAndSortedPrompts.length > 0 ? (
-            filteredAndSortedPrompts.map((prompt) => (
-              <PromptCard
-                key={prompt.id}
-                promptData={prompt}
-                language={language}
-                onTryClick={handleTryPrompt}
-              />
-            ))
-          ) : (
-            <div className="col-span-full text-center py-12">
-              <p className={`text-muted-foreground text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
-                {language === 'bn' 
-                  ? 'কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।'
-                  : 'No prompts found. Try different search terms.'
-                }
-              </p>
-            </div>
-          )}
-        </div>
+        {promptsLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredAndSortedPrompts.length > 0 ? (
+              filteredAndSortedPrompts.map((prompt) => (
+                <PromptCard
+                  key={prompt.id}
+                  promptData={prompt}
+                  language={language}
+                  onTryClick={handleTryPrompt}
+                />
+              ))
+            ) : (
+              <div className="col-span-full text-center py-12">
+                <p className={`text-muted-foreground text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {currentText.noResults}
+                </p>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <PlaygroundModal
