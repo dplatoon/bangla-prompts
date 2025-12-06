@@ -7,6 +7,7 @@ import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { SEOHead } from "@/components/SEOHead";
+import { FAQ } from "@/components/FAQ";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -37,14 +38,14 @@ const Index = () => {
 
   const seoContent = {
     bn: {
-      title: "bdprompt.com — সবচেয়ে বড় বাংলা AI প্রম্পট হাব | ৫০০+ প্রম্পট",
-      description: "বাংলা প্রম্পট টেমপ্লেট — কন্টেন্ট, ইমেজ, কোড, মার্কেটিং। ৫০০+ AI প্রম্পট এক ক্লিকে কপি করে ChatGPT, Claude, Gemini-তে প্রয়োগ করুন। বাংলাদেশের #১ AI প্রম্পট প্ল্যাটফর্ম।",
-      keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh, প্রম্পট টেমপ্লেট, বাংলা কন্টেন্ট, AI কন্টেন্ট রাইটিং"
+      title: "BdPrompt — #1 AI Prompt Generator in Bengali (বাংলা) | ৫০০+ প্রম্পট",
+      description: "Generate powerful AI prompts in Bengali for students, writers, businesses & creators. 100% free. Made for Bangladesh & global Bengali speakers. ৫০০+ প্রম্পট এক ক্লিকে কপি করুন।",
+      keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh, প্রম্পট টেমপ্লেট, বাংলা কন্টেন্ট, AI কন্টেন্ট রাইটিং, SSC প্রম্পট, HSC ChatGPT"
     },
     en: {
-      title: "bdprompt.com — Largest Bangla AI Prompt Hub | 500+ Prompts",
-      description: "Bangla prompt templates — content, image, code, marketing. Copy 500+ AI prompts with one click and use in ChatGPT, Claude, Gemini. Bangladesh's #1 AI prompt platform.",
-      keywords: "Bangla AI prompts, Bengali prompts, ChatGPT Bengali, AI prompts Bangladesh, prompt templates, Bangla content writing"
+      title: "BdPrompt — #1 AI Prompt Generator in Bengali | 500+ Prompts",
+      description: "Generate powerful AI prompts in Bengali for students, writers, businesses & creators. 100% free. Made for Bangladesh & global Bengali speakers.",
+      keywords: "Bangla AI prompts, Bengali prompts, ChatGPT Bengali, AI prompts Bangladesh, prompt templates, Bangla content writing, SSC prompts, HSC ChatGPT"
     }
   };
 
@@ -66,6 +67,7 @@ const Index = () => {
           <Hero language={language} />
           <FeatureGrid language={language} />
           <PromptShowcase language={language} />
+          <FAQ language={language} />
           <CTA language={language} />
         </main>
         <Footer language={language} />
