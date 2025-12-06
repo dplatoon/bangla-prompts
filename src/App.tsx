@@ -22,6 +22,10 @@ import DMCA from "./pages/DMCA";
 import Product from "./pages/Product";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
+import Shikkha from "./pages/Shikkha";
+import Kobita from "./pages/Kobita";
+import Business from "./pages/Business";
+import Resources from "./pages/Resources";
 
 const queryClient = new QueryClient();
 
@@ -50,6 +54,10 @@ const App = () => (
           <Route path="/dmca" element={<DMCA />} />
           <Route path="/product" element={<Product />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/shikkha" element={<Shikkha />} />
+          <Route path="/kobita" element={<Kobita />} />
+          <Route path="/business" element={<Business />} />
+          <Route path="/resources" element={<Resources />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
