@@ -3,12 +3,12 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
 import { PromptCard } from "@/components/PromptCard";
-import { usePrompts } from "@/hooks/usePrompts";
+import { usePrompts, promptToPromptData } from "@/hooks/usePrompts";
 import { Loader2, TrendingUp, MessageSquare, ShoppingBag, Users } from "lucide-react";
 
 const Business = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
-  const { prompts, isLoading } = usePrompts();
+  const { data: prompts, isLoading } = usePrompts();
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en';
@@ -142,13 +142,7 @@ const Business = () => {
                   {businessPrompts.map((prompt) => (
                     <PromptCard
                       key={prompt.id}
-                      id={prompt.id}
-                      title={language === 'bn' ? prompt.title_bn : prompt.title_en}
-                      description={language === 'bn' ? (prompt.description_bn || '') : (prompt.description_en || '')}
-                      category={prompt.category?.name_bn || 'ব্যবসা'}
-                      rating={prompt.rating || 0}
-                      uses={prompt.copy_count || 0}
-                      isFree={prompt.is_free || false}
+                      promptData={promptToPromptData(prompt)}
                       language={language}
                     />
                   ))}
