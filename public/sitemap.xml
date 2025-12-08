@@ -9,7 +9,7 @@
     <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/" />
     <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/?lang=en" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/" />
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
@@ -21,71 +21,104 @@
   <!-- Main Pages -->
   <url>
     <loc>https://bdprompt.com/explore</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/playground</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/packs</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/product</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/api</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
+  </url>
+  
+  <!-- SEO Landing Pages (High Priority for Target Keywords) -->
+  <url>
+    <loc>https://bdprompt.com/shikkha</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/shikkha" />
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://bdprompt.com/kobita</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/kobita" />
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://bdprompt.com/business</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/business" />
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
+    <loc>https://bdprompt.com/resources</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/resources" />
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
   </url>
   
   <!-- Community Pages -->
   <url>
     <loc>https://bdprompt.com/community</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/become-creator</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/guidelines</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/blog</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/support</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -93,78 +126,78 @@
   <!-- Legal Pages -->
   <url>
     <loc>https://bdprompt.com/legal</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/privacy</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/terms</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/cookies</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/dmca</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.4</priority>
   </url>
   
-  <!-- Category Pages -->
+  <!-- Category Pages (Updated with correct database slugs) -->
   <url>
-    <loc>https://bdprompt.com/explore?category=content-writing</loc>
-    <lastmod>2025-12-04</lastmod>
+    <loc>https://bdprompt.com/explore?category=content</loc>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bdprompt.com/explore?category=social-media</loc>
-    <lastmod>2025-12-04</lastmod>
+    <loc>https://bdprompt.com/explore?category=marketing</loc>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bdprompt.com/explore?category=e-commerce</loc>
-    <lastmod>2025-12-04</lastmod>
+    <loc>https://bdprompt.com/explore?category=business</loc>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bdprompt.com/explore?category=email-marketing</loc>
-    <lastmod>2025-12-04</lastmod>
-    <changefreq>daily</changefreq>
-    <priority>0.8</priority>
-  </url>
-  
-  <url>
-    <loc>https://bdprompt.com/explore?category=creative-writing</loc>
-    <lastmod>2025-12-04</lastmod>
+    <loc>https://bdprompt.com/explore?category=education</loc>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
     <loc>https://bdprompt.com/explore?category=code</loc>
-    <lastmod>2025-12-04</lastmod>
+    <lastmod>2025-12-08</lastmod>
+    <changefreq>daily</changefreq>
+    <priority>0.8</priority>
+  </url>
+  
+  <url>
+    <loc>https://bdprompt.com/explore?category=image</loc>
+    <lastmod>2025-12-08</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
