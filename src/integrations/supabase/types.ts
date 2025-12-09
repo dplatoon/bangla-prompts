@@ -14,6 +14,27 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_usage_logs: {
+        Row: {
+          created_at: string
+          function_name: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          function_name: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          function_name?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -46,6 +67,38 @@ export type Database = {
           slug?: string
         }
         Relationships: []
+      }
+      prompt_purchases: {
+        Row: {
+          amount: number
+          id: string
+          prompt_id: string
+          purchased_at: string
+          user_id: string
+        }
+        Insert: {
+          amount?: number
+          id?: string
+          prompt_id: string
+          purchased_at?: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          id?: string
+          prompt_id?: string
+          purchased_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "prompt_purchases_prompt_id_fkey"
+            columns: ["prompt_id"]
+            isOneToOne: false
+            referencedRelation: "prompts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       prompts: {
         Row: {
@@ -173,7 +226,24 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      check_rate_limit: {
+        Args: {
+          _function_name: string
+          _max_requests: number
+          _user_id: string
+          _window_minutes: number
+        }
+        Returns: boolean
+      }
+      get_prompt_template: { Args: { _prompt_id: string }; Returns: string }
+      has_purchased_prompt: {
+        Args: { _prompt_id: string; _user_id: string }
+        Returns: boolean
+      }
+      log_ai_usage: {
+        Args: { _function_name: string; _user_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

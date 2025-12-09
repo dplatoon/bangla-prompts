@@ -1,19 +1,72 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const RATE_LIMIT_MAX_REQUESTS = 15;
+const RATE_LIMIT_WINDOW_MINUTES = 60;
+
 serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Verify JWT and get user
+    const authHeader = req.headers.get("authorization");
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: "Authentication required" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
+    const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
+    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+      global: { headers: { Authorization: authHeader } },
+    });
+
+    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: "Invalid authentication" }), {
+        status: 401,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Check rate limit
+    const { data: withinLimit } = await supabase.rpc("check_rate_limit", {
+      _user_id: user.id,
+      _function_name: "suggest-prompt",
+      _max_requests: RATE_LIMIT_MAX_REQUESTS,
+      _window_minutes: RATE_LIMIT_WINDOW_MINUTES,
+    });
+
+    if (!withinLimit) {
+      return new Response(JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), {
+        status: 429,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
+    // Log usage
+    await supabase.rpc("log_ai_usage", {
+      _user_id: user.id,
+      _function_name: "suggest-prompt",
+    });
+
     const { prompt, language = 'en' } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
-    if (!prompt) throw new Error("Prompt is required");
+    if (!prompt || typeof prompt !== "string" || prompt.length > 10000) {
+      return new Response(JSON.stringify({ error: "Invalid prompt. Must be a string under 10000 characters." }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
 
     const systemMessage = language === 'bn' 
       ? `আপনি একজন প্রম্পট ইঞ্জিনিয়ারিং বিশেষজ্ঞ। ব্যবহারকারীর প্রম্পট উন্নত করতে 3টি সংক্ষিপ্ত পরামর্শ দিন। প্রতিটি পরামর্শ একটি বাক্যে দিন। শুধুমাত্র পরামর্শগুলি দিন, অন্য কোনো ব্যাখ্যা নয়।`
