@@ -26,6 +26,7 @@ import Shikkha from "./pages/Shikkha";
 import Kobita from "./pages/Kobita";
 import Business from "./pages/Business";
 import Resources from "./pages/Resources";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/kobita" element={<Kobita />} />
           <Route path="/business" element={<Business />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/admin" element={<Admin />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

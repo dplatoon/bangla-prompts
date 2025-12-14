@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Search, Menu, X, ChevronDown, User, LogOut } from "lucide-react";
+import { Search, Menu, X, ChevronDown, User, LogOut, Shield } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { useAuth } from "@/hooks/useAuth";
+import { useAdmin } from "@/hooks/useAdmin";
 
 interface HeaderProps {
   language: 'bn' | 'en';
@@ -22,6 +23,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
   const [searchQuery, setSearchQuery] = useState("");
   const navigate = useNavigate();
   const { user, loading, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -206,6 +208,14 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
                         {user.email}
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
+                      {isAdmin && (
+                        <DropdownMenuItem asChild>
+                          <Link to="/admin" className="flex items-center">
+                            <Shield className="w-4 h-4 mr-2" />
+                            {language === 'bn' ? 'অ্যাডমিন' : 'Admin'}
+                          </Link>
+                        </DropdownMenuItem>
+                      )}
                       <DropdownMenuItem onClick={signOut} className="text-destructive">
                         <LogOut className="w-4 h-4 mr-2" />
                         {language === 'bn' ? 'লগআউট' : 'Logout'}
