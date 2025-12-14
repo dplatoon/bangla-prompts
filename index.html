@@ -84,7 +84,7 @@
       "name": "bdprompt.com",
       "alternateName": "বিডি প্রম্পট",
       "url": "https://bdprompt.com",
-      "logo": "https://bdprompt.com/logo.png",
+      "logo": "https://bdprompt.com/favicon.jpg",
       "description": "বাংলাদেশের সবচেয়ে বড় বাংলা AI প্রম্পট হাব",
       "sameAs": [
         "https://twitter.com/bdprompt",
@@ -114,7 +114,7 @@
         "@type": "SearchAction",
         "target": {
           "@type": "EntryPoint",
-          "urlTemplate": "https://bdprompt.com/search?q={search_term_string}"
+          "urlTemplate": "https://bdprompt.com/explore?search={search_term_string}"
         },
         "query-input": "required name=search_term_string"
       }
@@ -142,39 +142,7 @@
     }
     </script>
     
-    <!-- Structured Data - FAQPage -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "bdprompt.com কি?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "bdprompt.com হল বাংলাদেশের সবচেয়ে বড় বাংলা AI প্রম্পট হাব যেখানে আপনি ৫০০+ বাংলা AI প্রম্পট পাবেন। এখানে কন্টেন্ট, ইমেজ, কোড এবং মার্কেটিং সংক্রান্ত প্রম্পট রয়েছে যা ChatGPT, Claude, Gemini-তে ব্যবহার করা যায়।"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "কিভাবে প্রম্পট ব্যবহার করব?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "প্রম্পট ব্যবহার করা খুব সহজ। আপনার পছন্দের প্রম্পট খুঁজুন, কপি বাটনে ক্লিক করুন, তারপর ChatGPT বা অন্য AI টুলে পেস্ট করুন। প্রয়োজনে ভেরিয়েবল পরিবর্তন করুন।"
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "প্রম্পট কি ফ্রি?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "হ্যাঁ, bdprompt.com-এ বেশিরভাগ প্রম্পট সম্পূর্ণ ফ্রি। কিছু প্রিমিয়াম প্রম্পট আছে যা অল্প মূল্যে পাওয়া যায়।"
-          }
-        }
-      ]
-    }
-    </script>
+    <!-- FAQ structured data is injected dynamically by FAQ.tsx component for proper localization -->
     
     <!-- Structured Data - BreadcrumbList -->
     <script type="application/ld+json">
