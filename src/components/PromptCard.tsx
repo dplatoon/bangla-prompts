@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Copy, ExternalLink, Heart, Play, Star, Bookmark, BookmarkCheck } from "lucide-react";
+import { Copy, ExternalLink, Heart, Play, Star, Bookmark, BookmarkCheck, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { savePromptToLocal, removePromptFromLocal, isPromptSaved, copyPromptToClipboard, type PromptData } from "@/data/mockPrompts";
+import { useSavePrompt } from "@/hooks/useSavePrompt";
+import { copyPromptToClipboard, type PromptData } from "@/data/mockPrompts";
 
 interface PromptCardProps {
   promptData: PromptData;
@@ -19,8 +20,8 @@ export const PromptCard = ({
   onTryClick
 }: PromptCardProps) => {
   const [isLiked, setIsLiked] = useState(false);
-  const [isSaved, setIsSaved] = useState(false);
   const { toast } = useToast();
+  const { isSaved, isPending, toggleSave } = useSavePrompt(promptData.id, language);
 
   const {
     id,
@@ -45,10 +46,6 @@ export const PromptCard = ({
   const displayTags = language === 'bn' && tagsBn ? tagsBn : tags;
   const displayAuthor = language === 'bn' && authorBn ? authorBn : author;
 
-  useEffect(() => {
-    setIsSaved(isPromptSaved(id));
-  }, [id]);
-
   const handleCopy = async () => {
     try {
       await copyPromptToClipboard(promptData, language);
@@ -71,24 +68,6 @@ export const PromptCard = ({
 
   const handleLike = () => {
     setIsLiked(!isLiked);
-  };
-
-  const handleSave = () => {
-    if (isSaved) {
-      removePromptFromLocal(id);
-      setIsSaved(false);
-      toast({
-        title: language === 'bn' ? 'সংরক্ষণ বাতিল!' : 'Unsaved!',
-        description: language === 'bn' ? 'প্রম্পট সংরক্ষিত তালিকা থেকে সরানো হয়েছে।' : 'Prompt removed from saved list.',
-      });
-    } else {
-      savePromptToLocal(id);
-      setIsSaved(true);
-      toast({
-        title: language === 'bn' ? 'সংরক্ষিত!' : 'Saved!',
-        description: language === 'bn' ? 'প্রম্পট সংরক্ষিত তালিকায় যোগ করা হয়েছে।' : 'Prompt added to saved list.',
-      });
-    }
   };
 
   const text = {
@@ -149,11 +128,14 @@ export const PromptCard = ({
             <Button
               variant="ghost"
               size="sm"
-              onClick={handleSave}
+              onClick={toggleSave}
+              disabled={isPending}
               className="text-muted-foreground hover:text-primary shrink-0"
               title={isSaved ? currentText.saved : currentText.save}
             >
-              {isSaved ? (
+              {isPending ? (
+                <Loader2 className="w-4 h-4 animate-spin" />
+              ) : isSaved ? (
                 <BookmarkCheck className="w-4 h-4 text-primary" />
               ) : (
                 <Bookmark className="w-4 h-4" />

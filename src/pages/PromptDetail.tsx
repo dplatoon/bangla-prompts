@@ -12,7 +12,8 @@ import { PromptCard } from "@/components/PromptCard";
 import { 
   ArrowLeft, 
   Copy, 
-  Heart, 
+  Bookmark,
+  BookmarkCheck,
   Share2, 
   Star, 
   User, 
@@ -22,6 +23,7 @@ import {
   Loader2
 } from "lucide-react";
 import { usePrompt, usePrompts, promptToPromptData } from "@/hooks/usePrompts";
+import { useSavePrompt } from "@/hooks/useSavePrompt";
 import type { PromptData } from "@/data/mockPrompts";
 import { useToast } from "@/hooks/use-toast";
 
@@ -30,12 +32,17 @@ const PromptDetail = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
-  const [isSaved, setIsSaved] = useState(false);
   const [isPlaygroundOpen, setIsPlaygroundOpen] = useState(false);
 
   // Fetch prompt by slug (id in URL is actually slug)
   const { data: dbPrompt, isLoading, error } = usePrompt(id || '');
   const { data: allPrompts } = usePrompts();
+  
+  // Use the save hook with the actual database prompt ID
+  const { isSaved, isPending: isSavePending, toggleSave } = useSavePrompt(
+    dbPrompt?.id || '', 
+    language
+  );
 
   // Convert to PromptData format
   const prompt = useMemo(() => {
@@ -58,12 +65,10 @@ const PromptDetail = () => {
   }, []);
 
   useEffect(() => {
-    if (id) {
-      const saved = localStorage.getItem('bdprompt-saved');
-      const savedList = saved ? JSON.parse(saved) : [];
-      setIsSaved(savedList.includes(id));
+    if (error) {
+      navigate('/');
     }
-  }, [id]);
+  }, [error, navigate]);
 
   useEffect(() => {
     if (error) {
@@ -92,29 +97,6 @@ const PromptDetail = () => {
         variant: "destructive"
       });
     }
-  };
-
-  const handleSave = () => {
-    if (!prompt) return;
-    const saved = localStorage.getItem('bdprompt-saved');
-    let savedList = saved ? JSON.parse(saved) : [];
-    
-    if (isSaved) {
-      savedList = savedList.filter((savedId: string) => savedId !== prompt.id);
-      setIsSaved(false);
-      toast({
-        title: language === 'bn' ? "সরানো হয়েছে" : "Removed",
-        description: language === 'bn' ? "সেভ তালিকা থেকে সরানো হয়েছে" : "Removed from saved prompts"
-      });
-    } else {
-      savedList.push(prompt.id);
-      setIsSaved(true);
-      toast({
-        title: language === 'bn' ? "সেভ করা হয়েছে!" : "Saved!",
-        description: language === 'bn' ? "প্রম্পট সেভ তালিকায় যোগ হয়েছে" : "Added to saved prompts"
-      });
-    }
-    localStorage.setItem('bdprompt-saved', JSON.stringify(savedList));
   };
 
   const handleShare = () => {
@@ -332,8 +314,14 @@ const PromptDetail = () => {
                   </div>
                 
                   <div className="flex items-center space-x-2">
-                    <Button size="sm" variant="outline" onClick={handleSave}>
-                      <Heart className={`w-4 h-4 ${isSaved ? 'fill-current text-red-500' : ''}`} />
+                    <Button size="sm" variant="outline" onClick={toggleSave} disabled={isSavePending}>
+                      {isSavePending ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : isSaved ? (
+                        <BookmarkCheck className="w-4 h-4 text-primary" />
+                      ) : (
+                        <Bookmark className="w-4 h-4" />
+                      )}
                     </Button>
                     <Button size="sm" variant="outline" onClick={handleShare}>
                       <Share2 className="w-4 h-4" />
