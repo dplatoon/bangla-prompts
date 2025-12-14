@@ -67,16 +67,19 @@ export const FAQ = ({ language }: FAQProps) => {
 
   const currentFAQ = faqData[language];
 
-  // Generate FAQ structured data for SEO
+  // Generate comprehensive FAQ structured data for SEO
   const faqStructuredData = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": currentFAQ.map(item => ({
+    "@id": "https://bdprompt.com/#faq",
+    "mainEntity": currentFAQ.map((item, index) => ({
       "@type": "Question",
+      "@id": `https://bdprompt.com/#faq-${index + 1}`,
       "name": item.question,
       "acceptedAnswer": {
         "@type": "Answer",
-        "text": item.answer
+        "text": item.answer,
+        "dateCreated": "2024-01-01"
       }
     }))
   };
