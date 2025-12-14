@@ -204,6 +204,12 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
                       </Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
+                      <DropdownMenuItem asChild>
+                        <Link to="/profile" className="flex items-center">
+                          <User className="w-4 h-4 mr-2" />
+                          {language === 'bn' ? 'আমার প্রোফাইল' : 'My Profile'}
+                        </Link>
+                      </DropdownMenuItem>
                       <DropdownMenuItem className="text-muted-foreground text-sm">
                         {user.email}
                       </DropdownMenuItem>
