@@ -27,6 +27,7 @@ import Kobita from "./pages/Kobita";
 import Business from "./pages/Business";
 import Resources from "./pages/Resources";
 import Admin from "./pages/Admin";
+import Profile from "./pages/Profile";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,7 @@ const App = () => (
           <Route path="/business" element={<Business />} />
           <Route path="/resources" element={<Resources />} />
           <Route path="/admin" element={<Admin />} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
