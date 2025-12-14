@@ -12,6 +12,43 @@ import { Search, Filter, Grid3X3, List, Loader2 } from "lucide-react";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
 import type { PromptData } from "@/data/mockPrompts";
 
+// Generate ItemList structured data for SEO
+const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') => {
+  return {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    "name": language === 'bn' ? "বাংলা AI প্রম্পট তালিকা" : "Bengali AI Prompts Collection",
+    "description": language === 'bn' 
+      ? "bdprompt.com-এ ৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন"
+      : "Explore 500+ Bengali AI prompts on bdprompt.com",
+    "numberOfItems": prompts.length,
+    "itemListElement": prompts.slice(0, 50).map((prompt, index) => ({
+      "@type": "ListItem",
+      "position": index + 1,
+      "item": {
+        "@type": "SoftwareApplication",
+        "@id": `https://bdprompt.com/prompt/${prompt.id}`,
+        "name": language === 'bn' ? prompt.titleBn : prompt.title,
+        "description": language === 'bn' ? prompt.descriptionBn : prompt.description,
+        "url": `https://bdprompt.com/prompt/${prompt.id}`,
+        "applicationCategory": "ProductivityApplication",
+        "offers": {
+          "@type": "Offer",
+          "price": prompt.price || 0,
+          "priceCurrency": "BDT"
+        },
+        ...(prompt.rating > 0 && {
+          "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": prompt.rating.toFixed(1),
+            "ratingCount": 1
+          }
+        })
+      }
+    }))
+  };
+};
+
 const Explore = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
   const [searchQuery, setSearchQuery] = useState("");
@@ -122,6 +159,11 @@ const Explore = () => {
 
   const currentText = text[language];
 
+  // Generate ItemList schema for rich snippets
+  const itemListSchema = useMemo(() => {
+    return generateItemListSchema(filteredPrompts, language);
+  }, [filteredPrompts, language]);
+
   return (
     <>
       <SEOHead 
@@ -129,6 +171,7 @@ const Explore = () => {
         description={language === 'bn' ? "৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন। কন্টেন্ট, ইমেজ, কোড, মার্কেটিং প্রম্পট খুঁজুন।" : "Explore 500+ Bangla AI prompts. Find content, image, code, and marketing prompts."}
         canonicalUrl="https://bdprompt.com/explore"
         language={language}
+        structuredData={itemListSchema}
       />
       
       <div className="min-h-screen bg-background">
