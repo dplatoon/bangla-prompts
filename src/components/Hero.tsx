@@ -24,33 +24,33 @@ export const Hero = ({ language }: HeroProps) => {
   const text = {
     bn: {
       headline: "বাংলা AI প্রম্পট জেনারেটর — শিক্ষার্থী, লেখক, ব্যবসায়ীদের জন্য",
-      subhead: "শিক্ষা, কবিতা, ব্যবসা, মার্কেটিং — ৫০০+ প্রম্পট দিয়ে ChatGPT, Claude, Gemini ব্যবহার করুন।",
+      subhead: "শিক্ষা, কবিতা, ব্যবসা, মার্কেটিং — ৬০+ প্রম্পট দিয়ে ChatGPT, Claude, Gemini ব্যবহার করুন।",
       exploreBtn: "প্রম্পট এক্সপ্লোর করুন",
       submitBtn: "প্রম্পট জমা দিন",
       tryPrompt: "এখনই চেষ্টা করুন",
       placeholder: "আপনার প্রম্পট লিখুন...",
       stats: {
-        prompts: "৫০০+",
+        prompts: "৬০+",
         promptsLabel: "প্রম্পট টেমপ্লেট",
-        users: "১০k+",
+        users: "১k+",
         usersLabel: "সক্রিয় ব্যবহারকারী",
-        copies: "৫০k+",
+        copies: "৫k+",
         copiesLabel: "কপি করা হয়েছে"
       }
     },
     en: {
       headline: "Bengali AI Prompt Generator — For Students, Writers, Businesses",
-      subhead: "Education, poetry, business, marketing — use 500+ prompts with ChatGPT, Claude, Gemini.",
+      subhead: "Education, poetry, business, marketing — use 60+ prompts with ChatGPT, Claude, Gemini.",
       exploreBtn: "Explore Prompts",
       submitBtn: "Submit Prompt",
       tryPrompt: "Try Now",
       placeholder: "Write your prompt...",
       stats: {
-        prompts: "500+",
+        prompts: "60+",
         promptsLabel: "Prompt Templates",
-        users: "10k+",
+        users: "1k+",
         usersLabel: "Active Users",
-        copies: "50k+",
+        copies: "5k+",
         copiesLabel: "Times Copied"
       }
     }
