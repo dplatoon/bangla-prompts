@@ -20,10 +20,13 @@ import {
   Eye,
   MessageSquare,
   ChevronRight,
-  Loader2
+  Loader2,
+  Lock,
+  CreditCard
 } from "lucide-react";
 import { usePrompt, usePrompts, promptToPromptData } from "@/hooks/usePrompts";
 import { useSavePrompt } from "@/hooks/useSavePrompt";
+import { usePurchase } from "@/hooks/usePurchase";
 import type { PromptData } from "@/data/mockPrompts";
 import { useToast } from "@/hooks/use-toast";
 
@@ -43,6 +46,19 @@ const PromptDetail = () => {
     dbPrompt?.id || '', 
     language
   );
+
+  // Use the purchase hook
+  const { 
+    hasPurchased, 
+    isLoading: isPurchaseLoading, 
+    isCheckingOut, 
+    initiateCheckout,
+    isAuthenticated 
+  } = usePurchase(dbPrompt?.id || '', language);
+
+  // Check if prompt is premium (not free and has price)
+  const isPremium = dbPrompt && !dbPrompt.is_free && (dbPrompt.price || 0) > 0;
+  const canAccessFullContent = !isPremium || hasPurchased;
 
   // Convert to PromptData format
   const prompt = useMemo(() => {
@@ -133,7 +149,12 @@ const PromptDetail = () => {
       relatedPrompts: "সম্পর্কিত প্রম্পট",
       tags: "ট্যাগ",
       loading: "লোড হচ্ছে...",
-      notFound: "প্রম্পট পাওয়া যায়নি"
+      notFound: "প্রম্পট পাওয়া যায়নি",
+      buyNow: "এখনই কিনুন",
+      premium: "প্রিমিয়াম",
+      purchased: "কেনা হয়েছে",
+      loginToBuy: "কিনতে লগইন করুন",
+      processing: "প্রসেসিং..."
     },
     en: {
       back: "Go Back",
@@ -154,7 +175,12 @@ const PromptDetail = () => {
       relatedPrompts: "Related Prompts",
       tags: "Tags",
       loading: "Loading...",
-      notFound: "Prompt not found"
+      notFound: "Prompt not found",
+      buyNow: "Buy Now",
+      premium: "Premium",
+      purchased: "Purchased",
+      loginToBuy: "Login to Buy",
+      processing: "Processing..."
     }
   };
 
@@ -371,13 +397,47 @@ const PromptDetail = () => {
 
               {/* Action Buttons */}
               <div className="flex flex-wrap gap-3">
-                <Button onClick={handleCopy} className={language === 'bn' ? 'font-bengali' : ''}>
+                {/* Show Buy button for premium prompts not yet purchased */}
+                {isPremium && !hasPurchased && (
+                  <Button 
+                    onClick={isAuthenticated ? initiateCheckout : () => navigate('/auth')}
+                    disabled={isCheckingOut || isPurchaseLoading}
+                    className={`bg-gradient-to-r from-primary to-accent hover:opacity-90 ${language === 'bn' ? 'font-bengali' : ''}`}
+                  >
+                    {isCheckingOut ? (
+                      <>
+                        <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                        {currentText.processing}
+                      </>
+                    ) : (
+                      <>
+                        <CreditCard className="w-4 h-4 mr-2" />
+                        {isAuthenticated ? `${currentText.buyNow} - ৳${dbPrompt?.price}` : currentText.loginToBuy}
+                      </>
+                    )}
+                  </Button>
+                )}
+                
+                {/* Show Purchased badge if already bought */}
+                {isPremium && hasPurchased && (
+                  <Badge variant="secondary" className={`px-4 py-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    ✓ {currentText.purchased}
+                  </Badge>
+                )}
+                
+                {/* Copy button - only enable if user can access content */}
+                <Button 
+                  onClick={handleCopy} 
+                  disabled={!canAccessFullContent}
+                  className={language === 'bn' ? 'font-bengali' : ''}
+                >
                   <Copy className="w-4 h-4 mr-2" />
                   {currentText.copy}
                 </Button>
                 <Button 
                   variant="outline" 
                   onClick={() => setIsPlaygroundOpen(true)}
+                  disabled={!canAccessFullContent}
                   className={language === 'bn' ? 'font-bengali' : ''}
                 >
                   <MessageSquare className="w-4 h-4 mr-2" />
@@ -388,16 +448,44 @@ const PromptDetail = () => {
               <Separator />
 
               {/* Prompt Content */}
-              <Card>
+              <Card className={!canAccessFullContent ? 'relative overflow-hidden' : ''}>
                 <CardHeader>
-                  <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                  <CardTitle className={`flex items-center gap-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
                     {language === 'bn' ? 'প্রম্পট টেমপ্লেট' : 'Prompt Template'}
+                    {isPremium && !hasPurchased && (
+                      <Badge variant="destructive" className="ml-2">
+                        <Lock className="w-3 h-3 mr-1" />
+                        {currentText.premium}
+                      </Badge>
+                    )}
                   </CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <div className="bg-muted/50 rounded-lg p-4 font-mono text-sm whitespace-pre-wrap">
+                  <div className={`bg-muted/50 rounded-lg p-4 font-mono text-sm whitespace-pre-wrap ${!canAccessFullContent ? 'blur-sm select-none' : ''}`}>
                     {language === 'bn' && prompt.contentBn ? prompt.contentBn : prompt.content}
                   </div>
+                  {!canAccessFullContent && (
+                    <div className="absolute inset-0 flex items-center justify-center bg-background/80 backdrop-blur-sm">
+                      <div className="text-center space-y-4 p-6">
+                        <Lock className="w-12 h-12 mx-auto text-muted-foreground" />
+                        <p className={`text-lg font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                          {language === 'bn' ? 'এই প্রম্পটের সম্পূর্ণ টেমপ্লেট দেখতে কিনুন' : 'Purchase to unlock full template'}
+                        </p>
+                        <Button 
+                          onClick={isAuthenticated ? initiateCheckout : () => navigate('/auth')}
+                          disabled={isCheckingOut}
+                          size="lg"
+                        >
+                          {isCheckingOut ? (
+                            <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          ) : (
+                            <CreditCard className="w-4 h-4 mr-2" />
+                          )}
+                          {isAuthenticated ? `${currentText.buyNow} - ৳${dbPrompt?.price}` : currentText.loginToBuy}
+                        </Button>
+                      </div>
+                    </div>
+                  )}
                 </CardContent>
               </Card>
 
