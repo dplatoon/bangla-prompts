@@ -1,3 +1,4 @@
+import "https://deno.land/x/xhr@0.1.0/mod.ts";
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
@@ -58,9 +59,9 @@ serve(async (req) => {
     });
 
     const { prompt, language = 'en' } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
+    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY is not configured");
+    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
     if (!prompt || typeof prompt !== "string" || prompt.length > 10000) {
       return new Response(JSON.stringify({ error: "Invalid prompt. Must be a string under 10000 characters." }), {
         status: 400,
@@ -72,19 +73,20 @@ serve(async (req) => {
       ? `আপনি একজন প্রম্পট ইঞ্জিনিয়ারিং বিশেষজ্ঞ। ব্যবহারকারীর প্রম্পট উন্নত করতে 3টি সংক্ষিপ্ত পরামর্শ দিন। প্রতিটি পরামর্শ একটি বাক্যে দিন। শুধুমাত্র পরামর্শগুলি দিন, অন্য কোনো ব্যাখ্যা নয়।`
       : `You are a prompt engineering expert. Provide 3 brief suggestions to improve the user's prompt. Each suggestion should be one sentence. Only provide the suggestions, no other explanation.`;
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
+        Authorization: `Bearer ${OPENAI_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.5-flash",
+        model: "gpt-4o-mini",
         messages: [
           { role: "system", content: systemMessage },
           { role: "user", content: `Prompt to improve: "${prompt}"` }
         ],
         temperature: 0.8,
+        max_tokens: 500,
       }),
     });
 
@@ -95,15 +97,9 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Payment required, please add funds to your Lovable AI workspace." }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
       const errorText = await response.text();
-      console.error("AI gateway error:", response.status, errorText);
-      throw new Error("AI gateway error");
+      console.error("OpenAI API error:", response.status, errorText);
+      throw new Error("OpenAI API error");
     }
 
     const data = await response.json();
