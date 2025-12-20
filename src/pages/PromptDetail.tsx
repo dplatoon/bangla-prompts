@@ -24,7 +24,7 @@ import {
   Lock,
   CreditCard
 } from "lucide-react";
-import { usePrompt, usePrompts, promptToPromptData } from "@/hooks/usePrompts";
+import { usePrompt, useRelatedPrompts, promptToPromptData } from "@/hooks/usePrompts";
 import { useSavePrompt } from "@/hooks/useSavePrompt";
 import { usePurchase } from "@/hooks/usePurchase";
 import type { PromptData } from "@/data/mockPrompts";
@@ -39,7 +39,13 @@ const PromptDetail = () => {
 
   // Fetch prompt by slug (id in URL is actually slug)
   const { data: dbPrompt, isLoading, error } = usePrompt(id || '');
-  const { data: allPrompts } = usePrompts();
+  
+  // Fetch related prompts from the same category
+  const { data: relatedPromptsData } = useRelatedPrompts(
+    dbPrompt?.id || '',
+    dbPrompt?.category_id || null,
+    4
+  );
   
   // Use the save hook with the actual database prompt ID
   const { isSaved, isPending: isSavePending, toggleSave } = useSavePrompt(
@@ -66,14 +72,11 @@ const PromptDetail = () => {
     return promptToPromptData(dbPrompt);
   }, [dbPrompt]);
 
-  // Get related prompts
+  // Convert related prompts to PromptData format
   const relatedPrompts = useMemo(() => {
-    if (!allPrompts || !dbPrompt) return [];
-    return allPrompts
-      .filter(p => p.id !== dbPrompt.id && p.category_id === dbPrompt.category_id)
-      .slice(0, 3)
-      .map(promptToPromptData);
-  }, [allPrompts, dbPrompt]);
+    if (!relatedPromptsData) return [];
+    return relatedPromptsData.map(promptToPromptData);
+  }, [relatedPromptsData]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
