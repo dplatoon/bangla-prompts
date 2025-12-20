@@ -269,6 +269,32 @@ export const useUnsavePrompt = () => {
   });
 };
 
+// Fetch related prompts by category (excluding current prompt)
+export const useRelatedPrompts = (promptId: string, categoryId: string | null, limit: number = 4) => {
+  return useQuery({
+    queryKey: ['relatedPrompts', promptId, categoryId, limit],
+    queryFn: async () => {
+      if (!categoryId) return [];
+      
+      const { data, error } = await supabase
+        .from('prompts')
+        .select(`
+          *,
+          category:categories(*)
+        `)
+        .eq('is_published', true)
+        .eq('category_id', categoryId)
+        .neq('id', promptId)
+        .order('rating', { ascending: false })
+        .limit(limit);
+      
+      if (error) throw error;
+      return data as Prompt[];
+    },
+    enabled: !!promptId && !!categoryId,
+  });
+};
+
 // Increment copy count (no-op for now, can be tracked server-side later)
 export const useIncrementCopyCount = () => {
   return useMutation({
