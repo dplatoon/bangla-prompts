@@ -107,6 +107,17 @@ export const PlaygroundModal = ({
   const handleGetSuggestions = async () => {
     if (!promptText.trim()) return;
     
+    // Check if user is authenticated
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session) {
+      toast({
+        title: language === 'bn' ? 'লগইন প্রয়োজন' : 'Login Required',
+        description: language === 'bn' ? 'AI পরামর্শ পেতে অনুগ্রহ করে লগইন করুন।' : 'Please log in to get AI suggestions.',
+        variant: "destructive",
+      });
+      return;
+    }
+    
     setIsSuggesting(true);
     setSuggestions("");
     
@@ -117,11 +128,14 @@ export const PlaygroundModal = ({
       
       if (error) throw error;
       setSuggestions(data.suggestions);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Suggestions error:', error);
+      const isAuthError = error?.message?.includes('401') || error?.message?.includes('authentication');
       toast({
         title: language === 'bn' ? 'ত্রুটি' : 'Error',
-        description: language === 'bn' ? 'পরামর্শ পাওয়া যায়নি। আবার চেষ্টা করুন।' : 'Failed to get suggestions. Please try again.',
+        description: isAuthError 
+          ? (language === 'bn' ? 'অনুগ্রহ করে লগইন করুন।' : 'Please log in to use this feature.')
+          : (language === 'bn' ? 'পরামর্শ পাওয়া যায়নি। আবার চেষ্টা করুন।' : 'Failed to get suggestions. Please try again.'),
         variant: "destructive",
       });
     } finally {
