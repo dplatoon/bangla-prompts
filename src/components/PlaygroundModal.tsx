@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
@@ -6,9 +6,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Slider } from "@/components/ui/slider";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Copy, Play, Loader2, Download, Wand2, Sparkles } from "lucide-react";
+import { Copy, Play, Loader2, Download, Wand2, Sparkles, LogIn } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
+import { User } from "@supabase/supabase-js";
 
 interface PlaygroundModalProps {
   open: boolean;
@@ -36,10 +38,24 @@ export const PlaygroundModal = ({
   const [isGenerating, setIsGenerating] = useState(false);
   const [isSuggesting, setIsSuggesting] = useState(false);
   const [suggestions, setSuggestions] = useState("");
-  const [model, setModel] = useState("google/gemini-2.5-flash");
+  const [model, setModel] = useState("gpt-4o-mini");
   const [temperature, setTemperature] = useState([0.7]);
   const [maxTokens, setMaxTokens] = useState([500]);
+  const [user, setUser] = useState<User | null>(null);
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user ?? null);
+    });
+
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((_, session) => {
+      setUser(session?.user ?? null);
+    });
+
+    return () => subscription.unsubscribe();
+  }, []);
 
   const text = {
     bn: {
@@ -62,7 +78,9 @@ export const PlaygroundModal = ({
       variablePlaceholder: 'এর জন্য মান লিখুন',
       getSuggestions: 'AI পরামর্শ পান',
       suggestions: 'AI পরামর্শ',
-      gettingSuggestions: 'পরামর্শ তৈরি করা হচ্ছে...'
+      gettingSuggestions: 'পরামর্শ তৈরি করা হচ্ছে...',
+      loginRequired: 'AI ফিচার ব্যবহার করতে লগইন করুন',
+      loginButton: 'লগইন করুন'
     },
     en: {
       title: 'AI Playground',
@@ -84,7 +102,9 @@ export const PlaygroundModal = ({
       variablePlaceholder: 'Enter value for',
       getSuggestions: 'Get AI Suggestions',
       suggestions: 'AI Suggestions',
-      gettingSuggestions: 'Getting suggestions...'
+      gettingSuggestions: 'Getting suggestions...',
+      loginRequired: 'Login to use AI features',
+      loginButton: 'Login'
     }
   };
 
@@ -104,12 +124,15 @@ export const PlaygroundModal = ({
     return text.replace(new RegExp(`\\{${variable}\\}`, 'g'), value);
   }, promptText);
 
+  const handleLogin = () => {
+    onOpenChange(false);
+    navigate('/auth');
+  };
+
   const handleGetSuggestions = async () => {
     if (!promptText.trim()) return;
     
-    // Check if user is authenticated
-    const { data: { session } } = await supabase.auth.getSession();
-    if (!session) {
+    if (!user) {
       toast({
         title: language === 'bn' ? 'লগইন প্রয়োজন' : 'Login Required',
         description: language === 'bn' ? 'AI পরামর্শ পেতে অনুগ্রহ করে লগইন করুন।' : 'Please log in to get AI suggestions.',
@@ -145,6 +168,15 @@ export const PlaygroundModal = ({
 
   const handleRun = async () => {
     if (!processedPrompt.trim()) return;
+    
+    if (!user) {
+      toast({
+        title: language === 'bn' ? 'লগইন প্রয়োজন' : 'Login Required',
+        description: language === 'bn' ? 'প্রম্পট চালাতে অনুগ্রহ করে লগইন করুন।' : 'Please log in to run prompts.',
+        variant: "destructive",
+      });
+      return;
+    }
     
     setIsGenerating(true);
     setOutput("");
@@ -204,6 +236,26 @@ export const PlaygroundModal = ({
             {currentText.title}
           </DialogTitle>
         </DialogHeader>
+
+        {/* Login Banner for unauthenticated users */}
+        {!user && (
+          <div className="bg-primary/10 border border-primary/20 rounded-lg p-4 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <LogIn className="w-5 h-5 text-primary" />
+              <p className={`text-sm text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {currentText.loginRequired}
+              </p>
+            </div>
+            <Button 
+              onClick={handleLogin}
+              size="sm"
+              className={language === 'bn' ? 'font-bengali' : ''}
+            >
+              <LogIn className="w-4 h-4 mr-2" />
+              {currentText.loginButton}
+            </Button>
+          </div>
+        )}
 
         <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0">
           {/* Left Panel - Input */}
@@ -300,10 +352,8 @@ export const PlaygroundModal = ({
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="google/gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
-                      <SelectItem value="google/gemini-2.5-pro">Gemini 2.5 Pro</SelectItem>
-                      <SelectItem value="openai/gpt-5-mini">GPT-5 Mini</SelectItem>
-                      <SelectItem value="openai/gpt-5">GPT-5</SelectItem>
+                      <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                      <SelectItem value="gpt-4o">GPT-4o</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
