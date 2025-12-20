@@ -88,8 +88,8 @@ export const usePurchase = (promptId: string, language: 'bn' | 'en' = 'bn') => {
       const { data, error } = await supabase.functions.invoke('create-checkout', {
         body: {
           promptId,
-          successUrl: `${window.location.origin}/prompt/${promptId}?purchase=success`,
-          cancelUrl: `${window.location.origin}/prompt/${promptId}?purchase=cancelled`,
+          successUrl: `${window.location.origin}/payment-success`,
+          cancelUrl: `${window.location.origin}/payment-cancelled`,
         },
       });
 
