@@ -4,7 +4,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/hooks/useAuth";
 type Message = {
   role: "user" | "assistant";
   content: string;
@@ -17,6 +18,7 @@ export const ChatAssistant = () => {
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -29,23 +31,43 @@ export const ChatAssistant = () => {
   const sendMessage = async () => {
     if (!input.trim() || isLoading) return;
 
+    if (!user) {
+      toast({
+        title: "Login Required",
+        description: "Please log in to use the AI assistant.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const userMessage: Message = { role: "user", content: input };
     setMessages(prev => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
 
     try {
+      // Get the user's JWT session token for proper authentication
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session?.access_token) {
+        throw new Error("No valid session");
+      }
+
       const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({ messages: [...messages, userMessage] }),
       });
 
       if (!response.ok || !response.body) {
-        throw new Error("Failed to get response");
+        const errorData = await response.json().catch(() => ({}));
+        if (response.status === 429) {
+          throw new Error("Rate limit exceeded. Please try again later.");
+        }
+        throw new Error(errorData.error || "Failed to get response");
       }
 
       const reader = response.body.getReader();
@@ -102,7 +124,7 @@ export const ChatAssistant = () => {
       console.error("Chat error:", error);
       toast({
         title: "Error",
-        description: "Failed to send message. Please try again.",
+        description: error instanceof Error ? error.message : "Failed to send message. Please try again.",
         variant: "destructive",
       });
       setMessages(prev => prev.slice(0, -1));
