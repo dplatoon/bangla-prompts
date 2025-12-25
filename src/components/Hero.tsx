@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ArrowRight, Sparkles, Copy, Play } from "lucide-react";
@@ -97,15 +98,19 @@ export const Hero = ({ language }: HeroProps) => {
             </div>
 
             {/* CTAs */}
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button size="lg" variant="secondary" className={`group ${language === 'bn' ? 'font-bengali' : ''}`}>
-                {currentText.exploreBtn}
-                <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <nav className="flex flex-col sm:flex-row gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
+              <Button size="lg" variant="secondary" className={`group ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+                <Link to="/explore">
+                  {currentText.exploreBtn}
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </Button>
-              <Button size="lg" variant="outline" className={`border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                {currentText.submitBtn}
+              <Button size="lg" variant="outline" className={`border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+                <Link to="/become-creator">
+                  {currentText.submitBtn}
+                </Link>
               </Button>
-            </div>
+            </nav>
 
             {/* Stats */}
             <aside className="grid grid-cols-3 gap-6 pt-8" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
@@ -192,8 +197,10 @@ export const Hero = ({ language }: HeroProps) => {
                     </p>
                   </div>
                   
-                  <Button className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`} variant="outline">
-                    {currentText.tryPrompt}
+                  <Button className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`} variant="outline" asChild>
+                    <Link to="/playground">
+                      {currentText.tryPrompt}
+                    </Link>
                   </Button>
                 </div>
               </div>

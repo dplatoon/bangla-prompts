@@ -1,4 +1,5 @@
 import { useState, useMemo } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -6,7 +7,7 @@ import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
 import type { PromptData } from "@/data/mockPrompts";
-import { TrendingUp, Search, Loader2 } from "lucide-react";
+import { TrendingUp, Search, Loader2, ArrowRight } from "lucide-react";
 
 interface PromptShowcaseProps {
   language: 'bn' | 'en';
@@ -44,7 +45,8 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       sortBy: "সাজান",
       loading: "লোড হচ্ছে...",
       noResults: "কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।",
-      resultsFound: "টি প্রম্পট পাওয়া গেছে"
+      resultsFound: "টি প্রম্পট পাওয়া গেছে",
+      tryPlayground: "প্লেগ্রাউন্ডে যান"
     },
     en: {
       title: "Popular Prompts",
@@ -62,7 +64,8 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       sortBy: "Sort by",
       loading: "Loading...",
       noResults: "No prompts found. Try different search terms.",
-      resultsFound: "prompts found"
+      resultsFound: "prompts found",
+      tryPlayground: "Go to Playground"
     }
   };
 
@@ -217,6 +220,21 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
             )}
           </div>
         )}
+
+        {/* View All & Playground Links */}
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-4 mt-12">
+          <Button size="lg" className={`group ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+            <Link to="/explore">
+              {currentText.viewAll}
+              <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </Button>
+          <Button size="lg" variant="outline" className={language === 'bn' ? 'font-bengali' : ''} asChild>
+            <Link to="/playground">
+              {currentText.tryPlayground}
+            </Link>
+          </Button>
+        </div>
       </div>
 
       <PlaygroundModal
