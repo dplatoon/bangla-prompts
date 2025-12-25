@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Zap, Package, Users, BookOpen } from "lucide-react";
@@ -17,28 +18,32 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "প্লেগ্রাউন্ড",
           description: "প্রম্পট টেস্ট করুন এবং রিয়েল-টাইমে ফলাফল দেখুন",
           action: "এখনই চেষ্টা করুন",
-          color: "bg-gradient-primary"
+          color: "bg-gradient-primary",
+          href: "/playground"
         },
         {
           icon: Package,
           title: "প্রম্পট প্যাকস", 
           description: "বিশেষ ক্যাটেগরির জন্য কিউরেটেড প্রম্পট কালেকশন",
           action: "ব্রাউজ করুন",
-          color: "bg-gradient-accent"
+          color: "bg-gradient-accent",
+          href: "/packs"
         },
         {
           icon: Users,
           title: "ক্রিয়েটর প্রোগ্রাম",
           description: "আপনার প্রম্পট বিক্রি করুন এবং আয় করুন",
           action: "যোগদান করুন",
-          color: "bg-primary"
+          color: "bg-primary",
+          href: "/become-creator"
         },
         {
           icon: BookOpen,
-          title: "ফ্রেজবুক",
-          description: "সাধারণ বাক্য ও শব্দের AI-ফ্রেন্ডলি ভার্শন",
-          action: "পড়ুন",
-          color: "bg-secondary"
+          title: "রিসোর্স",
+          description: "AI টুলস ও গাইডলাইন সম্পর্কে জানুন",
+          action: "দেখুন",
+          color: "bg-secondary",
+          href: "/resources"
         }
       ]
     },
@@ -51,28 +56,32 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "Playground",
           description: "Test prompts and see results in real-time",
           action: "Try Now",
-          color: "bg-gradient-primary"
+          color: "bg-gradient-primary",
+          href: "/playground"
         },
         {
           icon: Package,
           title: "Prompt Packs",
           description: "Curated prompt collections for specific categories",
           action: "Browse",
-          color: "bg-gradient-accent"
+          color: "bg-gradient-accent",
+          href: "/packs"
         },
         {
           icon: Users,
           title: "Creator Program", 
           description: "Sell your prompts and earn revenue",
           action: "Join Now",
-          color: "bg-primary"
+          color: "bg-primary",
+          href: "/become-creator"
         },
         {
           icon: BookOpen,
-          title: "Phrasebook",
-          description: "AI-friendly versions of common phrases and words",
-          action: "Read",
-          color: "bg-secondary"
+          title: "Resources",
+          description: "AI tools and guidelines to get started",
+          action: "View",
+          color: "bg-secondary",
+          href: "/resources"
         }
       ]
     }
@@ -96,28 +105,30 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           {currentText.features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Card key={index} className="group hover:shadow-accent transition-smooth border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm">
-                <CardHeader className="text-center pb-4">
-                  <div className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-primary`}>
-                    <Icon className="w-8 h-8 text-primary-foreground" />
-                  </div>
-                  <CardTitle className={`text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {feature.title}
-                  </CardTitle>
-                  <CardDescription className={`text-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <Button 
-                    variant="ghost" 
-                    className={`w-full group/btn text-primary hover:bg-primary/5 ${language === 'bn' ? 'font-bengali' : ''}`}
-                  >
-                    {feature.action}
-                    <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Button>
-                </CardContent>
-              </Card>
+              <Link key={index} to={feature.href} className="block">
+                <Card className="group hover:shadow-accent transition-smooth border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm h-full">
+                  <CardHeader className="text-center pb-4">
+                    <div className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-primary`}>
+                      <Icon className="w-8 h-8 text-primary-foreground" />
+                    </div>
+                    <CardTitle className={`text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {feature.title}
+                    </CardTitle>
+                    <CardDescription className={`text-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+                      {feature.description}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <Button 
+                      variant="ghost" 
+                      className={`w-full group/btn text-primary hover:bg-primary/5 ${language === 'bn' ? 'font-bengali' : ''}`}
+                    >
+                      {feature.action}
+                      <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Link>
             );
           })}
         </div>
