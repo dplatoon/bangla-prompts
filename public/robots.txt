@@ -1,7 +1,10 @@
 # robots.txt for bdprompt.com
 # Bangla AI Prompts Hub
 
-# Sitemap location
+# Dynamic Sitemap (includes all prompts from database)
+Sitemap: https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap
+
+# Static Sitemap fallback
 Sitemap: https://bdprompt.com/sitemap.xml
 
 # Google
