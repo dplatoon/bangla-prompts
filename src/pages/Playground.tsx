@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -133,6 +134,15 @@ const Playground = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-4 py-8">
+          {/* Breadcrumb Navigation */}
+          <Breadcrumbs
+            items={[
+              { label: "AI Playground", labelBn: "AI প্লেগ্রাউন্ড", href: "/playground" }
+            ]}
+            language={language}
+            className="mb-6"
+          />
+
           {/* Page Header */}
           <header className="text-center mb-12">
             <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">

@@ -4,6 +4,7 @@ import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -178,6 +179,15 @@ const Explore = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-4 py-8">
+          {/* Breadcrumb Navigation */}
+          <Breadcrumbs
+            items={[
+              { label: "Explore", labelBn: "এক্সপ্লোর", href: "/explore" }
+            ]}
+            language={language}
+            className="mb-6"
+          />
+
           {/* Page Header */}
           <header className="text-center mb-12">
             <h1 className={`text-4xl lg:text-5xl font-bold text-foreground mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>

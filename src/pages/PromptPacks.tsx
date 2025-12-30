@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -131,6 +132,15 @@ const PromptPacks = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-4 py-16">
+          {/* Breadcrumb Navigation */}
+          <Breadcrumbs
+            items={[
+              { label: "Prompt Packs", labelBn: "প্রম্পট প্যাক", href: "/packs" }
+            ]}
+            language={language}
+            className="mb-8"
+          />
+
           {/* Page Header */}
           <header className="text-center mb-16">
             <h1 className={`text-4xl lg:text-5xl font-bold text-foreground mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>
