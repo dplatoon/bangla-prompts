@@ -7,70 +7,138 @@ const corsHeaders = {
   'Cache-Control': 'public, max-age=3600, s-maxage=86400',
 }
 
+const URLS_PER_SITEMAP = 1000 // Maximum URLs per sitemap for better crawling
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
+  const url = new URL(req.url)
+  const sitemapType = url.searchParams.get('type') || 'index'
+
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
-
-    console.log('Generating comprehensive sitemap...')
-
-    // Fetch all published prompts with category info
-    const { data: prompts, error: promptsError } = await supabase
-      .from('prompts')
-      .select('slug, updated_at, title_bn, title_en, category_id')
-      .eq('is_published', true)
-      .order('updated_at', { ascending: false })
-
-    if (promptsError) {
-      console.error('Error fetching prompts:', promptsError)
-      throw promptsError
-    }
-
-    // Fetch all categories
-    const { data: categories, error: categoriesError } = await supabase
-      .from('categories')
-      .select('slug, name_bn, name_en')
-
-    if (categoriesError) {
-      console.error('Error fetching categories:', categoriesError)
-      throw categoriesError
-    }
-
-    console.log(`Found ${prompts?.length || 0} prompts and ${categories?.length || 0} categories`)
-
     const baseUrl = 'https://bdprompt.com'
     const today = new Date().toISOString().split('T')[0]
 
-    // Static pages with their priorities and change frequencies
-    const staticPages = [
-      { url: '/', priority: '1.0', changefreq: 'daily', title: 'বাংলা AI প্রম্পট হাব - bdprompt.com' },
-      { url: '/explore', priority: '0.9', changefreq: 'daily', title: 'সকল প্রম্পট এক্সপ্লোর করুন' },
-      { url: '/playground', priority: '0.9', changefreq: 'daily', title: 'AI প্লেগ্রাউন্ড' },
-      { url: '/prompt-packs', priority: '0.8', changefreq: 'weekly', title: 'প্রম্পট প্যাক কিনুন' },
-      { url: '/product', priority: '0.8', changefreq: 'weekly', title: 'প্রোডাক্ট তথ্য' },
-      { url: '/api', priority: '0.7', changefreq: 'weekly', title: 'API ডকুমেন্টেশন' },
-      { url: '/community', priority: '0.8', changefreq: 'weekly', title: 'কমিউনিটি' },
-      { url: '/blog', priority: '0.8', changefreq: 'daily', title: 'ব্লগ ও আর্টিকেল' },
-      { url: '/shikkha', priority: '0.8', changefreq: 'weekly', title: 'AI শিক্ষা' },
-      { url: '/kobita', priority: '0.8', changefreq: 'weekly', title: 'বাংলা কবিতা জেনারেটর' },
-      { url: '/business', priority: '0.8', changefreq: 'weekly', title: 'ব্যবসায়িক সমাধান' },
-      { url: '/resources', priority: '0.7', changefreq: 'weekly', title: 'রিসোর্স ও গাইড' },
-      { url: '/become-creator', priority: '0.7', changefreq: 'monthly', title: 'ক্রিয়েটর হোন' },
-      { url: '/support', priority: '0.5', changefreq: 'monthly', title: 'সাপোর্ট' },
-      { url: '/legal', priority: '0.3', changefreq: 'yearly', title: 'আইনি তথ্য' },
-      { url: '/privacy', priority: '0.3', changefreq: 'yearly', title: 'গোপনীয়তা নীতি' },
-      { url: '/terms', priority: '0.3', changefreq: 'yearly', title: 'শর্তাবলী' },
-      { url: '/cookies', priority: '0.3', changefreq: 'yearly', title: 'কুকি নীতি' },
-      { url: '/dmca', priority: '0.3', changefreq: 'yearly', title: 'DMCA নীতি' },
-      { url: '/guidelines', priority: '0.3', changefreq: 'yearly', title: 'নির্দেশিকা' },
-    ]
+    console.log(`Generating sitemap: ${sitemapType}`)
 
-    let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+    // Handle different sitemap types
+    if (sitemapType === 'index') {
+      return generateSitemapIndex(baseUrl, today, supabase)
+    } else if (sitemapType === 'pages') {
+      return generatePagesSitemap(baseUrl, today)
+    } else if (sitemapType === 'categories') {
+      return generateCategoriesSitemap(baseUrl, today, supabase)
+    } else if (sitemapType.startsWith('prompts')) {
+      const page = parseInt(sitemapType.replace('prompts-', '') || '1', 10)
+      return generatePromptsSitemap(baseUrl, today, supabase, page)
+    }
+
+    // Default to index
+    return generateSitemapIndex(baseUrl, today, supabase)
+  } catch (error) {
+    console.error('Sitemap generation error:', error)
+    return new Response(
+      `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://bdprompt.com/</loc>
+    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
+    <priority>1.0</priority>
+  </url>
+</urlset>`,
+      { status: 200, headers: corsHeaders }
+    )
+  }
+})
+
+// Generate sitemap index that references all sub-sitemaps
+async function generateSitemapIndex(baseUrl: string, today: string, supabase: any) {
+  console.log('Generating sitemap index...')
+
+  // Count total prompts to determine how many prompt sitemaps we need
+  const { count: promptCount, error } = await supabase
+    .from('prompts')
+    .select('*', { count: 'exact', head: true })
+    .eq('is_published', true)
+
+  if (error) {
+    console.error('Error counting prompts:', error)
+  }
+
+  const totalPrompts = promptCount || 0
+  const promptSitemapCount = Math.ceil(totalPrompts / URLS_PER_SITEMAP)
+
+  console.log(`Total prompts: ${totalPrompts}, Sitemap pages needed: ${promptSitemapCount}`)
+
+  const functionUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/sitemap`
+
+  let sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
+<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <!-- Static Pages Sitemap -->
+  <sitemap>
+    <loc>${functionUrl}?type=pages</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+  
+  <!-- Categories Sitemap -->
+  <sitemap>
+    <loc>${functionUrl}?type=categories</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>
+`
+
+  // Add prompt sitemaps (paginated)
+  for (let i = 1; i <= Math.max(1, promptSitemapCount); i++) {
+    sitemapIndex += `
+  <!-- Prompts Sitemap (Page ${i} of ${Math.max(1, promptSitemapCount)}) -->
+  <sitemap>
+    <loc>${functionUrl}?type=prompts-${i}</loc>
+    <lastmod>${today}</lastmod>
+  </sitemap>`
+  }
+
+  sitemapIndex += `
+</sitemapindex>`
+
+  console.log(`Sitemap index generated with ${2 + Math.max(1, promptSitemapCount)} sub-sitemaps`)
+
+  return new Response(sitemapIndex, { headers: corsHeaders, status: 200 })
+}
+
+// Generate sitemap for static pages
+function generatePagesSitemap(baseUrl: string, today: string) {
+  console.log('Generating pages sitemap...')
+
+  const staticPages = [
+    { url: '/', priority: '1.0', changefreq: 'daily' },
+    { url: '/explore', priority: '0.9', changefreq: 'daily' },
+    { url: '/playground', priority: '0.9', changefreq: 'daily' },
+    { url: '/packs', priority: '0.8', changefreq: 'weekly' },
+    { url: '/product', priority: '0.8', changefreq: 'weekly' },
+    { url: '/api', priority: '0.7', changefreq: 'weekly' },
+    { url: '/community', priority: '0.8', changefreq: 'weekly' },
+    { url: '/blog', priority: '0.8', changefreq: 'daily' },
+    { url: '/shikkha', priority: '0.8', changefreq: 'weekly' },
+    { url: '/kobita', priority: '0.8', changefreq: 'weekly' },
+    { url: '/business', priority: '0.8', changefreq: 'weekly' },
+    { url: '/resources', priority: '0.7', changefreq: 'weekly' },
+    { url: '/become-creator', priority: '0.7', changefreq: 'monthly' },
+    { url: '/support', priority: '0.5', changefreq: 'monthly' },
+    { url: '/legal', priority: '0.3', changefreq: 'yearly' },
+    { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
+    { url: '/terms', priority: '0.3', changefreq: 'yearly' },
+    { url: '/cookies', priority: '0.3', changefreq: 'yearly' },
+    { url: '/dmca', priority: '0.3', changefreq: 'yearly' },
+    { url: '/guidelines', priority: '0.3', changefreq: 'yearly' },
+  ]
+
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
@@ -91,78 +159,108 @@ Deno.serve(async (req) => {
   </url>
 `
 
-    // Add static pages (skip homepage as it's already added)
-    for (const page of staticPages.slice(1)) {
-      sitemap += `
-  <!-- ${page.title} -->
+  for (const page of staticPages.slice(1)) {
+    sitemap += `
   <url>
     <loc>${baseUrl}${page.url}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>${page.changefreq}</changefreq>
     <priority>${page.priority}</priority>
+    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}${page.url}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}${page.url}?lang=en" />
   </url>`
-    }
+  }
 
-    // Add category pages with Bengali alternates
-    if (categories && categories.length > 0) {
+  sitemap += `
+</urlset>`
+
+  console.log(`Pages sitemap generated with ${staticPages.length} URLs`)
+
+  return new Response(sitemap, { headers: corsHeaders, status: 200 })
+}
+
+// Generate sitemap for categories
+async function generateCategoriesSitemap(baseUrl: string, today: string, supabase: any) {
+  console.log('Generating categories sitemap...')
+
+  const { data: categories, error } = await supabase
+    .from('categories')
+    .select('slug, name_bn, name_en')
+
+  if (error) {
+    console.error('Error fetching categories:', error)
+    throw error
+  }
+
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+`
+
+  if (categories && categories.length > 0) {
+    for (const category of categories) {
       sitemap += `
-
-  <!-- Category Pages -->`
-      for (const category of categories) {
-        sitemap += `
   <url>
-    <loc>${baseUrl}/explore?category=${category.slug}</loc>
+    <loc>${baseUrl}/explore?category=${encodeURIComponent(category.slug)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/explore?category=${category.slug}" />
+    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/explore?category=${encodeURIComponent(category.slug)}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}/explore?category=${encodeURIComponent(category.slug)}&amp;lang=en" />
   </url>`
-      }
     }
+  }
 
-    // Add all prompt detail pages
-    if (prompts && prompts.length > 0) {
+  sitemap += `
+</urlset>`
+
+  console.log(`Categories sitemap generated with ${categories?.length || 0} URLs`)
+
+  return new Response(sitemap, { headers: corsHeaders, status: 200 })
+}
+
+// Generate paginated sitemap for prompts
+async function generatePromptsSitemap(baseUrl: string, today: string, supabase: any, page: number) {
+  console.log(`Generating prompts sitemap page ${page}...`)
+
+  const offset = (page - 1) * URLS_PER_SITEMAP
+
+  const { data: prompts, error } = await supabase
+    .from('prompts')
+    .select('slug, updated_at, title_bn, title_en')
+    .eq('is_published', true)
+    .order('updated_at', { ascending: false })
+    .range(offset, offset + URLS_PER_SITEMAP - 1)
+
+  if (error) {
+    console.error('Error fetching prompts:', error)
+    throw error
+  }
+
+  let sitemap = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
+`
+
+  if (prompts && prompts.length > 0) {
+    for (const prompt of prompts) {
+      const lastmod = prompt.updated_at ? prompt.updated_at.split('T')[0] : today
       sitemap += `
-
-  <!-- Dynamic Prompt Pages (${prompts.length} total) -->`
-      for (const prompt of prompts) {
-        const lastmod = prompt.updated_at ? prompt.updated_at.split('T')[0] : today
-        const title = prompt.title_bn || prompt.title_en || prompt.slug
-        sitemap += `
   <url>
-    <loc>${baseUrl}/prompt/${prompt.slug}</loc>
+    <loc>${baseUrl}/prompt/${encodeURIComponent(prompt.slug)}</loc>
     <lastmod>${lastmod}</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/prompt/${prompt.slug}" />
+    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/prompt/${encodeURIComponent(prompt.slug)}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}/prompt/${encodeURIComponent(prompt.slug)}?lang=en" />
   </url>`
-      }
     }
+  }
 
-    sitemap += `
+  sitemap += `
 </urlset>`
 
-    console.log(`Sitemap generated successfully with ${staticPages.length + (categories?.length || 0) + (prompts?.length || 0)} URLs`)
+  console.log(`Prompts sitemap page ${page} generated with ${prompts?.length || 0} URLs`)
 
-    return new Response(sitemap, {
-      headers: corsHeaders,
-      status: 200,
-    })
-  } catch (error) {
-    console.error('Sitemap generation error:', error)
-    return new Response(
-      `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>https://bdprompt.com/</loc>
-    <lastmod>${new Date().toISOString().split('T')[0]}</lastmod>
-    <priority>1.0</priority>
-  </url>
-</urlset>`,
-      {
-        status: 200,
-        headers: corsHeaders,
-      }
-    )
-  }
-})
+  return new Response(sitemap, { headers: corsHeaders, status: 200 })
+}
