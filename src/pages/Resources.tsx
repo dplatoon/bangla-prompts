@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { ExternalLink, Sparkles, Bot, Image, Code, FileText } from "lucide-react";
 
 const Resources = () => {
@@ -195,6 +196,13 @@ const Resources = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="pt-8 pb-16">
+          <div className="container mx-auto px-4 mb-4">
+            <Breadcrumbs 
+              items={[{ label: 'Resources', labelBn: 'রিসোর্স' }]} 
+              language={language}
+            />
+          </div>
+          
           {/* Hero Section */}
           <section className="bg-gradient-hero py-16 lg:py-24">
             <div className="container mx-auto px-4">

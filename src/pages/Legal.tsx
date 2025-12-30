@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
+import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { FileText, Shield, Cookie, AlertTriangle } from "lucide-react";
 
 const Legal = () => {
@@ -30,6 +31,11 @@ const Legal = () => {
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl">
+          <Breadcrumbs 
+            items={[{ label: 'Legal', labelBn: 'আইনি' }]} 
+            language={language} 
+            className="mb-8"
+          />
           <h1 className={`text-4xl font-bold text-center mb-12 ${language === 'bn' ? 'font-bengali' : ''}`}>{language === 'bn' ? 'আইনি তথ্য' : 'Legal Information'}</h1>
           <div className="grid md:grid-cols-2 gap-6">
             {pages.map((page, idx) => (
