@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { BookOpen, CheckCircle, XCircle, AlertTriangle } from "lucide-react";
@@ -111,6 +112,12 @@ const Guidelines = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-4 py-16 max-w-4xl">
+          <Breadcrumbs 
+            items={[{ label: 'Guidelines', labelBn: 'গাইডলাইন' }]} 
+            language={language} 
+            className="mb-8"
+          />
+          
           {/* Header */}
           <header className="text-center mb-12">
             <Badge variant="secondary" className="mb-4">

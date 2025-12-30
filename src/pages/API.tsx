@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -109,6 +110,12 @@ print(prompts)`
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-4 py-16">
+          <Breadcrumbs 
+            items={[{ label: 'API', labelBn: 'API' }]} 
+            language={language} 
+            className="mb-8"
+          />
+          
           {/* Hero */}
           <header className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">

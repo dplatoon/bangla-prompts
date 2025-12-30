@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 
 const DMCA = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -14,6 +15,14 @@ const DMCA = () => {
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl prose prose-lg dark:prose-invert">
+          <Breadcrumbs 
+            items={[
+              { label: 'Legal', labelBn: 'আইনি', href: '/legal' },
+              { label: 'DMCA', labelBn: 'DMCA' }
+            ]} 
+            language={language} 
+            className="mb-8 not-prose"
+          />
           <h1>DMCA Policy</h1>
           
           <h2>{language === 'bn' ? 'কপিরাইট লঙ্ঘন রিপোর্ট' : 'Copyright Infringement Reports'}</h2>
