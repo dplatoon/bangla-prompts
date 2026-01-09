@@ -98,6 +98,20 @@ const Support = () => {
 
   const currentText = text[language];
 
+  // Generate FAQ structured data for rich snippets
+  const faqStructuredData = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": currentText.faqItems.map((item) => ({
+      "@type": "Question",
+      "name": item.q,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": item.a
+      }
+    }))
+  };
+
   return (
     <>
       <SEOHead 
@@ -112,6 +126,7 @@ const Support = () => {
           { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
           { name: language === 'bn' ? 'সাপোর্ট' : 'Support', url: 'https://bdprompt.com/support' }
         ]}
+        structuredData={faqStructuredData}
       />
       
       <div className="min-h-screen bg-background">
