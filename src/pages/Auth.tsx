@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { SEOHead } from '@/components/SEOHead';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -134,8 +135,16 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <>
+      <SEOHead 
+        title={isLogin ? "লগইন | bdprompt.com" : "সাইন আপ | bdprompt.com"}
+        description="bdprompt-এ লগইন বা সাইন আপ করুন। বাংলা AI প্রম্পট অ্যাক্সেস করুন।"
+        canonicalUrl="https://bdprompt.com/auth"
+        ogImage="https://bdprompt.com/og-image.png"
+        language="bn"
+      />
+      <div className="min-h-screen bg-background flex items-center justify-center p-4">
+        <Card className="w-full max-w-md">
         <CardHeader className="text-center">
           <CardTitle className="text-2xl font-bold">
             {isLogin ? 'স্বাগতম' : 'অ্যাকাউন্ট তৈরি করুন'}
@@ -213,9 +222,10 @@ const Auth = () => {
               {isLogin ? 'সাইন আপ করুন' : 'লগইন করুন'}
             </button>
           </div>
-        </CardContent>
-      </Card>
-    </div>
+          </CardContent>
+        </Card>
+      </div>
+    </>
   );
 };
 

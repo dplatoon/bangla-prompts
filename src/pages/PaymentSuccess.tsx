@@ -1,14 +1,15 @@
-import { useState, useEffect } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { useState } from "react";
+import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, ArrowRight, BookOpen, ShoppingBag } from "lucide-react";
 
 const PaymentSuccess = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
-  const [searchParams] = useSearchParams();
+  
   
   const text = {
     bn: {
@@ -38,8 +39,16 @@ const PaymentSuccess = () => {
   const t = text[language];
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header language={language} onLanguageChange={setLanguage} />
+    <>
+      <SEOHead 
+        title={language === 'bn' ? "পেমেন্ট সফল | bdprompt.com" : "Payment Successful | bdprompt.com"}
+        description={language === 'bn' ? "আপনার পেমেন্ট সফল হয়েছে।" : "Your payment was successful."}
+        canonicalUrl="https://bdprompt.com/payment-success"
+        ogImage="https://bdprompt.com/og-image.png"
+        language={language}
+      />
+      <div className="min-h-screen bg-background">
+        <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center">
@@ -119,8 +128,9 @@ const PaymentSuccess = () => {
         </div>
       </main>
 
-      <Footer language={language} />
-    </div>
+        <Footer language={language} />
+      </div>
+    </>
   );
 };
 

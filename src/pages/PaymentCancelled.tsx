@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { XCircle, ArrowLeft, RefreshCw, HelpCircle, BookOpen } from "lucide-react";
@@ -50,8 +51,16 @@ const PaymentCancelled = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header language={language} onLanguageChange={setLanguage} />
+    <>
+      <SEOHead 
+        title={language === 'bn' ? "পেমেন্ট বাতিল | bdprompt.com" : "Payment Cancelled | bdprompt.com"}
+        description={language === 'bn' ? "আপনার পেমেন্ট বাতিল হয়েছে।" : "Your payment was cancelled."}
+        canonicalUrl="https://bdprompt.com/payment-cancelled"
+        ogImage="https://bdprompt.com/og-image.png"
+        language={language}
+      />
+      <div className="min-h-screen bg-background">
+        <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-16">
         <div className="max-w-2xl mx-auto text-center">
@@ -149,8 +158,9 @@ const PaymentCancelled = () => {
         </div>
       </main>
 
-      <Footer language={language} />
-    </div>
+        <Footer language={language} />
+      </div>
+    </>
   );
 };
 

@@ -90,8 +90,15 @@ const BecomeCreator = () => {
       <SEOHead 
         title={language === 'bn' ? "ক্রিয়েটর হন | bdprompt.com" : "Become a Creator | bdprompt.com"}
         description={language === 'bn' ? "bdprompt-এ প্রম্পট ক্রিয়েটর হন। আপনার প্রম্পট বিক্রি করে আয় করুন। ৭০% কমিশন।" : "Become a prompt creator on bdprompt. Sell your prompts and earn money. 70% commission."}
+        keywords={language === 'bn' ? "প্রম্পট ক্রিয়েটর, আয় করুন, AI প্রম্পট বিক্রি" : "prompt creator, earn money, sell AI prompts"}
         canonicalUrl="https://bdprompt.com/become-creator"
+        ogImage="https://bdprompt.com/og-image.png"
+        ogType="website"
         language={language}
+        breadcrumbs={[
+          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
+          { name: language === 'bn' ? 'ক্রিয়েটর হন' : 'Become Creator', url: 'https://bdprompt.com/become-creator' }
+        ]}
       />
       
       <div className="min-h-screen bg-background">
