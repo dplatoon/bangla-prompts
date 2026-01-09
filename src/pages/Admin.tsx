@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { useAuth } from "@/hooks/useAuth";
 import { useAdmin } from "@/hooks/useAdmin";
 import { AdminPromptsTable } from "@/components/admin/AdminPromptsTable";
@@ -70,8 +71,16 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header language={language} onLanguageChange={setLanguage} />
+    <>
+      <SEOHead 
+        title="Admin Dashboard | bdprompt.com"
+        description="Manage prompts, categories, and site analytics."
+        canonicalUrl="https://bdprompt.com/admin"
+        ogImage="https://bdprompt.com/og-image.png"
+        language={language}
+      />
+      <div className="min-h-screen bg-background">
+        <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Header */}
@@ -120,8 +129,9 @@ const Admin = () => {
         </Tabs>
       </main>
 
-      <Footer language={language} />
-    </div>
+        <Footer language={language} />
+      </div>
+    </>
   );
 };
 

@@ -89,8 +89,15 @@ const Community = () => {
       <SEOHead 
         title={language === 'bn' ? "কমিউনিটি | bdprompt.com" : "Community | bdprompt.com"}
         description={language === 'bn' ? "বাংলাদেশের সবচেয়ে বড় AI প্রম্পট ক্রিয়েটর কমিউনিটি। Discord, Facebook, Telegram এ যোগ দিন।" : "Bangladesh's largest AI prompt creator community. Join Discord, Facebook, Telegram."}
+        keywords={language === 'bn' ? "bdprompt কমিউনিটি, AI প্রম্পট ক্রিয়েটর, বাংলাদেশ AI" : "bdprompt community, AI prompt creators, Bangladesh AI"}
         canonicalUrl="https://bdprompt.com/community"
+        ogImage="https://bdprompt.com/og-image.png"
+        ogType="website"
         language={language}
+        breadcrumbs={[
+          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
+          { name: language === 'bn' ? 'কমিউনিটি' : 'Community', url: 'https://bdprompt.com/community' }
+        ]}
       />
       
       <div className="min-h-screen bg-background">

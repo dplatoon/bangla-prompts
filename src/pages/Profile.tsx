@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { SEOHead } from "@/components/SEOHead";
 import { useAuth } from "@/hooks/useAuth";
 import { ProfileSavedPrompts } from "@/components/profile/ProfileSavedPrompts";
 import { ProfilePurchases } from "@/components/profile/ProfilePurchases";
@@ -71,8 +72,16 @@ const Profile = () => {
   });
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header language={language} onLanguageChange={setLanguage} />
+    <>
+      <SEOHead 
+        title={language === 'bn' ? "আমার প্রোফাইল | bdprompt.com" : "My Profile | bdprompt.com"}
+        description={language === 'bn' ? "আপনার সেভ করা প্রম্পট, কেনাকাটা এবং API ব্যবহার দেখুন।" : "View your saved prompts, purchases, and API usage."}
+        canonicalUrl="https://bdprompt.com/profile"
+        ogImage="https://bdprompt.com/og-image.png"
+        language={language}
+      />
+      <div className="min-h-screen bg-background">
+        <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Profile Header */}
@@ -137,8 +146,9 @@ const Profile = () => {
         </Tabs>
       </main>
 
-      <Footer language={language} />
-    </div>
+        <Footer language={language} />
+      </div>
+    </>
   );
 };
 

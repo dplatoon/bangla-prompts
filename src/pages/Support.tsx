@@ -103,8 +103,15 @@ const Support = () => {
       <SEOHead 
         title={language === 'bn' ? "সাপোর্ট | bdprompt.com" : "Support | bdprompt.com"}
         description={language === 'bn' ? "bdprompt সাপোর্ট। প্রশ্ন আছে? আমাদের সাথে যোগাযোগ করুন।" : "bdprompt Support. Have questions? Contact us."}
+        keywords={language === 'bn' ? "bdprompt সাপোর্ট, সাহায্য, যোগাযোগ, প্রশ্ন" : "bdprompt support, help, contact, FAQ"}
         canonicalUrl="https://bdprompt.com/support"
+        ogImage="https://bdprompt.com/og-image.png"
+        ogType="website"
         language={language}
+        breadcrumbs={[
+          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
+          { name: language === 'bn' ? 'সাপোর্ট' : 'Support', url: 'https://bdprompt.com/support' }
+        ]}
       />
       
       <div className="min-h-screen bg-background">
