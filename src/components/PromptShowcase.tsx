@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import { useLazyLoad } from "@/hooks/useIntersectionObserver";
 import type { PromptData } from "@/data/mockPrompts";
 import { TrendingUp, Search, Loader2, ArrowRight } from "lucide-react";
 
@@ -107,6 +108,13 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       });
   }, [prompts, searchQuery, selectedCategory, sortBy]);
 
+  // Lazy load prompts in batches for better performance
+  const { loadedCount, loaderRef, hasMore } = useLazyLoad(
+    filteredAndSortedPrompts.length,
+    6
+  );
+  const visiblePrompts = filteredAndSortedPrompts.slice(0, loadedCount);
+
   const categoryOptions = useMemo(() => {
     const options: [string, string][] = [['all', currentText.all]];
     if (categories) {
@@ -201,24 +209,32 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
             <Loader2 className="w-8 h-8 animate-spin text-primary" />
           </div>
         ) : (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {filteredAndSortedPrompts.length > 0 ? (
-              filteredAndSortedPrompts.map((prompt) => (
-                <PromptCard
-                  key={prompt.id}
-                  promptData={prompt}
-                  language={language}
-                  onTryClick={handleTryPrompt}
-                />
-              ))
-            ) : (
-              <div className="col-span-full text-center py-12">
-                <p className={`text-muted-foreground text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
-                  {currentText.noResults}
-                </p>
+          <>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {visiblePrompts.length > 0 ? (
+                visiblePrompts.map((prompt) => (
+                  <PromptCard
+                    key={prompt.id}
+                    promptData={prompt}
+                    language={language}
+                    onTryClick={handleTryPrompt}
+                  />
+                ))
+              ) : (
+                <div className="col-span-full text-center py-12">
+                  <p className={`text-muted-foreground text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {currentText.noResults}
+                  </p>
+                </div>
+              )}
+            </div>
+            {/* Lazy load trigger */}
+            {hasMore && (
+              <div ref={loaderRef} className="flex justify-center py-8">
+                <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
               </div>
             )}
-          </div>
+          </>
         )}
 
         {/* View All & Playground Links */}

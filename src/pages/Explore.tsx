@@ -12,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Grid3X3, List, Loader2 } from "lucide-react";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import { useLazyLoad } from "@/hooks/useIntersectionObserver";
 import { trackCategoryFiltered, trackSearchPerformed } from "@/utils/analytics";
 import type { PromptData } from "@/data/mockPrompts";
 
@@ -50,6 +51,63 @@ const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') =>
       }
     }))
   };
+};
+
+// Lazy-loaded prompt grid component
+interface ExploreGridProps {
+  prompts: PromptData[];
+  viewMode: 'grid' | 'list';
+  language: 'bn' | 'en';
+  loading: boolean;
+  noResultsText: string;
+  onTryPrompt: (prompt: PromptData) => void;
+}
+
+const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTryPrompt }: ExploreGridProps) => {
+  const { loadedCount, loaderRef, hasMore } = useLazyLoad(prompts.length, 9);
+  const visiblePrompts = prompts.slice(0, loadedCount);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-20">
+        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      </div>
+    );
+  }
+
+  if (prompts.length === 0) {
+    return (
+      <div className="text-center py-20">
+        <p className={`text-xl text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+          {noResultsText}
+        </p>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <div className={viewMode === 'grid' 
+        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
+        : "space-y-4"
+      }>
+        {visiblePrompts.map((prompt) => (
+          <PromptCard 
+            key={prompt.id} 
+            promptData={prompt} 
+            language={language}
+            onTryClick={() => onTryPrompt(prompt)}
+          />
+        ))}
+      </div>
+      {/* Lazy load trigger */}
+      {hasMore && (
+        <div ref={loaderRef} className="flex justify-center py-8">
+          <Loader2 className="w-6 h-6 animate-spin text-muted-foreground" />
+        </div>
+      )}
+    </>
+  );
 };
 
 const Explore = () => {
@@ -323,31 +381,14 @@ const Explore = () => {
           </div>
 
           {/* Prompts Grid */}
-          {promptsLoading ? (
-            <div className="flex justify-center items-center py-20">
-              <Loader2 className="w-8 h-8 animate-spin text-primary" />
-            </div>
-          ) : filteredPrompts.length > 0 ? (
-            <div className={viewMode === 'grid' 
-              ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
-              : "space-y-4"
-            }>
-              {filteredPrompts.map((prompt) => (
-                <PromptCard 
-                  key={prompt.id} 
-                  promptData={prompt} 
-                  language={language}
-                  onTryClick={() => handleTryPrompt(prompt)}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-20">
-              <p className={`text-xl text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-                {currentText.noResults}
-              </p>
-            </div>
-          )}
+          <ExploreGrid 
+            prompts={filteredPrompts}
+            viewMode={viewMode}
+            language={language}
+            loading={promptsLoading}
+            noResultsText={currentText.noResults}
+            onTryPrompt={handleTryPrompt}
+          />
         </main>
 
         <Footer language={language} />
