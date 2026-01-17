@@ -199,14 +199,16 @@ async function generateCategoriesSitemap(baseUrl: string, today: string, supabas
 
   if (categories && categories.length > 0) {
     for (const category of categories) {
+      // Use clean URL paths instead of query parameters
+      const categorySlug = category.slug.toLowerCase()
       sitemap += `
   <url>
-    <loc>${baseUrl}/explore?category=${encodeURIComponent(category.slug)}</loc>
+    <loc>${baseUrl}/explore/${encodeURIComponent(categorySlug)}</loc>
     <lastmod>${today}</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
-    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/explore?category=${encodeURIComponent(category.slug)}" />
-    <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}/explore?category=${encodeURIComponent(category.slug)}&amp;lang=en" />
+    <xhtml:link rel="alternate" hreflang="bn" href="${baseUrl}/explore/${encodeURIComponent(categorySlug)}" />
+    <xhtml:link rel="alternate" hreflang="en" href="${baseUrl}/explore/${encodeURIComponent(categorySlug)}?lang=en" />
   </url>`
     }
   }

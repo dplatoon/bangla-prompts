@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { ArrowRight, Sparkles, Copy, Play } from "lucide-react";
 import { romanToBangla } from "@/utils/transliteration";
 import { useToast } from "@/hooks/use-toast";
+import { trackTransliterationUsed } from "@/utils/analytics";
 
 interface HeroProps {
   language: 'bn' | 'en';
@@ -20,6 +21,11 @@ export const Hero = ({ language }: HeroProps) => {
   const handleTranslitChange = (value: string) => {
     setTranslitInput(value);
     setBanglaOutput(romanToBangla(value));
+    
+    // Track transliteration usage when input reaches meaningful length
+    if (value.length === 10) {
+      trackTransliterationUsed(value.length);
+    }
   };
 
   const text = {

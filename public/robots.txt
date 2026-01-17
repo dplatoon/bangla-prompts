@@ -7,22 +7,21 @@ Sitemap: https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=inde
 # Static Sitemap fallback
 Sitemap: https://bdprompt.com/sitemap.xml
 
-# Google
+# Google (no crawl-delay needed - Google ignores it anyway)
 User-agent: Googlebot
 Allow: /
 Disallow: /auth
 Disallow: /api/
-Crawl-delay: 1
 
 User-agent: Googlebot-Image
 Allow: /
 
-# Bing
+# Bing (reduced crawl-delay for faster indexing)
 User-agent: Bingbot
 Allow: /
 Disallow: /auth
 Disallow: /api/
-Crawl-delay: 2
+Crawl-delay: 0.5
 
 # Social Media Crawlers
 User-agent: Twitterbot
@@ -56,20 +55,20 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
-# Other Search Engines
+# Other Search Engines (reduced crawl-delays)
 User-agent: DuckDuckBot
 Allow: /
-Crawl-delay: 2
+Crawl-delay: 0.5
 
 User-agent: Yandex
 Allow: /
-Crawl-delay: 2
+Crawl-delay: 0.5
 
 User-agent: Baiduspider
 Allow: /
-Crawl-delay: 3
+Crawl-delay: 1
 
-# Default rule for all other bots
+# Default rule for all other bots (reduced crawl-delay)
 User-agent: *
 Allow: /
 Disallow: /auth
@@ -77,7 +76,7 @@ Disallow: /api/
 Disallow: /*.json$
 Disallow: /*?*sort=
 Disallow: /*?*filter=
-Crawl-delay: 2
+Crawl-delay: 0.5
 
 # Host
 Host: https://bdprompt.com

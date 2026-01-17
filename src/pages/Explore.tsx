@@ -1,4 +1,5 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
@@ -11,6 +12,7 @@ import { Badge } from "@/components/ui/badge";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Grid3X3, List, Loader2 } from "lucide-react";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import { trackCategoryFiltered, trackSearchPerformed } from "@/utils/analytics";
 import type { PromptData } from "@/data/mockPrompts";
 
 // Generate ItemList structured data for SEO
@@ -51,9 +53,11 @@ const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') =>
 };
 
 const Explore = () => {
+  const { categorySlug } = useParams();
+  const navigate = useNavigate();
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState<string>("all");
+  const [selectedCategory, setSelectedCategory] = useState<string>(categorySlug || "all");
   const [sortBy, setSortBy] = useState<string>("popular");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [selectedPrompt, setSelectedPrompt] = useState<PromptData | null>(null);
@@ -61,6 +65,13 @@ const Explore = () => {
 
   const { data: prompts, isLoading: promptsLoading } = usePrompts();
   const { data: categories } = useCategories();
+
+  // Sync URL param with state
+  useEffect(() => {
+    if (categorySlug) {
+      setSelectedCategory(categorySlug);
+    }
+  }, [categorySlug]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
@@ -76,6 +87,33 @@ const Explore = () => {
     setSelectedPrompt(prompt);
     setIsPlaygroundOpen(true);
   };
+
+  // Handle category change with URL update and analytics
+  const handleCategoryChange = useCallback((value: string) => {
+    setSelectedCategory(value);
+    trackCategoryFiltered(value, language);
+    
+    // Update URL for clean paths
+    if (value === "all") {
+      navigate('/explore');
+    } else {
+      navigate(`/explore/${value}`);
+    }
+  }, [navigate, language]);
+
+  // Track search with debounce (results count calculated separately to avoid circular dep)
+  useEffect(() => {
+    if (searchQuery.length >= 3 && prompts) {
+      const timer = setTimeout(() => {
+        const count = prompts.filter(p => 
+          p.title_en.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          p.title_bn.includes(searchQuery)
+        ).length;
+        trackSearchPerformed(searchQuery, count, language);
+      }, 1000);
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery, language, prompts]);
 
   // Convert and filter prompts
   const filteredPrompts = useMemo(() => {
@@ -165,12 +203,36 @@ const Explore = () => {
     return generateItemListSchema(filteredPrompts, language);
   }, [filteredPrompts, language]);
 
+  // Generate canonical URL based on current category
+  const canonicalUrl = selectedCategory === "all" 
+    ? "https://bdprompt.com/explore" 
+    : `https://bdprompt.com/explore/${selectedCategory}`;
+
+  // Get current category label for SEO
+  const currentCategoryLabel = categoryList.find(c => c.value === selectedCategory)?.label;
+  
+  const seoTitle = selectedCategory !== "all" && currentCategoryLabel
+    ? language === 'bn' 
+      ? `${currentCategoryLabel} প্রম্পট | bdprompt.com`
+      : `${currentCategoryLabel} Prompts | bdprompt.com`
+    : language === 'bn' 
+      ? "প্রম্পট এক্সপ্লোর করুন | bdprompt.com" 
+      : "Explore Prompts | bdprompt.com";
+
+  const seoDescription = selectedCategory !== "all" && currentCategoryLabel
+    ? language === 'bn'
+      ? `${currentCategoryLabel} ক্যাটাগরির AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য বাংলা প্রম্পট।`
+      : `Explore ${currentCategoryLabel} AI prompts. Bengali prompts for ChatGPT, Claude, Gemini.`
+    : language === 'bn' 
+      ? "৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন। কন্টেন্ট, ইমেজ, কোড, মার্কেটিং প্রম্পট খুঁজুন।" 
+      : "Explore 500+ Bangla AI prompts. Find content, image, code, and marketing prompts.";
+
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "প্রম্পট এক্সপ্লোর করুন | bdprompt.com" : "Explore Prompts | bdprompt.com"}
-        description={language === 'bn' ? "৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন। কন্টেন্ট, ইমেজ, কোড, মার্কেটিং প্রম্পট খুঁজুন।" : "Explore 500+ Bangla AI prompts. Find content, image, code, and marketing prompts."}
-        canonicalUrl="https://bdprompt.com/explore"
+        title={seoTitle}
+        description={seoDescription}
+        canonicalUrl={canonicalUrl}
         language={language}
         structuredData={itemListSchema}
       />
@@ -210,7 +272,7 @@ const Explore = () => {
               />
             </div>
             
-            <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
               <SelectTrigger className={`w-full md:w-48 ${language === 'bn' ? 'font-bengali' : ''}`}>
                 <Filter className="w-4 h-4 mr-2" />
                 <SelectValue placeholder={currentText.allCategories} />

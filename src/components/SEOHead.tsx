@@ -135,7 +135,7 @@ export const SEOHead = ({
   return null;
 };
 
-// Helper function to generate prompt structured data
+// Helper function to generate prompt structured data (Product schema)
 export const generatePromptStructuredData = (prompt: {
   id: string;
   title: string;
@@ -172,4 +172,82 @@ export const generatePromptStructuredData = (prompt: {
     "ratingValue": prompt.rating,
     "ratingCount": prompt.ratingCount
   }
+});
+
+// Helper function to generate SoftwareSourceCode schema for prompts (enhanced SEO)
+export const generateSoftwareSourceCodeSchema = (prompt: {
+  id: string;
+  title: string;
+  titleBn: string;
+  description: string;
+  category: string;
+  author: string;
+  tags?: string[];
+}) => ({
+  "@context": "https://schema.org",
+  "@type": "SoftwareSourceCode",
+  "name": prompt.titleBn || prompt.title,
+  "description": prompt.description,
+  "programmingLanguage": "Natural Language",
+  "codeRepository": `https://bdprompt.com/prompt/${prompt.id}`,
+  "applicationCategory": "AI Assistant Prompt",
+  "applicationSubCategory": prompt.category,
+  "inLanguage": "bn",
+  "author": {
+    "@type": "Organization",
+    "name": "bdprompt.com",
+    "url": "https://bdprompt.com"
+  },
+  "contributor": {
+    "@type": "Person",
+    "name": prompt.author
+  },
+  "keywords": prompt.tags?.join(', ') || prompt.category
+});
+
+// Helper function to generate HowTo schema for playground/tool pages
+export const generateHowToSchema = (language: 'bn' | 'en') => ({
+  "@context": "https://schema.org",
+  "@type": "HowTo",
+  "name": language === 'bn' 
+    ? "কিভাবে বাংলা AI প্রম্পট ব্যবহার করবেন" 
+    : "How to Use Bengali AI Prompts",
+  "description": language === 'bn'
+    ? "bdprompt.com থেকে AI প্রম্পট কপি করে ChatGPT, Claude, বা Gemini-তে ব্যবহার করার ধাপসমূহ"
+    : "Steps to copy AI prompts from bdprompt.com and use them in ChatGPT, Claude, or Gemini",
+  "step": [
+    {
+      "@type": "HowToStep",
+      "position": 1,
+      "name": language === 'bn' ? "প্রম্পট খুঁজুন" : "Find a Prompt",
+      "text": language === 'bn' 
+        ? "bdprompt.com-এ আপনার প্রয়োজনীয় ক্যাটাগরি থেকে প্রম্পট খুঁজুন"
+        : "Browse bdprompt.com to find a prompt from your desired category"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 2,
+      "name": language === 'bn' ? "প্রম্পট কপি করুন" : "Copy the Prompt",
+      "text": language === 'bn'
+        ? "কপি বাটনে ক্লিক করে প্রম্পট ক্লিপবোর্ডে কপি করুন"
+        : "Click the copy button to copy the prompt to your clipboard"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 3,
+      "name": language === 'bn' ? "ভেরিয়েবল পূরণ করুন" : "Fill Variables",
+      "text": language === 'bn'
+        ? "{variable} ফরম্যাটের জায়গাগুলোতে আপনার তথ্য বসান"
+        : "Replace {variable} placeholders with your specific information"
+    },
+    {
+      "@type": "HowToStep",
+      "position": 4,
+      "name": language === 'bn' ? "AI-তে পেস্ট করুন" : "Paste in AI",
+      "text": language === 'bn'
+        ? "ChatGPT, Claude, বা Gemini-তে প্রম্পট পেস্ট করে এন্টার চাপুন"
+        : "Paste the prompt in ChatGPT, Claude, or Gemini and press enter"
+    }
+  ],
+  "totalTime": "PT2M"
 });
