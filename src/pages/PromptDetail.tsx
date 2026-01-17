@@ -29,6 +29,7 @@ import { useSavePrompt } from "@/hooks/useSavePrompt";
 import { usePurchase } from "@/hooks/usePurchase";
 import type { PromptData } from "@/data/mockPrompts";
 import { useToast } from "@/hooks/use-toast";
+import { trackPromptViewed, trackPromptCopied, trackPlaygroundUsed } from "@/utils/analytics";
 
 const PromptDetail = () => {
   const { id } = useParams();
@@ -83,6 +84,13 @@ const PromptDetail = () => {
     setLanguage(savedLang);
   }, []);
 
+  // Track prompt view on load
+  useEffect(() => {
+    if (prompt && dbPrompt) {
+      trackPromptViewed(dbPrompt.id, prompt.category, language);
+    }
+  }, [prompt?.id, language]);
+
   useEffect(() => {
     if (error) {
       navigate('/');
@@ -101,10 +109,11 @@ const PromptDetail = () => {
   };
 
   const handleCopy = async () => {
-    if (!prompt) return;
+    if (!prompt || !dbPrompt) return;
     try {
       const content = language === 'bn' && prompt.contentBn ? prompt.contentBn : prompt.content;
       await navigator.clipboard.writeText(content);
+      trackPromptCopied(dbPrompt.id, prompt.category, language);
       toast({
         title: language === 'bn' ? "কপি সম্পন্ন!" : "Copied!",
         description: language === 'bn' ? "প্রম্পট ক্লিপবোর্ডে কপি হয়েছে" : "Prompt copied to clipboard"
@@ -116,6 +125,13 @@ const PromptDetail = () => {
         variant: "destructive"
       });
     }
+  };
+
+  const handleOpenPlayground = () => {
+    if (dbPrompt) {
+      trackPlaygroundUsed(dbPrompt.id);
+    }
+    setIsPlaygroundOpen(true);
   };
 
   const handleShare = () => {
@@ -439,7 +455,7 @@ const PromptDetail = () => {
                 </Button>
                 <Button 
                   variant="outline" 
-                  onClick={() => setIsPlaygroundOpen(true)}
+                  onClick={handleOpenPlayground}
                   disabled={!canAccessFullContent}
                   className={language === 'bn' ? 'font-bengali' : ''}
                 >
@@ -544,7 +560,7 @@ const PromptDetail = () => {
                   <div className="space-y-3">
                     <Button 
                       className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}
-                      onClick={() => setIsPlaygroundOpen(true)}
+                      onClick={handleOpenPlayground}
                     >
                       {currentText.tryPlayground}
                     </Button>

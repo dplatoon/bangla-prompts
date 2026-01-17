@@ -58,6 +58,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/prompt/:id" element={<PromptDetail />} />
             <Route path="/explore" element={<Explore />} />
+            <Route path="/explore/:categorySlug" element={<Explore />} />
             <Route path="/auth" element={<Auth />} />
             
             {/* Lazy loaded routes */}
