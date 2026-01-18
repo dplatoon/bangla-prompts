@@ -111,7 +111,7 @@ export const Hero = ({ language }: HeroProps) => {
                   <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="lg" variant="outline" className={`border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10 ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+              <Button size="lg" variant="outline" className={`border-white/30 text-white hover:bg-white/10 hover:text-white ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
                 <Link to="/become-creator">
                   {currentText.submitBtn}
                 </Link>
