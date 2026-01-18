@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
@@ -8,10 +8,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
-import { Badge } from "@/components/ui/badge";
-import { Sparkles, Copy, RotateCcw, Wand2, Loader2 } from "lucide-react";
+import { Sparkles, Copy, RotateCcw, Wand2, Loader2, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+
+const GENERATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-prompt`;
 
 const Playground = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -22,6 +22,7 @@ const Playground = () => {
   const [temperature, setTemperature] = useState([0.7]);
   const [maxTokens, setMaxTokens] = useState([1024]);
   const { toast } = useToast();
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
@@ -33,6 +34,14 @@ const Playground = () => {
     localStorage.setItem('bdprompt-language', lang);
   };
 
+  const handleStop = useCallback(() => {
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+      abortControllerRef.current = null;
+      setIsGenerating(false);
+    }
+  }, []);
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast({
@@ -43,32 +52,107 @@ const Playground = () => {
       return;
     }
 
+    // Cancel any ongoing request
+    if (abortControllerRef.current) {
+      abortControllerRef.current.abort();
+    }
+
+    abortControllerRef.current = new AbortController();
     setIsGenerating(true);
     setOutput("");
 
     try {
-      const { data, error } = await supabase.functions.invoke('generate-prompt', {
-        body: { 
+      const response = await fetch(GENERATE_URL, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+        },
+        body: JSON.stringify({
           prompt: prompt,
           model: model,
           temperature: temperature[0],
-          maxTokens: maxTokens[0]
-        }
+          maxTokens: maxTokens[0],
+          stream: true,
+        }),
+        signal: abortControllerRef.current.signal,
       });
 
-      if (error) throw error;
-      
-      if (data.error) {
-        toast({
-          title: language === 'bn' ? "ত্রুটি" : "Error",
-          description: data.error,
-          variant: "destructive"
-        });
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `Request failed with status ${response.status}`);
+      }
+
+      if (!response.body) {
+        throw new Error("No response body");
+      }
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let textBuffer = "";
+      let streamDone = false;
+      let outputSoFar = "";
+
+      while (!streamDone) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        textBuffer += decoder.decode(value, { stream: true });
+
+        // Process line-by-line as data arrives
+        let newlineIndex: number;
+        while ((newlineIndex = textBuffer.indexOf("\n")) !== -1) {
+          let line = textBuffer.slice(0, newlineIndex);
+          textBuffer = textBuffer.slice(newlineIndex + 1);
+
+          if (line.endsWith("\r")) line = line.slice(0, -1); // handle CRLF
+          if (line.startsWith(":") || line.trim() === "") continue; // SSE comments/keepalive
+          if (!line.startsWith("data: ")) continue;
+
+          const jsonStr = line.slice(6).trim();
+          if (jsonStr === "[DONE]") {
+            streamDone = true;
+            break;
+          }
+
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              outputSoFar += content;
+              setOutput(outputSoFar);
+            }
+          } catch {
+            // Incomplete JSON split across chunks: put it back and wait for more data
+            textBuffer = line + "\n" + textBuffer;
+            break;
+          }
+        }
+      }
+
+      // Final flush in case remaining buffered lines arrived without trailing newline
+      if (textBuffer.trim()) {
+        for (let raw of textBuffer.split("\n")) {
+          if (!raw) continue;
+          if (raw.endsWith("\r")) raw = raw.slice(0, -1);
+          if (raw.startsWith(":") || raw.trim() === "") continue;
+          if (!raw.startsWith("data: ")) continue;
+          const jsonStr = raw.slice(6).trim();
+          if (jsonStr === "[DONE]") continue;
+          try {
+            const parsed = JSON.parse(jsonStr);
+            const content = parsed.choices?.[0]?.delta?.content as string | undefined;
+            if (content) {
+              outputSoFar += content;
+              setOutput(outputSoFar);
+            }
+          } catch { /* ignore partial leftovers */ }
+        }
+      }
+    } catch (error: any) {
+      if (error.name === 'AbortError') {
+        // User cancelled - don't show error
         return;
       }
-      
-      setOutput(data.output || "Generation completed.");
-    } catch (error: any) {
       console.error('Generation error:', error);
       toast({
         title: language === 'bn' ? "ত্রুটি" : "Error",
@@ -77,6 +161,7 @@ const Playground = () => {
       });
     } finally {
       setIsGenerating(false);
+      abortControllerRef.current = null;
     }
   };
 
@@ -91,6 +176,7 @@ const Playground = () => {
   };
 
   const handleReset = () => {
+    handleStop();
     setPrompt("");
     setOutput("");
   };
@@ -105,6 +191,7 @@ const Playground = () => {
       outputPlaceholder: "জেনারেট করা কন্টেন্ট এখানে দেখা যাবে...",
       generate: "জেনারেট করুন",
       generating: "জেনারেট হচ্ছে...",
+      stop: "থামুন",
       copy: "কপি",
       reset: "রিসেট",
       model: "মডেল",
@@ -121,6 +208,7 @@ const Playground = () => {
       outputPlaceholder: "Generated content will appear here...",
       generate: "Generate",
       generating: "Generating...",
+      stop: "Stop",
       copy: "Copy",
       reset: "Reset",
       model: "Model",
@@ -240,23 +328,25 @@ const Playground = () => {
                     className={`min-h-[150px] ${language === 'bn' ? 'font-bengali' : ''}`}
                   />
                   <div className="flex gap-3 mt-4">
-                    <Button 
-                      onClick={handleGenerate} 
-                      disabled={isGenerating}
-                      className={language === 'bn' ? 'font-bengali' : ''}
-                    >
-                      {isGenerating ? (
-                        <>
-                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                          {currentText.generating}
-                        </>
-                      ) : (
-                        <>
-                          <Wand2 className="w-4 h-4 mr-2" />
-                          {currentText.generate}
-                        </>
-                      )}
-                    </Button>
+                    {isGenerating ? (
+                      <Button 
+                        onClick={handleStop}
+                        variant="destructive"
+                        className={language === 'bn' ? 'font-bengali' : ''}
+                      >
+                        <Square className="w-4 h-4 mr-2" />
+                        {currentText.stop}
+                      </Button>
+                    ) : (
+                      <Button 
+                        onClick={handleGenerate} 
+                        disabled={isGenerating}
+                        className={language === 'bn' ? 'font-bengali' : ''}
+                      >
+                        <Wand2 className="w-4 h-4 mr-2" />
+                        {currentText.generate}
+                      </Button>
+                    )}
                     <Button variant="outline" onClick={handleReset} className={language === 'bn' ? 'font-bengali' : ''}>
                       <RotateCcw className="w-4 h-4 mr-2" />
                       {currentText.reset}
@@ -268,10 +358,11 @@ const Playground = () => {
               {/* Output */}
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between">
-                  <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                  <CardTitle className={`flex items-center gap-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
                     {currentText.outputLabel}
+                    {isGenerating && <Loader2 className="w-4 h-4 animate-spin text-primary" />}
                   </CardTitle>
-                  {output && (
+                  {output && !isGenerating && (
                     <Button variant="ghost" size="sm" onClick={handleCopy}>
                       <Copy className="w-4 h-4 mr-2" />
                       {currentText.copy}
