@@ -45,7 +45,7 @@ const PromptDetail = () => {
   const { data: relatedPromptsData } = useRelatedPrompts(
     dbPrompt?.id || '',
     dbPrompt?.category_id || null,
-    4
+    6
   );
   
   // Use the save hook with the actual database prompt ID
@@ -584,28 +584,39 @@ const PromptDetail = () => {
                 </CardContent>
               </Card>
 
-              {/* Related Prompts */}
-              {relatedPrompts.length > 0 && (
-                <Card>
-                  <CardHeader>
-                    <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
-                      {currentText.relatedPrompts}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent className="space-y-4">
-                    {relatedPrompts.map((relatedPrompt) => (
-                      <PromptCard 
-                        key={relatedPrompt.id} 
-                        promptData={relatedPrompt} 
-                        language={language}
-                        onTryClick={handleTryRelated}
-                      />
-                    ))}
-                  </CardContent>
-                </Card>
-              )}
             </aside>
           </div>
+
+          {/* Related Prompts Section - Full Width for SEO and Engagement */}
+          {relatedPrompts.length > 0 && (
+            <section className="mt-12" aria-labelledby="related-prompts-heading">
+              <div className="flex items-center justify-between mb-6">
+                <h2 
+                  id="related-prompts-heading"
+                  className={`text-2xl font-bold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {currentText.relatedPrompts}
+                </h2>
+                <Link 
+                  to={`/explore?category=${prompt.category.toLowerCase().replace(' ', '-')}`}
+                  className={`text-sm text-primary hover:underline flex items-center ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {language === 'bn' ? 'সব দেখুন' : 'View All'}
+                  <ChevronRight className="w-4 h-4 ml-1" />
+                </Link>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {relatedPrompts.map((relatedPrompt) => (
+                  <PromptCard 
+                    key={relatedPrompt.id} 
+                    promptData={relatedPrompt} 
+                    language={language}
+                    onTryClick={handleTryRelated}
+                  />
+                ))}
+              </div>
+            </section>
+          )}
         </main>
 
         <Footer language={language} />
