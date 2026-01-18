@@ -75,9 +75,22 @@ serve(async (req) => {
     const { prompt, language = 'en' } = await req.json();
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
     
-    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
-    if (!prompt || typeof prompt !== "string" || prompt.length > 10000) {
-      return new Response(JSON.stringify({ error: "Invalid prompt. Must be a string under 10000 characters." }), {
+    if (!OPENAI_API_KEY) {
+      console.error("OPENAI_API_KEY is not configured");
+      throw new Error("Service configuration error");
+    }
+    
+    // Validate prompt input
+    if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0 || prompt.length > 10000) {
+      return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
+    // Validate language parameter
+    if (language && typeof language !== "string" || !['en', 'bn'].includes(language)) {
+      return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -106,14 +119,14 @@ serve(async (req) => {
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
+        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const errorText = await response.text();
-      console.error("OpenAI API error:", response.status, errorText);
-      throw new Error("OpenAI API error");
+      console.error("External API error:", response.status, errorText);
+      throw new Error("Service error");
     }
 
     const data = await response.json();
@@ -124,8 +137,8 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("suggest-prompt error:", e);
-    return new Response(JSON.stringify({ error: "An error occurred. Please try again." }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+      status: 503,
       headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }

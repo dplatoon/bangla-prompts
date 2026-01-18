@@ -33,8 +33,8 @@ serve(async (req) => {
     
     if (!stripeSecretKey) {
       console.error("STRIPE_SECRET_KEY not configured");
-      return new Response(JSON.stringify({ error: "Stripe not configured" }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+        status: 503,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -51,8 +51,8 @@ serve(async (req) => {
     // SECURITY: Require webhook signature verification in production
     if (!webhookSecret) {
       console.error("STRIPE_WEBHOOK_SECRET not configured - rejecting webhook");
-      return new Response(JSON.stringify({ error: "Webhook secret not configured" }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+        status: 503,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -144,9 +144,9 @@ serve(async (req) => {
   } catch (error) {
     console.error("Webhook error:", error);
     return new Response(
-      JSON.stringify({ error: "Webhook processing failed" }),
+      JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }),
       {
-        status: 500,
+        status: 503,
         headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       }
     );

@@ -87,11 +87,11 @@ serve(async (req) => {
     
     if (!LOVABLE_API_KEY) {
       console.error("LOVABLE_API_KEY is not configured");
-      throw new Error("AI service is not configured");
+      throw new Error("Service configuration error");
     }
     
-    if (!prompt || typeof prompt !== "string" || prompt.length > 10000) {
-      return new Response(JSON.stringify({ error: "Invalid prompt. Must be a string under 10000 characters." }), {
+    if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0 || prompt.length > 10000) {
+      return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -128,21 +128,21 @@ serve(async (req) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error("Lovable AI error:", response.status, errorText);
+      console.error("AI service error:", response.status, errorText);
       
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded. Please try again later." }), {
+        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits exhausted. Please contact support." }), {
+        return new Response(JSON.stringify({ error: "Service quota exceeded. Please try again later.", code: "QUOTA_EXCEEDED" }), {
           status: 402,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      throw new Error("AI generation failed");
+      throw new Error("Service error");
     }
 
     // If streaming is enabled, pass through the SSE stream
@@ -161,8 +161,8 @@ serve(async (req) => {
     });
   } catch (e) {
     console.error("generate-prompt error:", e);
-    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "An error occurred. Please try again." }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+      status: 503,
       headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
