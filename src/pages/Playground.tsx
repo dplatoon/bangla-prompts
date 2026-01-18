@@ -9,9 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Sparkles, Copy, RotateCcw, Wand2, Loader2, Square } from "lucide-react";
+import { Sparkles, Copy, RotateCcw, Wand2, Loader2, Square, Save } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
-import { PromptTemplates } from "@/components/playground/PromptTemplates";
+import { PromptTemplates, saveCustomTemplate } from "@/components/playground/PromptTemplates";
 import { GenerationHistory, saveToHistory } from "@/components/playground/GenerationHistory";
 
 const GENERATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-prompt`;
@@ -24,6 +26,9 @@ const Playground = () => {
   const [model, setModel] = useState("gemini-2.5-flash");
   const [temperature, setTemperature] = useState([0.7]);
   const [maxTokens, setMaxTokens] = useState([1024]);
+  const [saveDialogOpen, setSaveDialogOpen] = useState(false);
+  const [templateName, setTemplateName] = useState("");
+  const [templatesRefreshKey, setTemplatesRefreshKey] = useState(0);
   const { toast } = useToast();
   const abortControllerRef = useRef<AbortController | null>(null);
 
@@ -205,6 +210,46 @@ const Playground = () => {
     setOutput("");
   };
 
+  const handleSaveAsTemplate = () => {
+    if (!prompt.trim()) {
+      toast({
+        title: language === 'bn' ? "প্রম্পট প্রয়োজন" : "Prompt required",
+        description: language === 'bn' ? "সংরক্ষণ করতে প্রম্পট লিখুন" : "Enter a prompt to save",
+        variant: "destructive"
+      });
+      return;
+    }
+    setSaveDialogOpen(true);
+  };
+
+  const handleConfirmSave = () => {
+    if (!templateName.trim()) {
+      toast({
+        title: language === 'bn' ? "নাম প্রয়োজন" : "Name required",
+        description: language === 'bn' ? "টেমপ্লেটের নাম দিন" : "Enter a name for the template",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    const saved = saveCustomTemplate(templateName.trim(), prompt);
+    if (saved) {
+      toast({
+        title: language === 'bn' ? "সংরক্ষিত!" : "Saved!",
+        description: language === 'bn' ? "টেমপ্লেট সংরক্ষণ করা হয়েছে" : "Template saved successfully"
+      });
+      setTemplatesRefreshKey((k) => k + 1);
+      setSaveDialogOpen(false);
+      setTemplateName("");
+    } else {
+      toast({
+        title: language === 'bn' ? "ত্রুটি" : "Error",
+        description: language === 'bn' ? "সংরক্ষণ ব্যর্থ হয়েছে" : "Failed to save template",
+        variant: "destructive"
+      });
+    }
+  };
+
   const text = {
     bn: {
       title: "AI প্লেগ্রাউন্ড",
@@ -221,7 +266,14 @@ const Playground = () => {
       model: "মডেল",
       temperature: "টেম্পারেচার",
       maxTokens: "সর্বোচ্চ টোকেন",
-      settings: "সেটিংস"
+      settings: "সেটিংস",
+      saveTemplate: "সেভ করুন",
+      saveDialogTitle: "টেমপ্লেট সংরক্ষণ করুন",
+      saveDialogDesc: "এই প্রম্পটটি আপনার ব্যক্তিগত টেমপ্লেট হিসেবে সংরক্ষণ করুন",
+      templateNameLabel: "টেমপ্লেটের নাম",
+      templateNamePlaceholder: "যেমন: ব্লগ পোস্ট লেখা",
+      cancel: "বাতিল",
+      save: "সংরক্ষণ"
     },
     en: {
       title: "AI Playground",
@@ -238,7 +290,14 @@ const Playground = () => {
       model: "Model",
       temperature: "Temperature",
       maxTokens: "Max Tokens",
-      settings: "Settings"
+      settings: "Settings",
+      saveTemplate: "Save",
+      saveDialogTitle: "Save as Template",
+      saveDialogDesc: "Save this prompt as a personal template for quick reuse",
+      templateNameLabel: "Template Name",
+      templateNamePlaceholder: "e.g., Blog Post Writer",
+      cancel: "Cancel",
+      save: "Save"
     }
   };
 
@@ -348,7 +407,7 @@ const Playground = () => {
                   </TabsTrigger>
                 </TabsList>
                 <TabsContent value="templates" className="mt-3">
-                  <PromptTemplates language={language} onSelectTemplate={handleSelectTemplate} />
+                  <PromptTemplates language={language} onSelectTemplate={handleSelectTemplate} refreshKey={templatesRefreshKey} />
                 </TabsContent>
                 <TabsContent value="history" className="mt-3">
                   <GenerationHistory language={language} onReuse={handleReuseFromHistory} />
@@ -396,6 +455,10 @@ const Playground = () => {
                       <RotateCcw className="w-4 h-4 mr-2" />
                       {currentText.reset}
                     </Button>
+                    <Button variant="secondary" onClick={handleSaveAsTemplate} className={language === 'bn' ? 'font-bengali' : ''}>
+                      <Save className="w-4 h-4 mr-2" />
+                      {currentText.saveTemplate}
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
@@ -429,6 +492,50 @@ const Playground = () => {
         </main>
 
         <Footer language={language} />
+
+        {/* Save Template Dialog */}
+        <Dialog open={saveDialogOpen} onOpenChange={setSaveDialogOpen}>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.saveDialogTitle}
+              </DialogTitle>
+              <DialogDescription className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.saveDialogDesc}
+              </DialogDescription>
+            </DialogHeader>
+            <div className="space-y-4 py-4">
+              <div className="space-y-2">
+                <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {currentText.templateNameLabel}
+                </label>
+                <Input
+                  value={templateName}
+                  onChange={(e) => setTemplateName(e.target.value)}
+                  placeholder={currentText.templateNamePlaceholder}
+                  className={language === 'bn' ? 'font-bengali' : ''}
+                  onKeyDown={(e) => e.key === 'Enter' && handleConfirmSave()}
+                />
+              </div>
+              <div className="bg-muted rounded-md p-3">
+                <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {language === 'bn' ? 'প্রম্পট প্রিভিউ:' : 'Prompt preview:'}
+                </p>
+                <p className={`text-sm mt-1 line-clamp-3 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {prompt.slice(0, 150)}{prompt.length > 150 ? '...' : ''}
+                </p>
+              </div>
+            </div>
+            <DialogFooter className="gap-2 sm:gap-0">
+              <Button variant="outline" onClick={() => setSaveDialogOpen(false)} className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.cancel}
+              </Button>
+              <Button onClick={handleConfirmSave} className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.save}
+              </Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </>
   );
