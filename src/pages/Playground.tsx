@@ -50,18 +50,29 @@ const Playground = () => {
       const { data, error } = await supabase.functions.invoke('generate-prompt', {
         body: { 
           prompt: prompt,
+          model: model,
           temperature: temperature[0],
           maxTokens: maxTokens[0]
         }
       });
 
       if (error) throw error;
-      setOutput(data.result || data.content || "Generation completed.");
-    } catch (error) {
+      
+      if (data.error) {
+        toast({
+          title: language === 'bn' ? "ত্রুটি" : "Error",
+          description: data.error,
+          variant: "destructive"
+        });
+        return;
+      }
+      
+      setOutput(data.output || "Generation completed.");
+    } catch (error: any) {
       console.error('Generation error:', error);
       toast({
         title: language === 'bn' ? "ত্রুটি" : "Error",
-        description: language === 'bn' ? "জেনারেশন ব্যর্থ হয়েছে" : "Generation failed",
+        description: error?.message || (language === 'bn' ? "জেনারেশন ব্যর্থ হয়েছে" : "Generation failed"),
         variant: "destructive"
       });
     } finally {

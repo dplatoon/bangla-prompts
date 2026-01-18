@@ -7,6 +7,8 @@ const ALLOWED_ORIGINS = [
   "https://www.bdprompt.com",
   "http://localhost:5173",
   "http://localhost:3000",
+  "https://id-preview--8787d62d-ea8a-489d-9b35-936ad6e92151.lovable.app",
+  "https://bangla-prompt.lovable.app",
 ];
 
 function getCorsHeaders(req: Request): Record<string, string> {
@@ -21,6 +23,14 @@ function getCorsHeaders(req: Request): Record<string, string> {
 
 const RATE_LIMIT_MAX_REQUESTS = 20;
 const RATE_LIMIT_WINDOW_MINUTES = 60;
+
+// Map frontend model names to Lovable AI model names
+const MODEL_MAP: Record<string, string> = {
+  "gemini-2.5-flash": "google/gemini-2.5-flash",
+  "gemini-2.5-pro": "google/gemini-2.5-pro",
+  "gpt-4o-mini": "openai/gpt-5-mini",
+  "gemini-3-flash": "google/gemini-3-flash-preview",
+};
 
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
@@ -72,10 +82,14 @@ serve(async (req) => {
       _function_name: "generate-prompt",
     });
 
-    const { prompt, temperature = 0.7, maxTokens = 500 } = await req.json();
-    const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
+    const { prompt, model = "gemini-2.5-flash", temperature = 0.7, maxTokens = 1024 } = await req.json();
+    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
-    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
+    if (!LOVABLE_API_KEY) {
+      console.error("LOVABLE_API_KEY is not configured");
+      throw new Error("AI service is not configured");
+    }
+    
     if (!prompt || typeof prompt !== "string" || prompt.length > 10000) {
       return new Response(JSON.stringify({ error: "Invalid prompt. Must be a string under 10000 characters." }), {
         status: 400,
@@ -84,17 +98,26 @@ serve(async (req) => {
     }
 
     const safeTemperature = typeof temperature === "number" ? Math.min(2, Math.max(0, temperature)) : 0.7;
-    const safeMaxTokens = typeof maxTokens === "number" ? Math.min(2000, Math.max(50, maxTokens)) : 500;
+    const safeMaxTokens = typeof maxTokens === "number" ? Math.min(4096, Math.max(50, maxTokens)) : 1024;
+    
+    // Map frontend model to Lovable AI model
+    const aiModel = MODEL_MAP[model] || "google/gemini-3-flash-preview";
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
+    console.log(`Generating with model: ${aiModel}, temperature: ${safeTemperature}, maxTokens: ${safeMaxTokens}`);
+
+    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
+        Authorization: `Bearer ${LOVABLE_API_KEY}`,
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: aiModel,
         messages: [
+          { 
+            role: "system", 
+            content: "You are a helpful AI assistant for BDPrompt, a Bengali AI prompt platform. Respond in the same language as the user's prompt. If the prompt is in Bengali, respond in Bengali. Be helpful, creative, and concise." 
+          },
           { role: "user", content: prompt }
         ],
         temperature: safeTemperature,
@@ -103,26 +126,33 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Lovable AI error:", response.status, errorText);
+      
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
+        return new Response(JSON.stringify({ error: "Rate limits exceeded. Please try again later." }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const errorText = await response.text();
-      console.error("OpenAI API error:", response.status, errorText);
-      throw new Error("OpenAI API error");
+      if (response.status === 402) {
+        return new Response(JSON.stringify({ error: "AI credits exhausted. Please contact support." }), {
+          status: 402,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      throw new Error("AI generation failed");
     }
 
     const data = await response.json();
-    const generatedText = data.choices[0].message.content;
+    const generatedText = data.choices?.[0]?.message?.content || "";
 
     return new Response(JSON.stringify({ output: generatedText }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
     console.error("generate-prompt error:", e);
-    return new Response(JSON.stringify({ error: "An error occurred. Please try again." }), {
+    return new Response(JSON.stringify({ error: e instanceof Error ? e.message : "An error occurred. Please try again." }), {
       status: 500,
       headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
