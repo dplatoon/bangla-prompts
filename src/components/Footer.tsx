@@ -47,7 +47,7 @@ export const Footer = ({ language }: FooterProps) => {
         button: "সাবস্ক্রাইব করুন"
       },
       social: "সোশ্যাল মিডিয়া",
-      copyright: "© ২০২৪ bdprompt.com। সকল অধিকার সংরক্ষিত।",
+      copyright: "© ২০২৫ BD Prompt by Start BD। সকল অধিকার সংরক্ষিত।",
       madeWith: "💚 দিয়ে বাংলাদেশে তৈরি"
     },
     en: {
@@ -88,7 +88,7 @@ export const Footer = ({ language }: FooterProps) => {
         button: "Subscribe"
       },
       social: "Social Media",
-      copyright: "© 2024 bdprompt.com. All rights reserved.",
+      copyright: "© 2025 BD Prompt by Start BD. All rights reserved.",
       madeWith: "Made with 💚 in Bangladesh"
     }
   };
