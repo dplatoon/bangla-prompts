@@ -1,0 +1,188 @@
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { FileText, Code, Languages, Briefcase, GraduationCap, Lightbulb } from "lucide-react";
+
+interface Template {
+  id: string;
+  icon: React.ReactNode;
+  titleBn: string;
+  titleEn: string;
+  descriptionBn: string;
+  descriptionEn: string;
+  prompt: string;
+}
+
+const templates: Template[] = [
+  {
+    id: "blog",
+    icon: <FileText className="w-4 h-4" />,
+    titleBn: "ব্লগ লেখা",
+    titleEn: "Blog Writing",
+    descriptionBn: "SEO-ফ্রেন্ডলি ব্লগ পোস্ট তৈরি",
+    descriptionEn: "Create SEO-friendly blog posts",
+    prompt: `Write a comprehensive blog post about [TOPIC].
+
+Requirements:
+- Engaging introduction that hooks the reader
+- At least 3 main sections with subheadings
+- Include practical examples and tips
+- SEO-optimized with relevant keywords
+- Compelling conclusion with call-to-action
+- Word count: approximately 1000 words
+
+Topic: [Enter your topic here]`
+  },
+  {
+    id: "code",
+    icon: <Code className="w-4 h-4" />,
+    titleBn: "কোড জেনারেশন",
+    titleEn: "Code Generation",
+    descriptionBn: "কোড লেখা এবং ব্যাখ্যা",
+    descriptionEn: "Write and explain code",
+    prompt: `Generate code for the following requirement:
+
+Language/Framework: [Specify language, e.g., TypeScript, Python]
+Task: [Describe what the code should do]
+
+Requirements:
+- Write clean, well-documented code
+- Include comments explaining key logic
+- Follow best practices for the language
+- Handle edge cases appropriately
+- Provide usage examples
+
+Description: [Enter your requirement here]`
+  },
+  {
+    id: "translation",
+    icon: <Languages className="w-4 h-4" />,
+    titleBn: "অনুবাদ",
+    titleEn: "Translation",
+    descriptionBn: "ভাষা অনুবাদ করুন",
+    descriptionEn: "Translate between languages",
+    prompt: `Translate the following text:
+
+From: [Source language, e.g., Bengali]
+To: [Target language, e.g., English]
+
+Instructions:
+- Maintain the original meaning and tone
+- Keep cultural context when appropriate
+- Preserve formatting and structure
+- Provide natural, fluent translation
+
+Text to translate:
+[Enter your text here]`
+  },
+  {
+    id: "business",
+    icon: <Briefcase className="w-4 h-4" />,
+    titleBn: "ব্যবসায়িক লেখা",
+    titleEn: "Business Writing",
+    descriptionBn: "পেশাদার ইমেইল এবং প্রস্তাব",
+    descriptionEn: "Professional emails and proposals",
+    prompt: `Create a professional business document:
+
+Type: [Email / Proposal / Report / Presentation]
+Purpose: [Describe the main objective]
+Recipient: [Who is this for?]
+Tone: [Formal / Semi-formal / Friendly professional]
+
+Key points to include:
+- [Point 1]
+- [Point 2]
+- [Point 3]
+
+Additional context:
+[Enter any additional details here]`
+  },
+  {
+    id: "education",
+    icon: <GraduationCap className="w-4 h-4" />,
+    titleBn: "শিক্ষামূলক",
+    titleEn: "Educational",
+    descriptionBn: "শিক্ষামূলক কন্টেন্ট তৈরি",
+    descriptionEn: "Create educational content",
+    prompt: `Create educational content for the following topic:
+
+Subject: [Enter subject area]
+Topic: [Specific topic to explain]
+Target Audience: [Beginners / Intermediate / Advanced]
+Format: [Lesson / Quiz / Summary / Study guide]
+
+Requirements:
+- Clear and easy-to-understand explanations
+- Use examples and analogies
+- Include key takeaways
+- Add practice questions if appropriate
+
+Details:
+[Enter any specific requirements here]`
+  },
+  {
+    id: "creative",
+    icon: <Lightbulb className="w-4 h-4" />,
+    titleBn: "সৃজনশীল লেখা",
+    titleEn: "Creative Writing",
+    descriptionBn: "গল্প, কবিতা এবং সৃজনশীল কন্টেন্ট",
+    descriptionEn: "Stories, poems, and creative content",
+    prompt: `Create a creative piece:
+
+Type: [Story / Poem / Script / Song lyrics]
+Genre: [Romance / Mystery / Comedy / Drama / etc.]
+Length: [Short / Medium / Long]
+Mood: [Happy / Sad / Suspenseful / Inspiring]
+
+Theme or concept:
+[Describe the main idea or story premise]
+
+Special elements to include:
+[Any specific characters, settings, or elements you want]`
+  }
+];
+
+interface PromptTemplatesProps {
+  language: 'bn' | 'en';
+  onSelectTemplate: (prompt: string) => void;
+}
+
+export const PromptTemplates = ({ language, onSelectTemplate }: PromptTemplatesProps) => {
+  return (
+    <Card>
+      <CardHeader className="pb-3">
+        <CardTitle className={`text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+          {language === 'bn' ? 'টেমপ্লেট' : 'Templates'}
+        </CardTitle>
+      </CardHeader>
+      <CardContent className="p-0">
+        <ScrollArea className="h-[280px] px-4 pb-4">
+          <div className="space-y-2">
+            {templates.map((template) => (
+              <Button
+                key={template.id}
+                variant="ghost"
+                className="w-full justify-start h-auto py-3 px-3"
+                onClick={() => onSelectTemplate(template.prompt)}
+              >
+                <div className="flex items-start gap-3 text-left">
+                  <div className="p-2 rounded-md bg-primary/10 text-primary shrink-0">
+                    {template.icon}
+                  </div>
+                  <div className="min-w-0">
+                    <p className={`font-medium text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {language === 'bn' ? template.titleBn : template.titleEn}
+                    </p>
+                    <p className={`text-xs text-muted-foreground truncate ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {language === 'bn' ? template.descriptionBn : template.descriptionEn}
+                    </p>
+                  </div>
+                </div>
+              </Button>
+            ))}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
+};
