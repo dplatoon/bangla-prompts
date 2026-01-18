@@ -111,8 +111,8 @@ serve(async (req) => {
     const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeSecretKey) {
       console.error("STRIPE_SECRET_KEY not configured");
-      return new Response(JSON.stringify({ error: "Payment system not configured" }), {
-        status: 500,
+      return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+        status: 503,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -163,9 +163,9 @@ serve(async (req) => {
   } catch (error) {
     console.error("Checkout error:", error);
     return new Response(
-      JSON.stringify({ error: "An error occurred. Please try again." }),
+      JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }),
       {
-        status: 500,
+        status: 503,
         headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
       }
     );

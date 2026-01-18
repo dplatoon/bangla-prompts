@@ -74,16 +74,41 @@ serve(async (req) => {
 
     const { messages } = await req.json();
     
-    // Validate messages
+    // Validate messages array
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
-      return new Response(JSON.stringify({ error: "Invalid messages. Must be an array with 1-50 messages." }), {
+      return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
+    // Validate each message structure
+    for (const msg of messages) {
+      if (!msg || typeof msg !== 'object') {
+        return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!msg.role || typeof msg.role !== 'string' || !['user', 'assistant', 'system'].includes(msg.role)) {
+        return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+      if (!msg.content || typeof msg.content !== 'string' || msg.content.length > 5000) {
+        return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
+    }
+
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
-    if (!OPENAI_API_KEY) throw new Error("OPENAI_API_KEY is not configured");
+    if (!OPENAI_API_KEY) {
+      console.error("OPENAI_API_KEY is not configured");
+      throw new Error("Service configuration error");
+    }
 
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
@@ -115,15 +140,15 @@ Be concise, friendly, and culturally aware when dealing with Bengali users. If a
 
     if (!response.ok) {
       if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Rate limits exceeded, please try again later." }), {
+        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
           status: 429,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
       const t = await response.text();
-      console.error("OpenAI API error:", response.status, t);
-      return new Response(JSON.stringify({ error: "OpenAI API error" }), {
-        status: 500,
+      console.error("External API error:", response.status, t);
+      return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+        status: 503,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
@@ -133,8 +158,8 @@ Be concise, friendly, and culturally aware when dealing with Bengali users. If a
     });
   } catch (e) {
     console.error("chat error:", e);
-    return new Response(JSON.stringify({ error: "An error occurred. Please try again." }), {
-      status: 500,
+    return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+      status: 503,
       headers: { ...getCorsHeaders(req), "Content-Type": "application/json" },
     });
   }
