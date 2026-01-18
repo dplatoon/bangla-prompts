@@ -82,7 +82,7 @@ serve(async (req) => {
       _function_name: "generate-prompt",
     });
 
-    const { prompt, model = "gemini-2.5-flash", temperature = 0.7, maxTokens = 1024 } = await req.json();
+    const { prompt, model = "gemini-2.5-flash", temperature = 0.7, maxTokens = 1024, stream = false } = await req.json();
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
@@ -103,7 +103,7 @@ serve(async (req) => {
     // Map frontend model to Lovable AI model
     const aiModel = MODEL_MAP[model] || "google/gemini-3-flash-preview";
 
-    console.log(`Generating with model: ${aiModel}, temperature: ${safeTemperature}, maxTokens: ${safeMaxTokens}`);
+    console.log(`Generating with model: ${aiModel}, temperature: ${safeTemperature}, maxTokens: ${safeMaxTokens}, stream: ${stream}`);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -122,6 +122,7 @@ serve(async (req) => {
         ],
         temperature: safeTemperature,
         max_tokens: safeMaxTokens,
+        stream: stream,
       }),
     });
 
@@ -144,6 +145,14 @@ serve(async (req) => {
       throw new Error("AI generation failed");
     }
 
+    // If streaming is enabled, pass through the SSE stream
+    if (stream) {
+      return new Response(response.body, {
+        headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+      });
+    }
+
+    // Non-streaming response
     const data = await response.json();
     const generatedText = data.choices?.[0]?.message?.content || "";
 
