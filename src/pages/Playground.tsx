@@ -8,8 +8,11 @@ import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Slider } from "@/components/ui/slider";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Sparkles, Copy, RotateCcw, Wand2, Loader2, Square } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { PromptTemplates } from "@/components/playground/PromptTemplates";
+import { GenerationHistory, saveToHistory } from "@/components/playground/GenerationHistory";
 
 const GENERATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-prompt`;
 
@@ -148,6 +151,11 @@ const Playground = () => {
           } catch { /* ignore partial leftovers */ }
         }
       }
+      
+      // Save to history on successful generation
+      if (outputSoFar.trim()) {
+        saveToHistory(prompt, outputSoFar, model);
+      }
     } catch (error: any) {
       if (error.name === 'AbortError') {
         // User cancelled - don't show error
@@ -163,6 +171,22 @@ const Playground = () => {
       setIsGenerating(false);
       abortControllerRef.current = null;
     }
+  };
+
+  const handleSelectTemplate = (templatePrompt: string) => {
+    setPrompt(templatePrompt);
+    toast({
+      title: language === 'bn' ? "টেমপ্লেট লোড হয়েছে" : "Template loaded",
+      description: language === 'bn' ? "প্রম্পট কাস্টমাইজ করুন" : "Customize the prompt as needed"
+    });
+  };
+
+  const handleReuseFromHistory = (historyPrompt: string, historyOutput: string) => {
+    setPrompt(historyPrompt);
+    setOutput(historyOutput);
+    toast({
+      title: language === 'bn' ? "ইতিহাস থেকে লোড হয়েছে" : "Loaded from history",
+    });
   };
 
   const handleCopy = async () => {
@@ -259,57 +283,78 @@ const Playground = () => {
           </header>
 
           <div className="grid lg:grid-cols-4 gap-8">
-            {/* Settings Panel */}
-            <Card className="lg:col-span-1">
-              <CardHeader>
-                <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
-                  {currentText.settings}
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="space-y-2">
-                  <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {currentText.model}
-                  </label>
-                  <Select value={model} onValueChange={setModel}>
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
-                      <SelectItem value="gemini-2.5-pro">Gemini 2.5 Pro</SelectItem>
-                      <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+            {/* Settings & Templates Panel */}
+            <div className="lg:col-span-1 space-y-4">
+              {/* Settings Card */}
+              <Card>
+                <CardHeader className="pb-3">
+                  <CardTitle className={`text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {currentText.settings}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <div className="space-y-2">
+                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {currentText.model}
+                    </label>
+                    <Select value={model} onValueChange={setModel}>
+                      <SelectTrigger>
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="gemini-2.5-flash">Gemini 2.5 Flash</SelectItem>
+                        <SelectItem value="gemini-2.5-pro">Gemini 2.5 Pro</SelectItem>
+                        <SelectItem value="gpt-4o-mini">GPT-4o Mini</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
 
-                <div className="space-y-2">
-                  <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {currentText.temperature}: {temperature[0]}
-                  </label>
-                  <Slider
-                    value={temperature}
-                    onValueChange={setTemperature}
-                    min={0}
-                    max={1}
-                    step={0.1}
-                  />
-                </div>
+                  <div className="space-y-2">
+                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {currentText.temperature}: {temperature[0]}
+                    </label>
+                    <Slider
+                      value={temperature}
+                      onValueChange={setTemperature}
+                      min={0}
+                      max={1}
+                      step={0.1}
+                    />
+                  </div>
 
-                <div className="space-y-2">
-                  <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {currentText.maxTokens}: {maxTokens[0]}
-                  </label>
-                  <Slider
-                    value={maxTokens}
-                    onValueChange={setMaxTokens}
-                    min={256}
-                    max={4096}
-                    step={256}
-                  />
-                </div>
-              </CardContent>
-            </Card>
+                  <div className="space-y-2">
+                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {currentText.maxTokens}: {maxTokens[0]}
+                    </label>
+                    <Slider
+                      value={maxTokens}
+                      onValueChange={setMaxTokens}
+                      min={256}
+                      max={4096}
+                      step={256}
+                    />
+                  </div>
+                </CardContent>
+              </Card>
+
+              {/* Templates & History Tabs */}
+              <Tabs defaultValue="templates" className="w-full">
+                <TabsList className="w-full grid grid-cols-2">
+                  <TabsTrigger value="templates" className={language === 'bn' ? 'font-bengali text-xs' : 'text-xs'}>
+                    {language === 'bn' ? 'টেমপ্লেট' : 'Templates'}
+                  </TabsTrigger>
+                  <TabsTrigger value="history" className={language === 'bn' ? 'font-bengali text-xs' : 'text-xs'}>
+                    {language === 'bn' ? 'ইতিহাস' : 'History'}
+                  </TabsTrigger>
+                </TabsList>
+                <TabsContent value="templates" className="mt-3">
+                  <PromptTemplates language={language} onSelectTemplate={handleSelectTemplate} />
+                </TabsContent>
+                <TabsContent value="history" className="mt-3">
+                  <GenerationHistory language={language} onReuse={handleReuseFromHistory} />
+                </TabsContent>
+              </Tabs>
+            </div>
 
             {/* Main Playground Area */}
             <div className="lg:col-span-3 space-y-6">
