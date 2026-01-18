@@ -1,7 +1,10 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { FileText, Code, Languages, Briefcase, GraduationCap, Lightbulb } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { FileText, Code, Languages, Briefcase, GraduationCap, Lightbulb, User, Trash2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface Template {
   id: string;
@@ -12,6 +15,53 @@ interface Template {
   descriptionEn: string;
   prompt: string;
 }
+
+export interface CustomTemplate {
+  id: string;
+  name: string;
+  prompt: string;
+  createdAt: string;
+}
+
+const CUSTOM_TEMPLATES_KEY = "bdprompt-custom-templates";
+const MAX_CUSTOM_TEMPLATES = 20;
+
+export const getCustomTemplates = (): CustomTemplate[] => {
+  try {
+    const saved = localStorage.getItem(CUSTOM_TEMPLATES_KEY);
+    return saved ? JSON.parse(saved) : [];
+  } catch {
+    return [];
+  }
+};
+
+export const saveCustomTemplate = (name: string, prompt: string): CustomTemplate | null => {
+  try {
+    const templates = getCustomTemplates();
+    const newTemplate: CustomTemplate = {
+      id: `custom-${Date.now()}`,
+      name,
+      prompt,
+      createdAt: new Date().toISOString(),
+    };
+    const updated = [newTemplate, ...templates].slice(0, MAX_CUSTOM_TEMPLATES);
+    localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(updated));
+    return newTemplate;
+  } catch {
+    return null;
+  }
+};
+
+export const deleteCustomTemplate = (id: string): boolean => {
+  try {
+    const templates = getCustomTemplates();
+    const updated = templates.filter((t) => t.id !== id);
+    localStorage.setItem(CUSTOM_TEMPLATES_KEY, JSON.stringify(updated));
+    return true;
+  } catch {
+    return false;
+  }
+};
 
 const templates: Template[] = [
   {
@@ -145,43 +195,128 @@ Special elements to include:
 interface PromptTemplatesProps {
   language: 'bn' | 'en';
   onSelectTemplate: (prompt: string) => void;
+  refreshKey?: number;
 }
 
-export const PromptTemplates = ({ language, onSelectTemplate }: PromptTemplatesProps) => {
+export const PromptTemplates = ({ language, onSelectTemplate, refreshKey }: PromptTemplatesProps) => {
+  const [customTemplates, setCustomTemplates] = useState<CustomTemplate[]>([]);
+  const { toast } = useToast();
+
+  useEffect(() => {
+    setCustomTemplates(getCustomTemplates());
+  }, [refreshKey]);
+
+  const handleDeleteCustom = (id: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (deleteCustomTemplate(id)) {
+      setCustomTemplates(getCustomTemplates());
+      toast({
+        title: language === 'bn' ? "মুছে ফেলা হয়েছে" : "Deleted",
+        description: language === 'bn' ? "টেমপ্লেট মুছে ফেলা হয়েছে" : "Template deleted",
+      });
+    }
+  };
+
   return (
     <Card>
-      <CardHeader className="pb-3">
+      <CardHeader className="pb-2">
         <CardTitle className={`text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
           {language === 'bn' ? 'টেমপ্লেট' : 'Templates'}
         </CardTitle>
       </CardHeader>
       <CardContent className="p-0">
-        <ScrollArea className="h-[280px] px-4 pb-4">
-          <div className="space-y-2">
-            {templates.map((template) => (
-              <Button
-                key={template.id}
-                variant="ghost"
-                className="w-full justify-start h-auto py-3 px-3"
-                onClick={() => onSelectTemplate(template.prompt)}
-              >
-                <div className="flex items-start gap-3 text-left">
-                  <div className="p-2 rounded-md bg-primary/10 text-primary shrink-0">
-                    {template.icon}
-                  </div>
-                  <div className="min-w-0">
-                    <p className={`font-medium text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
-                      {language === 'bn' ? template.titleBn : template.titleEn}
-                    </p>
-                    <p className={`text-xs text-muted-foreground truncate ${language === 'bn' ? 'font-bengali' : ''}`}>
-                      {language === 'bn' ? template.descriptionBn : template.descriptionEn}
-                    </p>
-                  </div>
+        <Tabs defaultValue="preset" className="w-full">
+          <TabsList className="w-full grid grid-cols-2 mx-4 mb-2" style={{ width: 'calc(100% - 2rem)' }}>
+            <TabsTrigger value="preset" className="text-xs">
+              {language === 'bn' ? 'প্রিসেট' : 'Preset'}
+            </TabsTrigger>
+            <TabsTrigger value="custom" className="text-xs">
+              {language === 'bn' ? 'আমার' : 'My'} ({customTemplates.length})
+            </TabsTrigger>
+          </TabsList>
+          
+          <TabsContent value="preset" className="m-0">
+            <ScrollArea className="h-[240px] px-4 pb-4">
+              <div className="space-y-2">
+                {templates.map((template) => (
+                  <Button
+                    key={template.id}
+                    variant="ghost"
+                    className="w-full justify-start h-auto py-3 px-3"
+                    onClick={() => onSelectTemplate(template.prompt)}
+                  >
+                    <div className="flex items-start gap-3 text-left">
+                      <div className="p-2 rounded-md bg-primary/10 text-primary shrink-0">
+                        {template.icon}
+                      </div>
+                      <div className="min-w-0">
+                        <p className={`font-medium text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                          {language === 'bn' ? template.titleBn : template.titleEn}
+                        </p>
+                        <p className={`text-xs text-muted-foreground truncate ${language === 'bn' ? 'font-bengali' : ''}`}>
+                          {language === 'bn' ? template.descriptionBn : template.descriptionEn}
+                        </p>
+                      </div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </ScrollArea>
+          </TabsContent>
+          
+          <TabsContent value="custom" className="m-0">
+            <ScrollArea className="h-[240px] px-4 pb-4">
+              {customTemplates.length === 0 ? (
+                <div className="text-center py-8 text-muted-foreground">
+                  <User className="w-8 h-8 mx-auto mb-2 opacity-50" />
+                  <p className={`text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {language === 'bn' ? 'কোনো কাস্টম টেমপ্লেট নেই' : 'No custom templates yet'}
+                  </p>
+                  <p className={`text-xs mt-1 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {language === 'bn' ? '"সেভ করুন" বাটন দিয়ে সংরক্ষণ করুন' : 'Use "Save" button to save prompts'}
+                  </p>
                 </div>
-              </Button>
-            ))}
-          </div>
-        </ScrollArea>
+              ) : (
+                <div className="space-y-2">
+                  {customTemplates.map((template) => (
+                    <div
+                      key={template.id}
+                      className="group relative"
+                    >
+                      <Button
+                        variant="ghost"
+                        className="w-full justify-start h-auto py-3 px-3 pr-10"
+                        onClick={() => onSelectTemplate(template.prompt)}
+                      >
+                        <div className="flex items-start gap-3 text-left">
+                          <div className="p-2 rounded-md bg-secondary text-secondary-foreground shrink-0">
+                            <User className="w-4 h-4" />
+                          </div>
+                          <div className="min-w-0">
+                            <p className={`font-medium text-sm truncate ${language === 'bn' ? 'font-bengali' : ''}`}>
+                              {template.name}
+                            </p>
+                            <p className="text-xs text-muted-foreground truncate max-w-[150px]">
+                              {template.prompt.slice(0, 50)}...
+                            </p>
+                          </div>
+                        </div>
+                      </Button>
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="absolute right-1 top-1/2 -translate-y-1/2 h-7 w-7 opacity-0 group-hover:opacity-100 transition-opacity text-destructive hover:text-destructive hover:bg-destructive/10"
+                        onClick={(e) => handleDeleteCustom(template.id, e)}
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </Button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </ScrollArea>
+          </TabsContent>
+        </Tabs>
       </CardContent>
     </Card>
   );
