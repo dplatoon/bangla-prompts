@@ -15,6 +15,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogD
 import { useToast } from "@/hooks/use-toast";
 import { PromptTemplates, saveCustomTemplate } from "@/components/playground/PromptTemplates";
 import { GenerationHistory, saveToHistory } from "@/components/playground/GenerationHistory";
+import { supabase } from "@/integrations/supabase/client";
+import { useNavigate } from "react-router-dom";
 
 const GENERATE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/generate-prompt`;
 
@@ -50,6 +52,8 @@ const Playground = () => {
     }
   }, []);
 
+  const navigate = useNavigate();
+
   const handleGenerate = async () => {
     if (!prompt.trim()) {
       toast({
@@ -57,6 +61,18 @@ const Playground = () => {
         description: language === 'bn' ? "অনুগ্রহ করে একটি প্রম্পট লিখুন" : "Please enter a prompt",
         variant: "destructive"
       });
+      return;
+    }
+
+    // Get user session for authentication
+    const { data: { session } } = await supabase.auth.getSession();
+    if (!session?.access_token) {
+      toast({
+        title: language === 'bn' ? "লগইন প্রয়োজন" : "Login required",
+        description: language === 'bn' ? "AI জেনারেশন ব্যবহার করতে লগইন করুন" : "Please log in to use AI generation",
+        variant: "destructive"
+      });
+      navigate('/auth');
       return;
     }
 
@@ -74,7 +90,7 @@ const Playground = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          Authorization: `Bearer ${session.access_token}`,
         },
         body: JSON.stringify({
           prompt: prompt,
