@@ -37,9 +37,17 @@ const Kobita = lazy(() => import("./pages/Kobita"));
 const Business = lazy(() => import("./pages/Business"));
 const Resources = lazy(() => import("./pages/Resources"));
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+      gcTime: 1000 * 60 * 30, // 30 minutes (previously cacheTime)
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
-// Loading fallback component
+// Loading fallback component with minimal layout shift
 const PageLoader = () => (
   <div className="min-h-screen bg-background flex items-center justify-center">
     <Loader2 className="w-8 h-8 animate-spin text-primary" />
@@ -51,7 +59,12 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <BrowserRouter>
+      <BrowserRouter
+        future={{
+          v7_startTransition: true,
+          v7_relativeSplatPath: true,
+        }}
+      >
         <Suspense fallback={<PageLoader />}>
           <Routes>
             {/* Critical path - eagerly loaded */}
