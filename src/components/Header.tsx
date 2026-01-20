@@ -37,6 +37,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
       title: "bdprompt.com",
       subtitle: "বাংলা AI প্রম্পট হাব",
       explore: "এক্সপ্লোর",
+      prompts: "প্রম্পট",
       playground: "প্লেগ্রাউন্ড",
       packs: "প্যাকস",
       product: "প্রোডাক্ট",
@@ -52,6 +53,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
       title: "bdprompt.com",
       subtitle: "Bangla AI Prompts Hub",
       explore: "Explore",
+      prompts: "Prompts",
       playground: "Playground",
       packs: "Packs",
       product: "Product",
@@ -91,6 +93,11 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
             <Link to="/explore">
               <Button variant="ghost" className={language === 'bn' ? 'font-bengali' : ''}>
                 {currentText.explore}
+              </Button>
+            </Link>
+            <Link to="/prompts">
+              <Button variant="ghost" className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.prompts}
               </Button>
             </Link>
             <Link to="/playground">
@@ -268,6 +275,11 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               <Link to="/explore" onClick={() => setIsMenuOpen(false)}>
                 <Button variant="ghost" className={`w-full justify-start ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {currentText.explore}
+                </Button>
+              </Link>
+              <Link to="/prompts" onClick={() => setIsMenuOpen(false)}>
+                <Button variant="ghost" className={`w-full justify-start ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {currentText.prompts}
                 </Button>
               </Link>
               <Link to="/playground" onClick={() => setIsMenuOpen(false)}>
