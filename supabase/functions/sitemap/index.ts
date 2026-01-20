@@ -119,6 +119,7 @@ const staticPages = [
     { url: '/', priority: '1.0', changefreq: 'daily' },
     { url: '/explore', priority: '0.9', changefreq: 'daily' },
     { url: '/playground', priority: '0.9', changefreq: 'daily' },
+    { url: '/guide', priority: '0.9', changefreq: 'weekly' },
     { url: '/packs', priority: '0.8', changefreq: 'weekly' },
     { url: '/product', priority: '0.8', changefreq: 'weekly' },
     { url: '/api', priority: '0.7', changefreq: 'weekly' },
