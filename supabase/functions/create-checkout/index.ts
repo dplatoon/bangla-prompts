@@ -5,6 +5,8 @@ import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 const ALLOWED_ORIGINS = [
   "https://bdprompt.com",
   "https://www.bdprompt.com",
+  "https://id-preview--8787d62d-ea8a-489d-9b35-936ad6e92151.lovable.app",
+  "https://bangla-prompt.lovable.app",
   "http://localhost:5173",
   "http://localhost:3000",
 ];
