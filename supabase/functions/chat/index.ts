@@ -82,7 +82,8 @@ serve(async (req) => {
       });
     }
 
-    // Validate each message structure
+    // Validate each message structure and calculate total length
+    let totalChars = 0;
     for (const msg of messages) {
       if (!msg || typeof msg !== 'object') {
         return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
@@ -96,12 +97,21 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (!msg.content || typeof msg.content !== 'string' || msg.content.length > 5000) {
+      if (!msg.content || typeof msg.content !== 'string' || msg.content.length > 2000) {
         return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
+      totalChars += msg.content.length;
+    }
+
+    // Prevent token exhaustion by limiting total message length
+    if (totalChars > 20000) {
+      return new Response(JSON.stringify({ error: "Total message length exceeds limit", code: "VALIDATION_ERROR" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
     }
 
     const OPENAI_API_KEY = Deno.env.get("OPENAI_API_KEY");
