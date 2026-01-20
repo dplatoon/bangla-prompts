@@ -81,26 +81,30 @@ export const AdminAuditLogs = ({ language }: AdminAuditLogsProps) => {
 
   const { data: auditLogs, isLoading } = useQuery({
     queryKey: ['admin-audit-logs', tableFilter, actionFilter],
-    queryFn: async () => {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      let query: any = supabase
+    queryFn: async (): Promise<AuditLog[]> => {
+      // Fetch all logs and filter client-side for simpler type handling
+      const { data, error } = await supabase
         .from('admin_audit_logs')
         .select('*')
         .order('created_at', { ascending: false })
-        .limit(100);
-
+        .limit(200);
+      
+      if (error) {
+        throw error;
+      }
+      
+      let logs: AuditLog[] = data as AuditLog[];
+      
+      // Apply table filter client-side
       if (tableFilter !== "all") {
-        query = query.eq('table_name', tableFilter);
+        logs = logs.filter((log) => log.table_name === tableFilter);
       }
-      
+      // Apply action filter client-side
       if (actionFilter !== "all") {
-        query = query.eq('action', actionFilter);
+        logs = logs.filter((log) => log.action === actionFilter);
       }
-
-      const { data, error } = await query;
       
-      if (error) throw error;
-      return data as AuditLog[];
+      return logs.slice(0, 100);
     },
   });
 
