@@ -123,9 +123,11 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
-    // Convert BDT to USD (approximate rate - in production use a rate API)
+    // Convert BDT to USD (using current approximate rate ~121 BDT per USD as of 2025)
+    // For production, consider using a currency API with caching for real-time rates
     const priceInBDT = Number(prompt.price);
-    const priceInUSD = Math.ceil(priceInBDT / 110); // Approximate BDT to USD
+    const BDT_TO_USD_RATE = 121; // Updated rate - review periodically
+    const priceInUSD = Math.ceil(priceInBDT / BDT_TO_USD_RATE);
     const priceInCents = Math.max(50, priceInUSD * 100); // Minimum $0.50 for Stripe
 
     console.log(`Creating checkout for prompt ${promptId}, price: ${priceInBDT} BDT = ${priceInCents} cents USD`);
