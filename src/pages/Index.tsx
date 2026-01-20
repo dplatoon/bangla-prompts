@@ -8,6 +8,7 @@ import { Footer } from "@/components/Footer";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { SEOHead } from "@/components/SEOHead";
 import { FAQ } from "@/components/FAQ";
+import { PWAStatus } from "@/components/PWAStatus";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -72,6 +73,7 @@ const Index = () => {
         </main>
         <Footer language={language} />
         <ChatAssistant />
+        <PWAStatus language={language} />
       </div>
     </>
   );
