@@ -115,7 +115,7 @@ async function generateSitemapIndex(baseUrl: string, today: string, supabase: an
 function generatePagesSitemap(baseUrl: string, today: string) {
   console.log('Generating pages sitemap...')
 
-  const staticPages = [
+const staticPages = [
     { url: '/', priority: '1.0', changefreq: 'daily' },
     { url: '/explore', priority: '0.9', changefreq: 'daily' },
     { url: '/playground', priority: '0.9', changefreq: 'daily' },
@@ -136,6 +136,18 @@ function generatePagesSitemap(baseUrl: string, today: string) {
     { url: '/cookies', priority: '0.3', changefreq: 'yearly' },
     { url: '/dmca', priority: '0.3', changefreq: 'yearly' },
     { url: '/guidelines', priority: '0.3', changefreq: 'yearly' },
+    // Prompt category pages
+    { url: '/prompts', priority: '0.9', changefreq: 'daily' },
+    { url: '/prompts/seo-bangla', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/marketing', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/freelancing', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/students', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/coding', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/business', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/creative-art', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/youtube-growth', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/bangla-writing', priority: '0.8', changefreq: 'weekly' },
+    { url: '/prompts/productivity', priority: '0.8', changefreq: 'weekly' },
   ]
 
   let sitemap = `<?xml version="1.0" encoding="UTF-8"?>

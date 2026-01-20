@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useParams, Link, Navigate } from "react-router-dom";
 import { 
   Search, Megaphone, Briefcase, GraduationCap, Code, 
@@ -27,6 +28,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const PromptCategory = () => {
+  const [language, setLanguage] = useState<"bn" | "en">("bn");
   const { slug } = useParams<{ slug: string }>();
   const category = slug ? getCategoryBySlug(slug) : undefined;
 
@@ -93,7 +95,7 @@ const PromptCategory = () => {
         structuredData={structuredData}
       />
       
-      <Header />
+      <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumbs */}
@@ -179,7 +181,7 @@ const PromptCategory = () => {
         </section>
       </main>
       
-      <Footer />
+      <Footer language={language} />
     </div>
   );
 };
