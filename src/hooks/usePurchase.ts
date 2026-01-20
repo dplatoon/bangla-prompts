@@ -98,7 +98,22 @@ export const usePurchase = (promptId: string, language: 'bn' | 'en' = 'bn') => {
       }
 
       if (data?.url) {
-        window.location.href = data.url;
+        // Defense-in-depth: Validate URL is from Stripe before redirecting
+        try {
+          const checkoutUrl = new URL(data.url);
+          if (checkoutUrl.hostname === 'checkout.stripe.com' && checkoutUrl.protocol === 'https:') {
+            window.location.href = data.url;
+          } else {
+            throw new Error('Invalid checkout URL domain');
+          }
+        } catch (urlError) {
+          console.error('URL validation failed:', urlError);
+          toast({
+            title: language === 'bn' ? "ত্রুটি" : "Error",
+            description: language === 'bn' ? "অবৈধ চেকআউট URL" : "Invalid checkout URL",
+            variant: "destructive",
+          });
+        }
       } else {
         throw new Error('No checkout URL returned');
       }
