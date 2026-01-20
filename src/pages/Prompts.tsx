@@ -1,5 +1,6 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
-import { 
+import {
   Search, Megaphone, Briefcase, GraduationCap, Code, 
   Mail, Palette, Youtube, PenTool, Clock, ChevronRight 
 } from "lucide-react";
@@ -26,6 +27,8 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const Prompts = () => {
+  const [language, setLanguage] = useState<"bn" | "en">("bn");
+
   const breadcrumbItems = [
     { label: "Prompts", labelBn: "প্রম্পট", href: "/prompts" },
   ];
@@ -63,7 +66,7 @@ const Prompts = () => {
         structuredData={structuredData}
       />
       
-      <Header />
+      <Header language={language} onLanguageChange={setLanguage} />
       
       <main className="container mx-auto px-4 py-8">
         {/* Breadcrumbs */}
@@ -134,7 +137,7 @@ const Prompts = () => {
         </section>
       </main>
       
-      <Footer />
+      <Footer language={language} />
     </div>
   );
 };
