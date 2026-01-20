@@ -22,6 +22,23 @@ function getCorsHeaders(req: Request): Record<string, string> {
 const RATE_LIMIT_MAX_REQUESTS = 15;
 const RATE_LIMIT_WINDOW_MINUTES = 60;
 
+// Suspicious prompt injection patterns (defense in depth)
+const SUSPICIOUS_PATTERNS = [
+  /ignore.*previous.*instructions/i,
+  /disregard.*above.*instructions/i,
+  /forget.*everything.*said/i,
+  /system.*role.*admin/i,
+  /\[SYSTEM\]/i,
+  /\[ADMIN\]/i,
+  /bypass.*security/i,
+  /reveal.*api.*key/i,
+  /show.*password/i,
+];
+
+function containsSuspiciousPatterns(content: string): boolean {
+  return SUSPICIOUS_PATTERNS.some(pattern => pattern.test(content));
+}
+
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   
@@ -83,6 +100,15 @@ serve(async (req) => {
     // Validate prompt input
     if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0 || prompt.length > 10000) {
       return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    
+    // Check for suspicious prompt injection patterns (defense in depth)
+    if (containsSuspiciousPatterns(prompt)) {
+      console.warn("Suspicious pattern detected in prompt from user:", user.id);
+      return new Response(JSON.stringify({ error: "Invalid request content", code: "VALIDATION_ERROR" }), {
         status: 400,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
