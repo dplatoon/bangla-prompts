@@ -15,7 +15,7 @@ export default defineConfig(({ mode }) => ({
     mode === 'development' && componentTagger(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.jpg', 'favicon.webp', 'icon-192x192.png', 'icon-512x512.png', 'og-image.png', 'og-image.webp'],
+      includeAssets: ['favicon.png', 'favicon.webp', 'favicon.ico', 'icon-192x192.png', 'icon-512x512.png', 'og-image.png', 'og-image.webp'],
       manifest: {
         name: 'bdprompt.com - বাংলা AI প্রম্পট হাব',
         short_name: 'bdprompt',
@@ -30,9 +30,9 @@ export default defineConfig(({ mode }) => ({
         categories: ['education', 'productivity', 'utilities'],
         icons: [
           {
-            src: '/favicon.ico',
+            src: '/favicon.png',
             sizes: '64x64 32x32 24x24 16x16',
-            type: 'image/x-icon'
+            type: 'image/png'
           },
           {
             src: '/icon-192x192.png',

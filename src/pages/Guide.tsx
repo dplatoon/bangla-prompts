@@ -25,16 +25,62 @@ import {
   Zap,
   Search,
   TrendingUp,
-  MessageSquare
+  MessageSquare,
+  ExternalLink,
+  Play
 } from "lucide-react";
 import { PROMPT_CATEGORIES } from "@/data/promptCategories";
+import { useToast } from "@/hooks/use-toast";
 
 const Guide = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
+  const { toast } = useToast();
 
   const breadcrumbItems = [
     { label: 'Guide', labelBn: 'গাইড' }
   ];
+
+  // Get featured prompts from different categories for internal linking
+  const getFeaturedPrompts = () => {
+    const featured: Array<{
+      categorySlug: string;
+      categoryTitle: string;
+      promptIndex: number;
+      prompt: { title: string; copyText: string; usage: string };
+    }> = [];
+    
+    // Pick 1-2 prompts from each category
+    PROMPT_CATEGORIES.forEach((category) => {
+      if (category.prompts.length > 0) {
+        featured.push({
+          categorySlug: category.slug,
+          categoryTitle: category.title,
+          promptIndex: 0,
+          prompt: category.prompts[0]
+        });
+        if (category.prompts.length > 1) {
+          featured.push({
+            categorySlug: category.slug,
+            categoryTitle: category.title,
+            promptIndex: 1,
+            prompt: category.prompts[1]
+          });
+        }
+      }
+    });
+    
+    return featured.slice(0, 12); // Limit to 12 featured prompts
+  };
+
+  const featuredPrompts = getFeaturedPrompts();
+
+  const handleCopyPrompt = (promptText: string, promptTitle: string) => {
+    navigator.clipboard.writeText(promptText);
+    toast({
+      title: language === 'bn' ? "কপি হয়েছে!" : "Copied!",
+      description: language === 'bn' ? `"${promptTitle}" প্রম্পট কপি করা হয়েছে।` : `"${promptTitle}" prompt copied.`,
+    });
+  };
 
   const content = {
     bn: {
@@ -418,6 +464,86 @@ const Guide = () => {
                   </CardContent>
                 </Card>
               ))}
+            </div>
+          </section>
+
+          {/* Featured Prompts with Try This Prompt CTAs */}
+          <section className="mb-16">
+            <div className="text-center mb-8">
+              <Badge className="mb-4" variant="default">
+                <Play className="w-4 h-4 mr-2" />
+                {language === 'bn' ? 'ট্রাই করুন' : 'Try Now'}
+              </Badge>
+              <h2 className={`text-3xl font-bold mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {language === 'bn' ? 'জনপ্রিয় প্রম্পট সমূহ' : 'Popular Prompts'}
+              </h2>
+              <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {language === 'bn' 
+                  ? 'এই প্রম্পটগুলো এখনই কপি করে ChatGPT বা Claude-এ ব্যবহার করুন' 
+                  : 'Copy these prompts and use them in ChatGPT or Claude right now'}
+              </p>
+            </div>
+            
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {featuredPrompts.map((item, index) => (
+                <Card key={index} className="group hover:shadow-lg transition-all duration-300 hover:border-primary/50">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-start justify-between gap-2">
+                      <div className="flex-1">
+                        <Link 
+                          to={`/prompts/${item.categorySlug}`}
+                          className="text-xs text-primary hover:underline inline-flex items-center gap-1 mb-1"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                          {language === 'bn' ? 'ক্যাটাগরি দেখুন' : 'View Category'}
+                        </Link>
+                        <CardTitle className="text-base">{item.prompt.title}</CardTitle>
+                      </div>
+                    </div>
+                    <CardDescription className={`text-xs line-clamp-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {item.prompt.usage}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <div className="bg-muted rounded-lg p-3 mb-4 max-h-24 overflow-hidden relative">
+                      <p className="text-xs text-muted-foreground font-mono line-clamp-3">
+                        {item.prompt.copyText.slice(0, 150)}...
+                      </p>
+                      <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-muted to-transparent" />
+                    </div>
+                    <div className="flex gap-2">
+                      <Button 
+                        size="sm" 
+                        variant="default"
+                        className={`flex-1 ${language === 'bn' ? 'font-bengali' : ''}`}
+                        onClick={() => handleCopyPrompt(item.prompt.copyText, item.prompt.title)}
+                      >
+                        <Copy className="w-4 h-4 mr-2" />
+                        {language === 'bn' ? 'কপি করুন' : 'Copy'}
+                      </Button>
+                      <Link to={`/prompts/${item.categorySlug}`}>
+                        <Button 
+                          size="sm" 
+                          variant="outline"
+                          className={language === 'bn' ? 'font-bengali' : ''}
+                        >
+                          <Play className="w-4 h-4 mr-1" />
+                          {language === 'bn' ? 'আরো দেখুন' : 'See More'}
+                        </Button>
+                      </Link>
+                    </div>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <div className="text-center mt-8">
+              <Link to="/explore">
+                <Button size="lg" variant="outline" className={language === 'bn' ? 'font-bengali' : ''}>
+                  {language === 'bn' ? 'সব প্রম্পট দেখুন' : 'View All Prompts'}
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </Button>
+              </Link>
             </div>
           </section>
 
