@@ -46,7 +46,7 @@ export const Hero = ({ language }: HeroProps) => {
       }
     },
     en: {
-      headline: "Bengali AI Prompt Generator — For Students, Writers, Businesses",
+      headline: "Bangla AI Prompt Generator — For Students, Writers, Businesses",
       subhead: "Education, poetry, business, marketing — use 60+ prompts with ChatGPT, Claude, Gemini.",
       exploreBtn: "Explore Prompts",
       submitBtn: "Submit Prompt",
@@ -194,11 +194,11 @@ export const Hero = ({ language }: HeroProps) => {
                     className="bg-muted/50 rounded-lg p-4 min-h-[60px] border border-border/30"
                     role="region"
                     aria-live="polite"
-                    aria-label={language === 'bn' ? 'বাংলা আউটপুট' : 'Bengali Output'}
+                    aria-label={language === 'bn' ? 'বাংলা আউটপুট' : 'Bangla Output'}
                   >
                     <p className={`text-sm font-bengali text-bengali ${banglaOutput ? 'text-foreground' : 'text-muted-foreground'}`}>
                       {banglaOutput || 
-                        (language === 'bn' ? 'Roman Bangla টাইপ করুন এবং বাংলায় দেখুন' : 'Type in Roman Bangla to see Bengali output')
+                        (language === 'bn' ? 'Roman Bangla টাইপ করুন এবং বাংলায় দেখুন' : 'Type in Roman Bangla to see Bangla output')
                       }
                     </p>
                   </div>
