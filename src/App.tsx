@@ -36,6 +36,8 @@ const Shikkha = lazy(() => import("./pages/Shikkha"));
 const Kobita = lazy(() => import("./pages/Kobita"));
 const Business = lazy(() => import("./pages/Business"));
 const Resources = lazy(() => import("./pages/Resources"));
+const Prompts = lazy(() => import("./pages/Prompts"));
+const PromptCategory = lazy(() => import("./pages/PromptCategory"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -93,6 +95,8 @@ const App = () => (
             <Route path="/kobita" element={<Kobita />} />
             <Route path="/business" element={<Business />} />
             <Route path="/resources" element={<Resources />} />
+            <Route path="/prompts" element={<Prompts />} />
+            <Route path="/prompts/:slug" element={<PromptCategory />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/profile" element={<Profile />} />
             <Route path="/payment-success" element={<PaymentSuccess />} />
