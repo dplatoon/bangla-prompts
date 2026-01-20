@@ -4,6 +4,22 @@
       "source": "/explore",
       "has": [{ "type": "query", "key": "category", "value": "(?<cat>.*)" }],
       "destination": "/explore/:cat"
+    },
+    {
+      "source": "/sitemap.xml",
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=index"
+    },
+    {
+      "source": "/sitemap-pages.xml",
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=pages"
+    },
+    {
+      "source": "/sitemap-categories.xml",
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=categories"
+    },
+    {
+      "source": "/sitemap-prompts-:page.xml",
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=prompts-:page"
     }
   ],
   "headers": [

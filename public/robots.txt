@@ -1,10 +1,7 @@
 # robots.txt for bdprompt.com
 # Bangla AI Prompts Hub
 
-# Sitemap Index (splits large sitemaps for better crawling)
-Sitemap: https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=index
-
-# Static Sitemap fallback
+# Dynamic Sitemap (served via clean URL)
 Sitemap: https://bdprompt.com/sitemap.xml
 
 # Google (no crawl-delay needed - Google ignores it anyway)
