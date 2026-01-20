@@ -103,6 +103,7 @@ export const useCategories = () => {
 };
 
 // Fetch all prompts with optional filters
+// Uses prompts_public view which conditionally exposes prompt_template based on purchase status
 export const usePrompts = (options?: {
   categorySlug?: string;
   search?: string;
@@ -112,13 +113,13 @@ export const usePrompts = (options?: {
   return useQuery({
     queryKey: ['prompts', options],
     queryFn: async () => {
+      // Use the secure view that conditionally exposes prompt_template
       let query = supabase
-        .from('prompts')
+        .from('prompts_public')
         .select(`
           *,
           category:categories(*)
-        `)
-        .eq('is_published', true);
+        `);
 
       if (options?.categorySlug) {
         const { data: category } = await supabase
@@ -153,12 +154,14 @@ export const usePrompts = (options?: {
 };
 
 // Fetch single prompt by slug
+// Uses prompts_public view which conditionally exposes prompt_template based on purchase status
 export const usePrompt = (slug: string) => {
   return useQuery({
     queryKey: ['prompt', slug],
     queryFn: async () => {
+      // Use the secure view that conditionally exposes prompt_template
       const { data, error } = await supabase
-        .from('prompts')
+        .from('prompts_public')
         .select(`
           *,
           category:categories(*)
@@ -174,6 +177,8 @@ export const usePrompt = (slug: string) => {
 };
 
 // Fetch user's saved prompts
+// Note: This still uses the prompts table directly, but saved prompts are already accessible
+// to the user who saved them, and the view handles template exposure correctly
 export const useSavedPrompts = () => {
   const { user } = useAuth();
   
@@ -182,20 +187,34 @@ export const useSavedPrompts = () => {
     queryFn: async () => {
       if (!user) return [];
       
-      const { data, error } = await supabase
+      // First fetch saved prompt IDs
+      const { data: savedData, error: savedError } = await supabase
         .from('saved_prompts')
-        .select(`
-          *,
-          prompt:prompts(
-            *,
-            category:categories(*)
-          )
-        `)
+        .select('id, user_id, prompt_id, created_at')
         .eq('user_id', user.id)
         .order('created_at', { ascending: false });
       
-      if (error) throw error;
-      return data as SavedPrompt[];
+      if (savedError) throw savedError;
+      if (!savedData || savedData.length === 0) return [];
+      
+      // Fetch prompts using the secure view
+      const promptIds = savedData.map(s => s.prompt_id);
+      const { data: promptsData, error: promptsError } = await supabase
+        .from('prompts_public')
+        .select(`
+          *,
+          category:categories(*)
+        `)
+        .in('id', promptIds);
+      
+      if (promptsError) throw promptsError;
+      
+      // Combine saved prompts with their prompt data
+      const promptsMap = new Map(promptsData?.map(p => [p.id, p]) || []);
+      return savedData.map(saved => ({
+        ...saved,
+        prompt: promptsMap.get(saved.prompt_id) as Prompt | undefined
+      })) as SavedPrompt[];
     },
     enabled: !!user,
   });
@@ -270,19 +289,20 @@ export const useUnsavePrompt = () => {
 };
 
 // Fetch related prompts by category (excluding current prompt)
+// Uses prompts_public view which conditionally exposes prompt_template based on purchase status
 export const useRelatedPrompts = (promptId: string, categoryId: string | null, limit: number = 4) => {
   return useQuery({
     queryKey: ['relatedPrompts', promptId, categoryId, limit],
     queryFn: async () => {
       if (!categoryId) return [];
       
+      // Use the secure view that conditionally exposes prompt_template
       const { data, error } = await supabase
-        .from('prompts')
+        .from('prompts_public')
         .select(`
           *,
           category:categories(*)
         `)
-        .eq('is_published', true)
         .eq('category_id', categoryId)
         .neq('id', promptId)
         .order('rating', { ascending: false })
