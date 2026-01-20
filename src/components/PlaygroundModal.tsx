@@ -229,7 +229,7 @@ export const PlaygroundModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-6xl h-[90vh] flex flex-col">
+      <DialogContent className="max-w-6xl max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle className={`text-xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
             <Wand2 className="w-5 h-5 inline mr-2 text-primary" />
@@ -257,9 +257,9 @@ export const PlaygroundModal = ({
           </div>
         )}
 
-        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0">
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 gap-6 min-h-0 overflow-hidden">
           {/* Left Panel - Input */}
-          <div className="space-y-4 flex flex-col">
+          <div className="space-y-4 flex flex-col overflow-y-auto pr-2">
             {/* Prompt Template */}
             <Card className="flex-1 flex flex-col">
               <CardHeader className="pb-3">
@@ -411,7 +411,7 @@ export const PlaygroundModal = ({
           </div>
 
           {/* Right Panel - Output */}
-          <Card className="flex flex-col">
+          <Card className="flex flex-col overflow-hidden">
             <CardHeader className="pb-3">
               <div className="flex items-center justify-between">
                 <CardTitle className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
@@ -439,8 +439,8 @@ export const PlaygroundModal = ({
                 )}
               </div>
             </CardHeader>
-            <CardContent className="flex-1 flex flex-col">
-              <div className="flex-1 p-4 bg-muted/30 rounded-md border min-h-32">
+            <CardContent className="flex-1 flex flex-col overflow-hidden">
+              <div className="flex-1 p-4 bg-muted/30 rounded-md border min-h-32 overflow-y-auto">
                 {isGenerating ? (
                   <div className="flex items-center justify-center h-full text-muted-foreground">
                     <div className="text-center space-y-2">
