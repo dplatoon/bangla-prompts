@@ -8,9 +8,10 @@ import { useAdmin } from "@/hooks/useAdmin";
 import { AdminPromptsTable } from "@/components/admin/AdminPromptsTable";
 import { AdminCategoriesTable } from "@/components/admin/AdminCategoriesTable";
 import { AdminAnalytics } from "@/components/admin/AdminAnalytics";
+import { AdminAuditLogs } from "@/components/admin/AdminAuditLogs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Shield, FileText, FolderOpen, BarChart3, Loader2 } from "lucide-react";
+import { Shield, FileText, FolderOpen, BarChart3, History, Loader2 } from "lucide-react";
 
 const Admin = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -37,6 +38,7 @@ const Admin = () => {
       prompts: "প্রম্পট",
       categories: "ক্যাটেগরি",
       analytics: "অ্যানালিটিক্স",
+      auditLogs: "অডিট লগ",
       loading: "লোড হচ্ছে...",
       unauthorized: "আপনার অ্যাডমিন অ্যাক্সেস নেই",
     },
@@ -46,6 +48,7 @@ const Admin = () => {
       prompts: "Prompts",
       categories: "Categories",
       analytics: "Analytics",
+      auditLogs: "Audit Logs",
       loading: "Loading...",
       unauthorized: "You don't have admin access",
     }
@@ -100,7 +103,7 @@ const Admin = () => {
 
         {/* Tabs */}
         <Tabs defaultValue="prompts" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+          <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
             <TabsTrigger value="prompts" className={`flex items-center gap-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
               <FileText className="w-4 h-4" />
               {t.prompts}
@@ -112,6 +115,10 @@ const Admin = () => {
             <TabsTrigger value="analytics" className={`flex items-center gap-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
               <BarChart3 className="w-4 h-4" />
               {t.analytics}
+            </TabsTrigger>
+            <TabsTrigger value="audit" className={`flex items-center gap-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
+              <History className="w-4 h-4" />
+              {t.auditLogs}
             </TabsTrigger>
           </TabsList>
 
@@ -125,6 +132,10 @@ const Admin = () => {
 
           <TabsContent value="analytics">
             <AdminAnalytics language={language} />
+          </TabsContent>
+
+          <TabsContent value="audit">
+            <AdminAuditLogs language={language} />
           </TabsContent>
         </Tabs>
       </main>
