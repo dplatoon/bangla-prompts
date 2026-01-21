@@ -67,7 +67,7 @@ export const Hero = ({ language }: HeroProps) => {
 
   return (
     <section 
-      className="relative overflow-hidden bg-gradient-hero py-20 lg:py-32"
+      className="relative overflow-hidden bg-gradient-hero py-12 sm:py-16 lg:py-32"
       aria-labelledby="hero-heading"
       itemScope 
       itemType="https://schema.org/WebPageElement"
@@ -75,28 +75,28 @@ export const Hero = ({ language }: HeroProps) => {
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" aria-hidden="true"></div>
       
-      <div className="container relative mx-auto px-4">
-        <div className="grid lg:grid-cols-2 gap-12 items-center">
+      <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
           {/* Left Content */}
-          <header className="space-y-8">
-            <div className="space-y-4">
-              <div className="inline-flex items-center space-x-2 bg-accent-light px-4 py-2 rounded-full" role="status">
-                <Sparkles className="w-4 h-4 text-accent" aria-hidden="true" />
-                <span className={`text-sm font-medium text-accent-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+          <header className="space-y-6 sm:space-y-8">
+            <div className="space-y-3 sm:space-y-4">
+              <div className="inline-flex items-center space-x-2 bg-accent-light px-3 sm:px-4 py-1.5 sm:py-2 rounded-full" role="status">
+                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" aria-hidden="true" />
+                <span className={`text-xs sm:text-sm font-medium text-accent-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {language === 'bn' ? 'নতুন প্রম্পট যোগ হচ্ছে প্রতিদিন' : 'New prompts added daily'}
                 </span>
               </div>
               
               <h1 
                 id="hero-heading"
-                className={`text-4xl lg:text-6xl font-bold text-primary-foreground leading-tight ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-tight ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
                 itemProp="headline"
               >
                 {currentText.headline}
               </h1>
               
               <p 
-                className={`text-xl text-primary-foreground/80 max-w-2xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                className={`text-base sm:text-lg lg:text-xl text-primary-foreground/80 max-w-2xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
                 itemProp="description"
               >
                 {currentText.subhead}
@@ -104,14 +104,14 @@ export const Hero = ({ language }: HeroProps) => {
             </div>
 
             {/* CTAs */}
-            <nav className="flex flex-col sm:flex-row gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
-              <Button size="lg" variant="secondary" className={`group ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+            <nav className="flex flex-col sm:flex-row gap-3 sm:gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
+              <Button size="lg" variant="secondary" className={`group text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
                 <Link to="/explore">
                   {currentText.exploreBtn}
-                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="lg" variant="secondary" className={`bg-accent text-accent-foreground hover:bg-accent/90 ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+              <Button size="lg" variant="secondary" className={`bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
                 <Link to="/become-creator">
                   {currentText.submitBtn}
                 </Link>
@@ -119,16 +119,16 @@ export const Hero = ({ language }: HeroProps) => {
             </nav>
 
             {/* Stats */}
-            <aside className="grid grid-cols-3 gap-6 pt-8" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
+            <aside className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 sm:pt-8" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
               {Object.entries(currentText.stats).reduce((acc, [key, value], index) => {
                 if (index % 2 === 0) {
                   const labelKey = currentText.stats[`${key}Label` as keyof typeof currentText.stats];
                   acc.push(
                     <div key={key} className="text-center lg:text-left">
-                      <div className={`text-2xl lg:text-3xl font-bold text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      <div className={`text-xl sm:text-2xl lg:text-3xl font-bold text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                         {value}
                       </div>
-                      <div className={`text-sm text-primary-foreground/70 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      <div className={`text-xs sm:text-sm text-primary-foreground/70 ${language === 'bn' ? 'font-bengali' : ''}`}>
                         {labelKey}
                       </div>
                     </div>
@@ -140,9 +140,9 @@ export const Hero = ({ language }: HeroProps) => {
           </header>
 
           {/* Right Content - Live Demo */}
-          <aside className="lg:pl-8" aria-label={language === 'bn' ? 'ট্রান্সলিটেরেশন টুল' : 'Transliteration Tool'}>
-            <article className="bg-card/95 backdrop-blur-sm rounded-2xl shadow-elegant p-6 border border-border/20">
-              <div className="space-y-4">
+          <aside className="lg:pl-8 mt-4 lg:mt-0" aria-label={language === 'bn' ? 'ট্রান্সলিটেরেশন টুল' : 'Transliteration Tool'}>
+            <article className="bg-card/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-elegant p-4 sm:p-6 border border-border/20">
+              <div className="space-y-3 sm:space-y-4">
                 <div className="flex items-center justify-between">
                   <h2 className={`font-semibold text-card-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                     {language === 'bn' ? 'লাইভ ট্রান্সলিটেরেশন' : 'Live Transliteration'}

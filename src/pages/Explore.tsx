@@ -88,7 +88,7 @@ const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTr
   return (
     <>
       <div className={viewMode === 'grid' 
-        ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" 
+        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" 
         : "space-y-4"
       }>
         {visiblePrompts.map((prompt) => (
@@ -298,78 +298,87 @@ const Explore = () => {
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
           {/* Breadcrumb Navigation */}
           <Breadcrumbs
             items={[
               { label: "Explore", labelBn: "এক্সপ্লোর", href: "/explore" }
             ]}
             language={language}
-            className="mb-6"
+            className="mb-4 sm:mb-6"
           />
 
           {/* Page Header */}
-          <header className="text-center mb-12">
-            <h1 className={`text-4xl lg:text-5xl font-bold text-foreground mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>
+          <header className="text-center mb-8 sm:mb-12">
+            <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-foreground mb-3 sm:mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>
               {currentText.title}
             </h1>
-            <p className={`text-xl text-muted-foreground max-w-2xl mx-auto ${language === 'bn' ? 'font-bengali' : ''}`}>
+            <p className={`text-base sm:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto px-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
               {currentText.subtitle}
             </p>
           </header>
 
           {/* Filters */}
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+          <div className="flex flex-col gap-3 sm:gap-4 mb-6 sm:mb-8">
+            {/* Search - Full width on mobile */}
+            <div className="relative w-full">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 sm:w-5 sm:h-5 text-muted-foreground" />
               <Input
                 placeholder={currentText.searchPlaceholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className={`pl-10 ${language === 'bn' ? 'font-bengali' : ''}`}
+                className={`pl-9 sm:pl-10 text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`}
               />
             </div>
             
-            <Select value={selectedCategory} onValueChange={handleCategoryChange}>
-              <SelectTrigger className={`w-full md:w-48 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                <Filter className="w-4 h-4 mr-2" />
-                <SelectValue placeholder={currentText.allCategories} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{currentText.allCategories}</SelectItem>
-                {categoryList.map(cat => (
-                  <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            
-            <Select value={sortBy} onValueChange={setSortBy}>
-              <SelectTrigger className={`w-full md:w-40 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                <SelectValue placeholder={currentText.sortBy} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="popular">{currentText.popular}</SelectItem>
-                <SelectItem value="rating">{currentText.rating}</SelectItem>
-                <SelectItem value="newest">{currentText.newest}</SelectItem>
-                <SelectItem value="free">{currentText.free}</SelectItem>
-              </SelectContent>
-            </Select>
-            
-            <div className="flex gap-2">
-              <Button
-                variant={viewMode === 'grid' ? 'default' : 'outline'}
-                size="icon"
-                onClick={() => setViewMode('grid')}
-              >
-                <Grid3X3 className="w-4 h-4" />
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? 'default' : 'outline'}
-                size="icon"
-                onClick={() => setViewMode('list')}
-              >
-                <List className="w-4 h-4" />
-              </Button>
+            {/* Filter row - responsive grid */}
+            <div className="flex flex-col sm:flex-row gap-2 sm:gap-4">
+              <Select value={selectedCategory} onValueChange={handleCategoryChange}>
+                <SelectTrigger className={`w-full sm:w-48 text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  <Filter className="w-4 h-4 mr-2 shrink-0" />
+                  <SelectValue placeholder={currentText.allCategories} />
+                </SelectTrigger>
+                <SelectContent className="bg-background border border-border z-50">
+                  <SelectItem value="all">{currentText.allCategories}</SelectItem>
+                  {categoryList.map(cat => (
+                    <SelectItem key={cat.value} value={cat.value}>{cat.label}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+              
+              <div className="flex gap-2">
+                <Select value={sortBy} onValueChange={setSortBy}>
+                  <SelectTrigger className={`flex-1 sm:w-40 text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <SelectValue placeholder={currentText.sortBy} />
+                  </SelectTrigger>
+                  <SelectContent className="bg-background border border-border z-50">
+                    <SelectItem value="popular">{currentText.popular}</SelectItem>
+                    <SelectItem value="rating">{currentText.rating}</SelectItem>
+                    <SelectItem value="newest">{currentText.newest}</SelectItem>
+                    <SelectItem value="free">{currentText.free}</SelectItem>
+                  </SelectContent>
+                </Select>
+                
+                {/* View mode - visible on all screens */}
+                <div className="flex gap-1">
+                  <Button
+                    variant={viewMode === 'grid' ? 'default' : 'outline'}
+                    size="icon"
+                    className="h-9 w-9 sm:h-10 sm:w-10"
+                    onClick={() => setViewMode('grid')}
+                  >
+                    <Grid3X3 className="w-4 h-4" />
+                  </Button>
+                  <Button
+                    variant={viewMode === 'list' ? 'default' : 'outline'}
+                    size="icon"
+                    className="h-9 w-9 sm:h-10 sm:w-10"
+                    onClick={() => setViewMode('list')}
+                  >
+                    <List className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
             </div>
           </div>
 

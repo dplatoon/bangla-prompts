@@ -97,29 +97,29 @@ export const PromptCard = ({
 
   return (
     <Card className="group hover:shadow-accent transition-smooth border-border/50 hover:border-primary/20 bg-card/50 backdrop-blur-sm">
-      <CardHeader className="pb-3">
-        <div className="flex items-start justify-between">
-          <div className="space-y-2 flex-1">
-            <div className="flex items-center space-x-2 flex-wrap">
-              <Badge variant="secondary" className={`text-xs ${language === 'bn' ? 'font-bengali' : ''}`}>
+      <CardHeader className="pb-2 sm:pb-3 p-3 sm:p-4">
+        <div className="flex items-start justify-between gap-2">
+          <div className="space-y-1.5 sm:space-y-2 flex-1 min-w-0">
+            <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+              <Badge variant="secondary" className={`text-[10px] sm:text-xs ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {displayCategory}
               </Badge>
               {price === 0 ? (
-                <Badge variant="outline" className={`text-accent border-accent ${language === 'bn' ? 'font-bengali' : ''}`}>
+                <Badge variant="outline" className={`text-accent border-accent text-[10px] sm:text-xs ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {currentText.free}
                 </Badge>
               ) : (
-                <Badge variant="outline" className={`text-primary border-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
+                <Badge variant="outline" className={`text-primary border-primary text-[10px] sm:text-xs ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {currentText.taka}{price}
                 </Badge>
               )}
             </div>
             
-            <CardTitle className={`text-lg leading-tight group-hover:text-primary transition-colors ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+            <CardTitle className={`text-sm sm:text-lg leading-tight group-hover:text-primary transition-colors line-clamp-2 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
               {displayTitle}
             </CardTitle>
             
-            <CardDescription className={`text-sm line-clamp-2 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+            <CardDescription className={`text-xs sm:text-sm line-clamp-2 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
               {displayDescription}
             </CardDescription>
           </div>
@@ -153,43 +153,43 @@ export const PromptCard = ({
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-4">
+      <CardContent className="space-y-3 sm:space-y-4 p-3 sm:p-4 pt-0">
         {/* Tags */}
         <div className="flex flex-wrap gap-1">
           {displayTags.slice(0, 3).map((tag, index) => (
-            <Badge key={index} variant="outline" className={`text-xs text-muted-foreground border-border/50 ${language === 'bn' ? 'font-bengali' : ''}`}>
+            <Badge key={index} variant="outline" className={`text-[10px] sm:text-xs text-muted-foreground border-border/50 ${language === 'bn' ? 'font-bengali' : ''}`}>
               {tag}
             </Badge>
           ))}
           {displayTags.length > 3 && (
-            <Badge variant="outline" className="text-xs text-muted-foreground border-border/50">
+            <Badge variant="outline" className="text-[10px] sm:text-xs text-muted-foreground border-border/50">
               +{displayTags.length - 3}
             </Badge>
           )}
         </div>
 
         {/* Stats */}
-        <div className="flex items-center justify-between text-xs text-muted-foreground">
-          <div className="flex items-center space-x-3">
+        <div className="flex items-center justify-between text-[10px] sm:text-xs text-muted-foreground">
+          <div className="flex items-center space-x-2 sm:space-x-3">
             <div className="flex items-center space-x-1">
               <Star className="w-3 h-3 fill-accent text-accent" />
               <span>{rating.toFixed(1)}</span>
             </div>
             <span>{usageCount.toLocaleString()} {currentText.uses}</span>
           </div>
-          <span className={language === 'bn' ? 'font-bengali' : ''}>
+          <span className={`truncate max-w-[100px] sm:max-w-none ${language === 'bn' ? 'font-bengali' : ''}`}>
             {currentText.by} {displayAuthor}
           </span>
         </div>
 
         {/* Actions */}
-        <div className="flex space-x-2">
+        <div className="flex gap-1.5 sm:gap-2">
           <Button 
             onClick={handleTry}
-            className={`flex-1 group/btn ${language === 'bn' ? 'font-bengali' : ''}`}
+            className={`flex-1 group/btn text-xs sm:text-sm h-8 sm:h-9 ${language === 'bn' ? 'font-bengali' : ''}`}
             size="sm"
           >
-            <Play className="w-4 h-4 mr-2 group-hover/btn:scale-110 transition-transform" />
+            <Play className="w-3.5 h-3.5 sm:w-4 sm:h-4 mr-1 sm:mr-2 group-hover/btn:scale-110 transition-transform" />
             {currentText.tryNow}
           </Button>
           
@@ -197,18 +197,18 @@ export const PromptCard = ({
             onClick={handleCopy}
             variant="outline"
             size="sm"
-            className="px-3"
+            className="px-2 sm:px-3 h-8 sm:h-9"
           >
-            <Copy className="w-4 h-4" />
+            <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </Button>
           
           <Link to={`/prompt/${id}`}>
             <Button
               variant="ghost"
               size="sm"
-              className="px-3"
+              className="px-2 sm:px-3 h-8 sm:h-9"
             >
-              <ExternalLink className="w-4 h-4" />
+              <ExternalLink className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
             </Button>
           </Link>
         </div>
