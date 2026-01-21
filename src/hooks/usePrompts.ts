@@ -86,6 +86,35 @@ export const promptToPromptData = (prompt: Prompt): PromptData => {
   };
 };
 
+// Helper function to attach category to prompts
+const attachCategories = async (prompts: any[]): Promise<Prompt[]> => {
+  if (!prompts || prompts.length === 0) return [];
+  
+  // Get unique category IDs
+  const categoryIds = [...new Set(prompts.map(p => p.category_id).filter(Boolean))];
+  
+  if (categoryIds.length === 0) {
+    return prompts.map(p => ({ ...p, category: undefined })) as Prompt[];
+  }
+  
+  // Fetch categories
+  const { data: categories, error } = await supabase
+    .from('categories')
+    .select('*')
+    .in('id', categoryIds);
+  
+  if (error) throw error;
+  
+  // Create category map
+  const categoryMap = new Map(categories?.map(c => [c.id, c]) || []);
+  
+  // Attach categories to prompts
+  return prompts.map(p => ({
+    ...p,
+    category: p.category_id ? categoryMap.get(p.category_id) : undefined
+  })) as Prompt[];
+};
+
 // Fetch all categories
 export const useCategories = () => {
   return useQuery({
@@ -116,10 +145,7 @@ export const usePrompts = (options?: {
       // Use the secure view that conditionally exposes prompt_template
       let query = supabase
         .from('prompts_public')
-        .select(`
-          *,
-          category:categories(*)
-        `);
+        .select('*');
 
       if (options?.categorySlug) {
         const { data: category } = await supabase
@@ -148,7 +174,9 @@ export const usePrompts = (options?: {
       const { data, error } = await query.order('created_at', { ascending: false });
       
       if (error) throw error;
-      return data as Prompt[];
+      
+      // Manually attach categories since view doesn't have FK relation
+      return attachCategories(data || []);
     },
   });
 };
@@ -162,15 +190,16 @@ export const usePrompt = (slug: string) => {
       // Use the secure view that conditionally exposes prompt_template
       const { data, error } = await supabase
         .from('prompts_public')
-        .select(`
-          *,
-          category:categories(*)
-        `)
+        .select('*')
         .eq('slug', slug)
         .maybeSingle();
       
       if (error) throw error;
-      return data as Prompt | null;
+      if (!data) return null;
+      
+      // Manually attach category since view doesn't have FK relation
+      const prompts = await attachCategories([data]);
+      return prompts[0] || null;
     },
     enabled: !!slug,
   });
@@ -201,16 +230,16 @@ export const useSavedPrompts = () => {
       const promptIds = savedData.map(s => s.prompt_id);
       const { data: promptsData, error: promptsError } = await supabase
         .from('prompts_public')
-        .select(`
-          *,
-          category:categories(*)
-        `)
+        .select('*')
         .in('id', promptIds);
       
       if (promptsError) throw promptsError;
       
+      // Attach categories to prompts
+      const promptsWithCategories = await attachCategories(promptsData || []);
+      
       // Combine saved prompts with their prompt data
-      const promptsMap = new Map(promptsData?.map(p => [p.id, p]) || []);
+      const promptsMap = new Map(promptsWithCategories.map(p => [p.id, p]));
       return savedData.map(saved => ({
         ...saved,
         prompt: promptsMap.get(saved.prompt_id) as Prompt | undefined
@@ -299,17 +328,16 @@ export const useRelatedPrompts = (promptId: string, categoryId: string | null, l
       // Use the secure view that conditionally exposes prompt_template
       const { data, error } = await supabase
         .from('prompts_public')
-        .select(`
-          *,
-          category:categories(*)
-        `)
+        .select('*')
         .eq('category_id', categoryId)
         .neq('id', promptId)
         .order('rating', { ascending: false })
         .limit(limit);
       
       if (error) throw error;
-      return data as Prompt[];
+      
+      // Manually attach categories since view doesn't have FK relation
+      return attachCategories(data || []);
     },
     enabled: !!promptId && !!categoryId,
   });
