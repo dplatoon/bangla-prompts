@@ -46,7 +46,7 @@ const Resources = () => {
       }
     },
     en: {
-      title: "Best AI Tools for Bengali Users",
+      title: "Best AI Tools for Bangla Users",
       subtitle: "Complete Guide to Free & Paid AI Platforms",
       description: "List of AI tools easily accessible from Bangladesh and how to use them.",
       categories: {

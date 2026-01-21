@@ -233,8 +233,8 @@ const Guide = () => {
           answer: "Each model has its strengths. ChatGPT is good for general tasks, Claude is skilled at long texts, Gemini is powerful for research. Choose based on your work."
         },
         {
-          question: "Do prompts work well in Bengali?",
-          answer: "Yes! Modern AI models understand Bengali and can respond in Bengali. However, English prompts may work better for some technical topics."
+          question: "Do prompts work well in Bangla?",
+          answer: "Yes! Modern AI models understand Bangla and can respond in Bangla. However, English prompts may work better for some technical topics."
         },
         {
           question: "How does AI help in freelancing?",

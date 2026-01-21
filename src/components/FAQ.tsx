@@ -39,11 +39,11 @@ export const FAQ = ({ language }: FAQProps) => {
     ],
     en: [
       {
-        question: "How does ChatGPT work in Bengali?",
-        answer: "ChatGPT can understand and respond in Bengali. If you ask questions in Bengali, you'll get answers in Bengali. At bdprompt.com, we've created specially optimized prompts for Bengali language that deliver better results."
+        question: "How does ChatGPT work in Bangla?",
+        answer: "ChatGPT can understand and respond in Bangla. If you ask questions in Bangla, you'll get answers in Bangla. At bdprompt.com, we've created specially optimized prompts for Bangla language that deliver better results."
       },
       {
-        question: "Are Bengali AI prompts free?",
+        question: "Are Bangla AI prompts free?",
         answer: "Yes! Most prompts on bdprompt.com are completely free. You can copy with one click and use them in any AI tool (ChatGPT, Claude, Gemini). Premium prompt packs are also available."
       },
       {
@@ -60,7 +60,7 @@ export const FAQ = ({ language }: FAQProps) => {
       },
       {
         question: "Why is bdprompt.com Bangladesh's #1 AI prompt platform?",
-        answer: "We are the first and largest Bengali AI prompt collection in Bangladesh. 500+ prompts, created for local context, and optimized for Bengali language. New prompts are added regularly."
+        answer: "We are the first and largest Bangla AI prompt collection in Bangladesh. 500+ prompts, created for local context, and optimized for Bangla language. New prompts are added regularly."
       }
     ]
   };

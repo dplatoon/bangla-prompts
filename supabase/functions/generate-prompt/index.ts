@@ -142,7 +142,7 @@ serve(async (req) => {
         messages: [
           { 
             role: "system", 
-            content: "You are a helpful AI assistant for BDPrompt, a Bengali AI prompt platform. Respond in the same language as the user's prompt. If the prompt is in Bengali, respond in Bengali. Be helpful, creative, and concise." 
+            content: "You are a helpful AI assistant for BDPrompt, a Bangla AI prompt platform. Respond in the same language as the user's prompt. If the prompt is in Bangla, respond in Bangla. Be helpful, creative, and concise."
           },
           { role: "user", content: prompt }
         ],
