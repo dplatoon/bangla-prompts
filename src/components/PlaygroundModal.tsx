@@ -152,7 +152,9 @@ export const PlaygroundModal = ({
       if (error) throw error;
       setSuggestions(data.suggestions);
     } catch (error: any) {
-      console.error('Suggestions error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Suggestions error:', error);
+      }
       const isAuthError = error?.message?.includes('401') || error?.message?.includes('authentication');
       toast({
         title: language === 'bn' ? 'ত্রুটি' : 'Error',
@@ -193,7 +195,9 @@ export const PlaygroundModal = ({
       if (error) throw error;
       setOutput(data.output);
     } catch (error) {
-      console.error('Generation error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Generation error:', error);
+      }
       setOutput(language === 'bn' ? 'প্রতিক্রিয়া তৈরি করতে ত্রুটি হয়েছে। আবার চেষ্টা করুন।' : 'Error generating response. Please try again.');
     } finally {
       setIsGenerating(false);

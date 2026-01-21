@@ -65,6 +65,7 @@ export const promptToPromptData = (prompt: Prompt): PromptData => {
 
   return {
     id: prompt.id,
+    slug: prompt.slug,  // Add slug for URL navigation
     title: prompt.title_en,
     titleBn: prompt.title_bn,
     description: prompt.description_en || '',

@@ -27,13 +27,15 @@ export const usePurchase = (promptId: string, language: 'bn' | 'en' = 'bn') => {
           .eq('prompt_id', promptId)
           .maybeSingle();
 
-        if (error) {
+        if (error && import.meta.env.DEV) {
           console.error('Error checking purchase:', error);
         }
         
         setHasPurchased(!!data);
       } catch (err) {
-        console.error('Purchase check failed:', err);
+        if (import.meta.env.DEV) {
+          console.error('Purchase check failed:', err);
+        }
       } finally {
         setIsLoading(false);
       }
@@ -107,7 +109,9 @@ export const usePurchase = (promptId: string, language: 'bn' | 'en' = 'bn') => {
             throw new Error('Invalid checkout URL domain');
           }
         } catch (urlError) {
-          console.error('URL validation failed:', urlError);
+          if (import.meta.env.DEV) {
+            console.error('URL validation failed:', urlError);
+          }
           toast({
             title: language === 'bn' ? "ত্রুটি" : "Error",
             description: language === 'bn' ? "অবৈধ চেকআউট URL" : "Invalid checkout URL",
@@ -118,7 +122,9 @@ export const usePurchase = (promptId: string, language: 'bn' | 'en' = 'bn') => {
         throw new Error('No checkout URL returned');
       }
     } catch (err) {
-      console.error('Checkout failed:', err);
+      if (import.meta.env.DEV) {
+        console.error('Checkout failed:', err);
+      }
       toast({
         title: language === 'bn' ? "ত্রুটি" : "Error",
         description: language === 'bn' 

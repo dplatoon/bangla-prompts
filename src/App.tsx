@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Loader2 } from "lucide-react";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Eagerly loaded pages (critical path)
 import Index from "./pages/Index";
@@ -58,59 +59,61 @@ const PageLoader = () => (
 );
 
 const App = () => (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter
-        future={{
-          v7_startTransition: true,
-          v7_relativeSplatPath: true,
-        }}
-      >
-        <Suspense fallback={<PageLoader />}>
-          <Routes>
-            {/* Critical path - eagerly loaded */}
-            <Route path="/" element={<Index />} />
-            <Route path="/prompt/:id" element={<PromptDetail />} />
-            <Route path="/explore" element={<Explore />} />
-            <Route path="/explore/:categorySlug" element={<Explore />} />
-            <Route path="/auth" element={<Auth />} />
-            
-            {/* Lazy loaded routes */}
-            <Route path="/playground" element={<Playground />} />
-            <Route path="/packs" element={<PromptPacks />} />
-            <Route path="/api" element={<API />} />
-            <Route path="/community" element={<Community />} />
-            <Route path="/become-creator" element={<BecomeCreator />} />
-            <Route path="/guidelines" element={<Guidelines />} />
-            <Route path="/support" element={<Support />} />
-            <Route path="/blog" element={<Blog />} />
-            <Route path="/legal" element={<Legal />} />
-            <Route path="/privacy" element={<Privacy />} />
-            <Route path="/terms" element={<Terms />} />
-            <Route path="/cookies" element={<Cookies />} />
-            <Route path="/dmca" element={<DMCA />} />
-            <Route path="/product" element={<Product />} />
-            <Route path="/shikkha" element={<Shikkha />} />
-            <Route path="/kobita" element={<Kobita />} />
-            <Route path="/business" element={<Business />} />
-            <Route path="/resources" element={<Resources />} />
-            <Route path="/prompts" element={<Prompts />} />
-            <Route path="/prompts/:slug" element={<PromptCategory />} />
-            <Route path="/guide" element={<Guide />} />
-            <Route path="/admin" element={<Admin />} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-cancelled" element={<PaymentCancelled />} />
-            
-            {/* Fallback */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Suspense>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+  <ErrorBoundary>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter
+          future={{
+            v7_startTransition: true,
+            v7_relativeSplatPath: true,
+          }}
+        >
+          <Suspense fallback={<PageLoader />}>
+            <Routes>
+              {/* Critical path - eagerly loaded */}
+              <Route path="/" element={<Index />} />
+              <Route path="/prompt/:id" element={<PromptDetail />} />
+              <Route path="/explore" element={<Explore />} />
+              <Route path="/explore/:categorySlug" element={<Explore />} />
+              <Route path="/auth" element={<Auth />} />
+              
+              {/* Lazy loaded routes */}
+              <Route path="/playground" element={<Playground />} />
+              <Route path="/packs" element={<PromptPacks />} />
+              <Route path="/api" element={<API />} />
+              <Route path="/community" element={<Community />} />
+              <Route path="/become-creator" element={<BecomeCreator />} />
+              <Route path="/guidelines" element={<Guidelines />} />
+              <Route path="/support" element={<Support />} />
+              <Route path="/blog" element={<Blog />} />
+              <Route path="/legal" element={<Legal />} />
+              <Route path="/privacy" element={<Privacy />} />
+              <Route path="/terms" element={<Terms />} />
+              <Route path="/cookies" element={<Cookies />} />
+              <Route path="/dmca" element={<DMCA />} />
+              <Route path="/product" element={<Product />} />
+              <Route path="/shikkha" element={<Shikkha />} />
+              <Route path="/kobita" element={<Kobita />} />
+              <Route path="/business" element={<Business />} />
+              <Route path="/resources" element={<Resources />} />
+              <Route path="/prompts" element={<Prompts />} />
+              <Route path="/prompts/:slug" element={<PromptCategory />} />
+              <Route path="/guide" element={<Guide />} />
+              <Route path="/admin" element={<Admin />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/payment-cancelled" element={<PaymentCancelled />} />
+              
+              {/* Fallback */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </Suspense>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
+  </ErrorBoundary>
 );
 
 export default App;

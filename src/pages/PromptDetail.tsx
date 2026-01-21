@@ -97,12 +97,6 @@ const PromptDetail = () => {
     }
   }, [error, navigate]);
 
-  useEffect(() => {
-    if (error) {
-      navigate('/');
-    }
-  }, [error, navigate]);
-
   const handleLanguageChange = (lang: 'bn' | 'en') => {
     setLanguage(lang);
     localStorage.setItem('bdprompt-language', lang);
@@ -145,7 +139,8 @@ const PromptDetail = () => {
   };
 
   const handleTryRelated = (p: PromptData) => {
-    navigate(`/prompt/${p.id}`);
+    // Use slug for navigation, falling back to id if slug is not available
+    navigate(`/prompt/${p.slug || p.id}`);
   };
 
   const text = {
