@@ -25,6 +25,7 @@ export const PromptCard = ({
 
   const {
     id,
+    slug,
     title,
     titleBn,
     description,
@@ -39,6 +40,9 @@ export const PromptCard = ({
     author,
     authorBn
   } = promptData;
+
+  // Use slug for navigation, falling back to id if slug is not available
+  const navigationSlug = slug || id;
 
   const displayTitle = language === 'bn' && titleBn ? titleBn : title;
   const displayDescription = language === 'bn' && descriptionBn ? descriptionBn : description;
@@ -202,7 +206,7 @@ export const PromptCard = ({
             <Copy className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
           </Button>
           
-          <Link to={`/prompt/${id}`}>
+          <Link to={`/prompt/${navigationSlug}`}>
             <Button
               variant="ghost"
               size="sm"

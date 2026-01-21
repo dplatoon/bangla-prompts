@@ -182,7 +182,9 @@ const Playground = () => {
         // User cancelled - don't show error
         return;
       }
-      console.error('Generation error:', error);
+      if (import.meta.env.DEV) {
+        console.error('Generation error:', error);
+      }
       toast({
         title: language === 'bn' ? "ত্রুটি" : "Error",
         description: error?.message || (language === 'bn' ? "জেনারেশন ব্যর্থ হয়েছে" : "Generation failed"),

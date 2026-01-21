@@ -1,5 +1,6 @@
 export interface PromptData {
-  id: string;
+  id: string;           // UUID for database operations
+  slug?: string;        // URL-friendly slug for navigation
   title: string;
   titleBn: string;
   description: string;

@@ -121,7 +121,9 @@ export const ChatAssistant = () => {
         }
       }
     } catch (error) {
-      console.error("Chat error:", error);
+      if (import.meta.env.DEV) {
+        console.error("Chat error:", error);
+      }
       toast({
         title: "Error",
         description: error instanceof Error ? error.message : "Failed to send message. Please try again.",
