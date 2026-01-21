@@ -131,13 +131,6 @@ export type Database = {
             referencedRelation: "prompts"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "prompt_purchases_prompt_id_fkey"
-            columns: ["prompt_id"]
-            isOneToOne: false
-            referencedRelation: "prompts_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       prompts: {
@@ -259,13 +252,6 @@ export type Database = {
             referencedRelation: "prompts"
             referencedColumns: ["id"]
           },
-          {
-            foreignKeyName: "saved_prompts_prompt_id_fkey"
-            columns: ["prompt_id"]
-            isOneToOne: false
-            referencedRelation: "prompts_public"
-            referencedColumns: ["id"]
-          },
         ]
       }
       user_roles: {
@@ -319,69 +305,7 @@ export type Database = {
           use_case_en: string | null
           view_count: number | null
         }
-        Insert: {
-          author_avatar?: string | null
-          author_name?: string | null
-          category_id?: string | null
-          copy_count?: number | null
-          created_at?: string | null
-          description_bn?: string | null
-          description_en?: string | null
-          example_input?: string | null
-          example_output?: string | null
-          id?: string | null
-          is_featured?: boolean | null
-          is_free?: boolean | null
-          is_published?: boolean | null
-          price?: number | null
-          prompt_template?: never
-          rating?: number | null
-          rating_count?: number | null
-          slug?: string | null
-          tags?: string[] | null
-          title_bn?: string | null
-          title_en?: string | null
-          updated_at?: string | null
-          use_case_bn?: string | null
-          use_case_en?: string | null
-          view_count?: number | null
-        }
-        Update: {
-          author_avatar?: string | null
-          author_name?: string | null
-          category_id?: string | null
-          copy_count?: number | null
-          created_at?: string | null
-          description_bn?: string | null
-          description_en?: string | null
-          example_input?: string | null
-          example_output?: string | null
-          id?: string | null
-          is_featured?: boolean | null
-          is_free?: boolean | null
-          is_published?: boolean | null
-          price?: number | null
-          prompt_template?: never
-          rating?: number | null
-          rating_count?: number | null
-          slug?: string | null
-          tags?: string[] | null
-          title_bn?: string | null
-          title_en?: string | null
-          updated_at?: string | null
-          use_case_bn?: string | null
-          use_case_en?: string | null
-          view_count?: number | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "prompts_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "categories"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Functions: {
@@ -395,6 +319,36 @@ export type Database = {
         Returns: boolean
       }
       get_prompt_template: { Args: { _prompt_id: string }; Returns: string }
+      get_public_prompts: {
+        Args: never
+        Returns: {
+          author_avatar: string
+          author_name: string
+          category_id: string
+          copy_count: number
+          created_at: string
+          description_bn: string
+          description_en: string
+          example_input: string
+          example_output: string
+          id: string
+          is_featured: boolean
+          is_free: boolean
+          is_published: boolean
+          price: number
+          prompt_template: string
+          rating: number
+          rating_count: number
+          slug: string
+          tags: string[]
+          title_bn: string
+          title_en: string
+          updated_at: string
+          use_case_bn: string
+          use_case_en: string
+          view_count: number
+        }[]
+      }
       has_purchased_prompt: {
         Args: { _prompt_id: string; _user_id: string }
         Returns: boolean
