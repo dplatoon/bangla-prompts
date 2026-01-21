@@ -57,9 +57,9 @@ const Kobita = () => {
       noPrompts: "সৃজনশীল প্রম্পট শীঘ্রই আসছে..."
     },
     en: {
-      title: "Bengali Poetry & Story Writing AI Prompts",
+      title: "Bangla Poetry & Story Writing AI Prompts",
       subtitle: "AI Prompts to Write Poetry Like Rabindranath or Jibanananda",
-      description: "Create Bengali literature! Generate poetry, short stories, novels, and creative writing with AI. Themes for Eid, Pohela Boishakh, Durga Puja.",
+      description: "Create Bangla literature! Generate poetry, short stories, novels, and creative writing with AI. Themes for Eid, Pohela Boishakh, Durga Puja.",
       features: [
         { icon: Feather, title: "Poetry", desc: "Rhymed & free verse" },
         { icon: BookOpen, title: "Stories", desc: "Short stories & novels" },

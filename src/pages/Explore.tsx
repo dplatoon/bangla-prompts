@@ -21,10 +21,10 @@ const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') =>
   return {
     "@context": "https://schema.org",
     "@type": "ItemList",
-    "name": language === 'bn' ? "বাংলা AI প্রম্পট তালিকা" : "Bengali AI Prompts Collection",
+    "name": language === 'bn' ? "বাংলা AI প্রম্পট তালিকা" : "Bangla AI Prompts Collection",
     "description": language === 'bn' 
       ? "bdprompt.com-এ ৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন"
-      : "Explore 500+ Bengali AI prompts on bdprompt.com",
+      : "Explore 500+ Bangla AI prompts on bdprompt.com",
     "numberOfItems": prompts.length,
     "itemListElement": prompts.slice(0, 50).map((prompt, index) => ({
       "@type": "ListItem",

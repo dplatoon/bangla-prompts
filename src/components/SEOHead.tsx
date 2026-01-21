@@ -211,7 +211,7 @@ export const generateHowToSchema = (language: 'bn' | 'en') => ({
   "@type": "HowTo",
   "name": language === 'bn' 
     ? "কিভাবে বাংলা AI প্রম্পট ব্যবহার করবেন" 
-    : "How to Use Bengali AI Prompts",
+    : "How to Use Bangla AI Prompts",
   "description": language === 'bn'
     ? "bdprompt.com থেকে AI প্রম্পট কপি করে ChatGPT, Claude, বা Gemini-তে ব্যবহার করার ধাপসমূহ"
     : "Steps to copy AI prompts from bdprompt.com and use them in ChatGPT, Claude, or Gemini",

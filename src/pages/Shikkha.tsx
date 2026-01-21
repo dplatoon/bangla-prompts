@@ -34,9 +34,9 @@ const Shikkha = () => {
       keywords: "শিক্ষা AI প্রম্পট, SSC প্রম্পট, HSC ChatGPT, বাংলা স্টাডি প্রম্পট, ছাত্রদের জন্য AI, বিশ্ববিদ্যালয় প্রম্পট"
     },
     en: {
-      title: "Bengali AI Prompts for Education — SSC, HSC, University | bdprompt.com",
-      description: "Bengali AI prompts for SSC, HSC, and university students. Make studying easier with ChatGPT! Prompts for notes, exam prep, and research.",
-      keywords: "education AI prompts, SSC prompts, HSC ChatGPT, Bengali study prompts, AI for students, university prompts"
+      title: "Bangla AI Prompts for Education — SSC, HSC, University | bdprompt.com",
+      description: "Bangla AI prompts for SSC, HSC, and university students. Make studying easier with ChatGPT! Prompts for notes, exam prep, and research.",
+      keywords: "education AI prompts, SSC prompts, HSC ChatGPT, Bangla study prompts, AI for students, university prompts"
     }
   };
 
@@ -57,7 +57,7 @@ const Shikkha = () => {
       noPrompts: "শিক্ষামূলক প্রম্পট শীঘ্রই আসছে..."
     },
     en: {
-      title: "Bengali AI Prompts for Education",
+      title: "Bangla AI Prompts for Education",
       subtitle: "AI Prompts for SSC, HSC, and University Students",
       description: "Make studying easier with ChatGPT, Claude, and Gemini. Specially designed prompts for note-taking, exam prep, practice questions, and research.",
       features: [

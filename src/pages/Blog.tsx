@@ -73,7 +73,7 @@ const Blog = () => {
       {
         id: 2,
         title: "Bangla Content Marketing with AI: A Complete Guide",
-        excerpt: "Learn how to improve your Bengali content marketing strategy using AI tools.",
+        excerpt: "Learn how to improve your Bangla content marketing strategy using AI tools.",
         category: "Marketing",
         author: "Priya Das",
         date: "November 25, 2024",
