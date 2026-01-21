@@ -73,18 +73,18 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
 
   return (
     <header className="bg-background/95 backdrop-blur-sm border-b border-border sticky top-0 z-50">
-      <div className="container mx-auto px-4 py-4">
-        <div className="flex items-center justify-between">
+      <div className="container mx-auto px-3 sm:px-4 py-3 sm:py-4">
+        <div className="flex items-center justify-between gap-2">
           {/* Logo */}
-          <Link to="/" className="flex items-center space-x-3 hover:opacity-90 transition-opacity">
-            <div className="w-8 h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
-              <span className="text-primary-foreground font-bold text-lg">B</span>
+          <Link to="/" className="flex items-center space-x-2 sm:space-x-3 hover:opacity-90 transition-opacity shrink-0">
+            <div className="w-7 h-7 sm:w-8 sm:h-8 bg-gradient-primary rounded-lg flex items-center justify-center">
+              <span className="text-primary-foreground font-bold text-base sm:text-lg">B</span>
             </div>
-            <div>
-              <h1 className={`font-bold text-lg text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
+            <div className="hidden xs:block sm:block">
+              <h1 className={`font-bold text-sm sm:text-lg text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.title}
               </h1>
-              <p className={`text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              <p className={`text-[10px] sm:text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
                 {currentText.subtitle}
               </p>
             </div>
@@ -174,9 +174,9 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
           </nav>
 
           {/* Search & Language Toggle */}
-          <div className="flex items-center space-x-4">
-            {/* Search */}
-            <form onSubmit={handleSearch} className="hidden sm:flex relative">
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* Search - Hidden on mobile, shown on larger screens */}
+            <form onSubmit={handleSearch} className="hidden md:flex relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
               <Input
                 placeholder={currentText.search}
@@ -186,13 +186,13 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               />
             </form>
 
-            {/* Language Toggle */}
-            <div className="flex bg-muted rounded-lg p-1">
+            {/* Language Toggle - Compact on mobile */}
+            <div className="flex bg-muted rounded-lg p-0.5 sm:p-1">
               <Button
                 variant={language === 'bn' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => onLanguageChange('bn')}
-                className="font-bengali text-xs"
+                className="font-bengali text-[10px] sm:text-xs px-2 sm:px-3 h-7 sm:h-8"
               >
                 বাংলা
               </Button>
@@ -200,7 +200,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
                 variant={language === 'en' ? 'default' : 'ghost'}
                 size="sm"
                 onClick={() => onLanguageChange('en')}
-                className="text-xs"
+                className="text-[10px] sm:text-xs px-2 sm:px-3 h-7 sm:h-8"
               >
                 EN
               </Button>
@@ -256,7 +256,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
             <Button
               variant="ghost"
               size="sm"
-              className="lg:hidden"
+              className="lg:hidden p-1.5 sm:p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

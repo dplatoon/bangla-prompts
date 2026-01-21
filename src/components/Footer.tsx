@@ -97,23 +97,23 @@ export const Footer = ({ language }: FooterProps) => {
 
   return (
     <footer className="bg-muted/30 border-t border-border">
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-3 sm:px-4">
         {/* Newsletter Section */}
-        <div className="py-12">
-          <div className="bg-gradient-primary rounded-2xl p-8 text-center">
-            <h3 className={`text-2xl font-bold text-primary-foreground mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
+        <div className="py-8 sm:py-12">
+          <div className="bg-gradient-primary rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
+            <h3 className={`text-xl sm:text-2xl font-bold text-primary-foreground mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
               {currentText.newsletter.title}
             </h3>
-            <p className={`text-primary-foreground/80 mb-6 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+            <p className={`text-sm sm:text-base text-primary-foreground/80 mb-4 sm:mb-6 ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
               {currentText.newsletter.subtitle}
             </p>
-            <div className="flex max-w-md mx-auto gap-3">
+            <div className="flex flex-col sm:flex-row max-w-md mx-auto gap-2 sm:gap-3">
               <input
                 type="email"
                 placeholder={currentText.newsletter.placeholder}
-                className={`flex-1 px-4 py-3 rounded-lg border-0 bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground placeholder:text-primary-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary-foreground/20 ${language === 'bn' ? 'font-bengali' : ''}`}
+                className={`flex-1 px-3 sm:px-4 py-2.5 sm:py-3 rounded-lg border-0 bg-primary-foreground/10 backdrop-blur-sm text-primary-foreground placeholder:text-primary-foreground/60 focus:outline-none focus:ring-2 focus:ring-primary-foreground/20 text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`}
               />
-              <Button variant="secondary" className={`px-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
+              <Button variant="secondary" className={`px-4 sm:px-6 text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.newsletter.button}
               </Button>
             </div>
@@ -121,46 +121,46 @@ export const Footer = ({ language }: FooterProps) => {
         </div>
 
         {/* Main Footer */}
-        <div className="py-12">
-          <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-8">
+        <div className="py-8 sm:py-12">
+          <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
             {/* Brand */}
-            <div className="lg:col-span-2 space-y-4">
-              <Link to="/" className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-gradient-primary rounded-xl flex items-center justify-center">
-                  <span className="text-primary-foreground font-bold text-xl">B</span>
+            <div className="col-span-2 sm:col-span-2 lg:col-span-2 space-y-4">
+              <Link to="/" className="flex items-center space-x-2 sm:space-x-3">
+                <div className="w-8 h-8 sm:w-10 sm:h-10 bg-gradient-primary rounded-lg sm:rounded-xl flex items-center justify-center">
+                  <span className="text-primary-foreground font-bold text-base sm:text-xl">B</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg text-primary">bdprompt.com</h3>
+                  <h3 className="font-bold text-base sm:text-lg text-primary">bdprompt.com</h3>
                 </div>
               </Link>
-              <p className={`text-muted-foreground max-w-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              <p className={`text-sm text-muted-foreground max-w-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
                 {currentText.tagline}
               </p>
               
               {/* Social Links */}
               <div className="space-y-2">
-                <h4 className={`text-sm font-medium text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                <h4 className={`text-xs sm:text-sm font-medium text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {currentText.social}
                 </h4>
                 <div className="flex space-x-2">
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
                     <a href="https://twitter.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                      <Twitter className="w-4 h-4" />
+                      <Twitter className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
                     <a href="https://facebook.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                      <Facebook className="w-4 h-4" />
+                      <Facebook className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
                     <a href="https://github.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                      <Github className="w-4 h-4" />
+                      <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
                   </Button>
-                  <Button variant="outline" size="sm" className="w-10 h-10 p-0" asChild>
+                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
                     <a href="mailto:hello@bdprompt.com" aria-label="Email">
-                      <Mail className="w-4 h-4" />
+                      <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
                   </Button>
                 </div>
@@ -169,16 +169,16 @@ export const Footer = ({ language }: FooterProps) => {
 
             {/* Links Sections */}
             {Object.entries(currentText.sections).map(([key, section]) => (
-              <div key={key} className="space-y-4">
-                <h4 className={`text-sm font-semibold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+              <div key={key} className="space-y-3 sm:space-y-4">
+                <h4 className={`text-xs sm:text-sm font-semibold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {section.title}
                 </h4>
-                <ul className="space-y-2">
+                <ul className="space-y-1.5 sm:space-y-2">
                   {section.links.map((link, index) => (
                     <li key={index}>
                       <Link 
                         to={link.href}
-                        className={`text-sm text-muted-foreground hover:text-foreground transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                        className={`text-xs sm:text-sm text-muted-foreground hover:text-foreground transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
                       >
                         {link.label}
                       </Link>
@@ -190,14 +190,14 @@ export const Footer = ({ language }: FooterProps) => {
           </div>
         </div>
 
-        <Separator className="mb-8" />
+        <Separator className="mb-6 sm:mb-8" />
         
         {/* Bottom */}
-        <div className="pb-8 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-          <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+        <div className="pb-6 sm:pb-8 flex flex-col md:flex-row justify-between items-center space-y-3 md:space-y-0 text-center md:text-left">
+          <p className={`text-xs sm:text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
             {currentText.copyright}
           </p>
-          <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+          <p className={`text-xs sm:text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
             {currentText.madeWith}
           </p>
         </div>
