@@ -9,13 +9,74 @@ const corsHeaders = {
 
 const URLS_PER_SITEMAP = 1000 // Maximum URLs per sitemap for better crawling
 
+// Simple in-memory rate limiting (resets on cold start)
+const rateLimitMap = new Map<string, { count: number; resetTime: number }>()
+const RATE_LIMIT_WINDOW_MS = 60000 // 1 minute
+const MAX_REQUESTS_PER_WINDOW = 30 // 30 requests per minute per IP
+
+function checkRateLimit(clientIP: string): boolean {
+  const now = Date.now()
+  const record = rateLimitMap.get(clientIP)
+  
+  if (!record || now > record.resetTime) {
+    rateLimitMap.set(clientIP, { count: 1, resetTime: now + RATE_LIMIT_WINDOW_MS })
+    return true
+  }
+  
+  if (record.count >= MAX_REQUESTS_PER_WINDOW) {
+    return false
+  }
+  
+  record.count++
+  return true
+}
+
+// Validate sitemap type parameter to prevent injection
+function isValidSitemapType(type: string): boolean {
+  const validTypes = ['index', 'pages', 'categories']
+  if (validTypes.includes(type)) return true
+  // Allow prompts-N format where N is a positive integer
+  if (/^prompts-\d{1,3}$/.test(type)) return true
+  return false
+}
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders })
   }
 
+  // Only allow GET requests for sitemap
+  if (req.method !== 'GET') {
+    return new Response('Method not allowed', { status: 405, headers: corsHeaders })
+  }
+
+  // Get client IP for rate limiting
+  const clientIP = req.headers.get('x-forwarded-for')?.split(',')[0]?.trim() || 
+                   req.headers.get('cf-connecting-ip') || 
+                   'unknown'
+  
+  // Check rate limit
+  if (!checkRateLimit(clientIP)) {
+    return new Response('Rate limit exceeded. Please try again later.', { 
+      status: 429, 
+      headers: { 
+        ...corsHeaders, 
+        'Content-Type': 'text/plain',
+        'Retry-After': '60' 
+      } 
+    })
+  }
+
   const url = new URL(req.url)
   const sitemapType = url.searchParams.get('type') || 'index'
+
+  // Validate sitemap type parameter
+  if (!isValidSitemapType(sitemapType)) {
+    return new Response('Invalid sitemap type', { 
+      status: 400, 
+      headers: { ...corsHeaders, 'Content-Type': 'text/plain' } 
+    })
+  }
 
   try {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
@@ -23,8 +84,6 @@ Deno.serve(async (req) => {
     const supabase = createClient(supabaseUrl, supabaseKey)
     const baseUrl = 'https://bdprompt.com'
     const today = new Date().toISOString().split('T')[0]
-
-    console.log(`Generating sitemap: ${sitemapType}`)
 
     // Handle different sitemap types
     if (sitemapType === 'index') {
@@ -35,13 +94,21 @@ Deno.serve(async (req) => {
       return generateCategoriesSitemap(baseUrl, today, supabase)
     } else if (sitemapType.startsWith('prompts')) {
       const page = parseInt(sitemapType.replace('prompts-', '') || '1', 10)
+      // Validate page number is reasonable (prevent abuse)
+      if (page < 1 || page > 999) {
+        return new Response('Invalid page number', { 
+          status: 400, 
+          headers: { ...corsHeaders, 'Content-Type': 'text/plain' } 
+        })
+      }
       return generatePromptsSitemap(baseUrl, today, supabase, page)
     }
 
     // Default to index
     return generateSitemapIndex(baseUrl, today, supabase)
   } catch (error) {
-    console.error('Sitemap generation error:', error)
+    // Log error without exposing details to client
+    console.error('Sitemap generation error:', error instanceof Error ? error.message : 'Unknown error')
     return new Response(
       `<?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
