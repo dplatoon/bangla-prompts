@@ -1,10 +1,11 @@
-import { useEffect } from 'react';
+import { useLayoutEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 interface SEOHeadProps {
   title?: string;
   description?: string;
   keywords?: string;
-  canonicalUrl?: string;
+  canonicalUrl?: string; // Optional - will auto-generate from current route if not provided
   ogImage?: string;
   ogType?: 'website' | 'article' | 'product';
   language?: 'bn' | 'en';
@@ -19,7 +20,7 @@ export const SEOHead = ({
   title = "bdprompt.com — সবচেয়ে বড় বাংলা AI প্রম্পট হাব",
   description = "বাংলা প্রম্পট টেমপ্লেট — কন্টেন্ট, ইমেজ, কোড, মার্কেটিং। ৫০০+ AI প্রম্পট এক ক্লিকে কপি করে প্রয়োগ করুন।",
   keywords = "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh",
-  canonicalUrl = "https://bdprompt.com/",
+  canonicalUrl, // No default - will be computed from route
   ogImage = "https://bdprompt.com/og-image.png",
   ogType = 'website',
   language = 'bn',
@@ -29,8 +30,17 @@ export const SEOHead = ({
   breadcrumbs,
   structuredData,
 }: SEOHeadProps) => {
+  const location = useLocation();
   
-  useEffect(() => {
+  // Auto-generate canonical URL from current route if not explicitly provided
+  // Homepage gets trailing slash, all other pages don't
+  const finalCanonicalUrl = canonicalUrl || 
+    (location.pathname === '/' 
+      ? 'https://bdprompt.com/' 
+      : `https://bdprompt.com${location.pathname}`);
+  
+  // Use useLayoutEffect for synchronous DOM updates (better for SEO crawlers)
+  useLayoutEffect(() => {
     // Update document title
     document.title = title;
     
@@ -54,7 +64,7 @@ export const SEOHead = ({
     // Open Graph
     updateMeta('og:title', title, true);
     updateMeta('og:description', description, true);
-    updateMeta('og:url', canonicalUrl, true);
+    updateMeta('og:url', finalCanonicalUrl, true);
     updateMeta('og:image', ogImage, true);
     updateMeta('og:type', ogType, true);
     updateMeta('og:locale', language === 'bn' ? 'bn_BD' : 'en_US', true);
@@ -79,7 +89,7 @@ export const SEOHead = ({
       canonical.setAttribute('rel', 'canonical');
       document.head.appendChild(canonical);
     }
-    canonical.setAttribute('href', canonicalUrl);
+    canonical.setAttribute('href', finalCanonicalUrl);
     
     // Update language
     document.documentElement.lang = language;
@@ -130,7 +140,7 @@ export const SEOHead = ({
       if (breadcrumbScript) breadcrumbScript.remove();
       if (customScript) customScript.remove();
     };
-  }, [title, description, keywords, canonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
+  }, [title, description, keywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
   
   return null;
 };
