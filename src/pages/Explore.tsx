@@ -268,10 +268,11 @@ const Explore = () => {
 
   // Get current category label for SEO
   const currentCategoryLabel = categoryList.find(c => c.value === selectedCategory)?.label;
+  const currentCategoryLabelBn = categories?.find(c => c.name_en.toLowerCase() === selectedCategory)?.name_bn;
   
   const seoTitle = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn' 
-      ? `${currentCategoryLabel} প্রম্পট | bdprompt.com`
+      ? `${currentCategoryLabelBn || currentCategoryLabel} প্রম্পট | bdprompt.com`
       : `${currentCategoryLabel} Prompts | bdprompt.com`
     : language === 'bn' 
       ? "প্রম্পট এক্সপ্লোর করুন | bdprompt.com" 
@@ -279,11 +280,26 @@ const Explore = () => {
 
   const seoDescription = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn'
-      ? `${currentCategoryLabel} ক্যাটাগরির AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য বাংলা প্রম্পট।`
+      ? `${currentCategoryLabelBn || currentCategoryLabel} ক্যাটাগরির AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য বাংলা প্রম্পট।`
       : `Explore ${currentCategoryLabel} AI prompts. Bengali prompts for ChatGPT, Claude, Gemini.`
     : language === 'bn' 
       ? "৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন। কন্টেন্ট, ইমেজ, কোড, মার্কেটিং প্রম্পট খুঁজুন।" 
       : "Explore 500+ Bangla AI prompts. Find content, image, code, and marketing prompts.";
+
+  // Build breadcrumb items dynamically based on current category
+  const breadcrumbItems = useMemo(() => {
+    const items = [{ label: "Explore", labelBn: "এক্সপ্লোর", href: "/explore" }];
+    
+    if (selectedCategory !== "all" && currentCategoryLabel) {
+      items.push({
+        label: currentCategoryLabel,
+        labelBn: currentCategoryLabelBn || currentCategoryLabel,
+        href: `/explore/${selectedCategory}`
+      });
+    }
+    
+    return items;
+  }, [selectedCategory, currentCategoryLabel, currentCategoryLabelBn]);
 
   return (
     <>
@@ -299,11 +315,9 @@ const Explore = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
-          {/* Breadcrumb Navigation */}
+          {/* Breadcrumb Navigation with Schema */}
           <Breadcrumbs
-            items={[
-              { label: "Explore", labelBn: "এক্সপ্লোর", href: "/explore" }
-            ]}
+            items={breadcrumbItems}
             language={language}
             className="mb-4 sm:mb-6"
           />
