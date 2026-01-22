@@ -46,8 +46,9 @@ export const Breadcrumbs = ({ items, language = 'bn', className = '' }: Breadcru
 
   return (
     <>
-      {/* JSON-LD Structured Data */}
+      {/* JSON-LD Structured Data - Use unique ID to prevent duplicates */}
       <script
+        id="breadcrumb-ld-visual"
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
       />

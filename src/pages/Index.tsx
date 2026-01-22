@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { PromptShowcase } from "@/components/PromptShowcase";
+import { MostCopiedSection } from "@/components/MostCopiedSection";
 import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
 import { ChatAssistant } from "@/components/ChatAssistant";
@@ -67,6 +68,7 @@ const Index = () => {
         <main role="main" id="main-content">
           <Hero language={language} />
           <FeatureGrid language={language} />
+          <MostCopiedSection language={language} />
           <PromptShowcase language={language} />
           <FAQ language={language} />
           <CTA language={language} />
