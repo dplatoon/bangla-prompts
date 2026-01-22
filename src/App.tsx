@@ -40,6 +40,7 @@ const Resources = lazy(() => import("./pages/Resources"));
 const Prompts = lazy(() => import("./pages/Prompts"));
 const PromptCategory = lazy(() => import("./pages/PromptCategory"));
 const Guide = lazy(() => import("./pages/Guide"));
+const Sitemap = lazy(() => import("./pages/Sitemap"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -101,6 +102,7 @@ const App = () => (
               <Route path="/prompts" element={<Prompts />} />
               <Route path="/prompts/:slug" element={<PromptCategory />} />
               <Route path="/guide" element={<Guide />} />
+              <Route path="/sitemap" element={<Sitemap />} />
               <Route path="/admin" element={<Admin />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
