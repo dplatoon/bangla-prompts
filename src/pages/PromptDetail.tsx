@@ -9,6 +9,7 @@ import { Footer } from "@/components/Footer";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead, generatePromptStructuredData } from "@/components/SEOHead";
 import { PromptCard } from "@/components/PromptCard";
+import { SocialShareButtons } from "@/components/SocialShareButtons";
 import { 
   ArrowLeft, 
   Copy, 
@@ -382,9 +383,12 @@ const PromptDetail = () => {
                         <Bookmark className="w-4 h-4" />
                       )}
                     </Button>
-                    <Button size="sm" variant="outline" onClick={handleShare}>
-                      <Share2 className="w-4 h-4" />
-                    </Button>
+                    <SocialShareButtons
+                      url={`https://bdprompt.com/prompt/${id}`}
+                      title={language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title}
+                      description={language === 'bn' && prompt.descriptionBn ? prompt.descriptionBn : prompt.description}
+                      language={language}
+                    />
                   </div>
                 </div>
 
