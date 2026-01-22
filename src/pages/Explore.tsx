@@ -53,6 +53,59 @@ const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') =>
   };
 };
 
+// Section heading component for SEO
+interface SectionHeadingProps {
+  title: string;
+  titleBn: string;
+  language: 'bn' | 'en';
+  level?: 'h2' | 'h3';
+}
+
+const SectionHeading = ({ title, titleBn, language, level = 'h2' }: SectionHeadingProps) => {
+  const Tag = level;
+  const text = language === 'bn' ? titleBn : title;
+  
+  return (
+    <Tag className={`text-xl sm:text-2xl font-bold text-foreground mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>
+      {text}
+    </Tag>
+  );
+};
+
+// Prompt section component
+interface PromptSectionProps {
+  title: string;
+  titleBn: string;
+  prompts: PromptData[];
+  viewMode: 'grid' | 'list';
+  language: 'bn' | 'en';
+  onTryPrompt: (prompt: PromptData) => void;
+  level?: 'h2' | 'h3';
+}
+
+const PromptSection = ({ title, titleBn, prompts, viewMode, language, onTryPrompt, level = 'h2' }: PromptSectionProps) => {
+  if (prompts.length === 0) return null;
+  
+  return (
+    <section className="mb-10 sm:mb-12">
+      <SectionHeading title={title} titleBn={titleBn} language={language} level={level} />
+      <div className={viewMode === 'grid' 
+        ? "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6" 
+        : "space-y-4"
+      }>
+        {prompts.map((prompt) => (
+          <PromptCard 
+            key={prompt.id} 
+            promptData={prompt} 
+            language={language}
+            onTryClick={() => onTryPrompt(prompt)}
+          />
+        ))}
+      </div>
+    </section>
+  );
+};
+
 // Lazy-loaded prompt grid component
 interface ExploreGridProps {
   prompts: PromptData[];
@@ -61,11 +114,28 @@ interface ExploreGridProps {
   loading: boolean;
   noResultsText: string;
   onTryPrompt: (prompt: PromptData) => void;
+  showSections?: boolean;
 }
 
-const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTryPrompt }: ExploreGridProps) => {
-  const { loadedCount, loaderRef, hasMore } = useLazyLoad(prompts.length, 9);
+const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTryPrompt, showSections = false }: ExploreGridProps) => {
+  const { loadedCount, loaderRef, hasMore } = useLazyLoad(prompts.length, 12);
   const visiblePrompts = prompts.slice(0, loadedCount);
+
+  // Categorize prompts for sections
+  const popularPrompts = useMemo(() => 
+    [...prompts].sort((a, b) => b.usageCount - a.usageCount).slice(0, 6), 
+    [prompts]
+  );
+  
+  const newestPrompts = useMemo(() => 
+    [...prompts].sort((a, b) => new Date(b.id).getTime() - new Date(a.id).getTime()).slice(0, 6), 
+    [prompts]
+  );
+  
+  const topRatedPrompts = useMemo(() => 
+    [...prompts].sort((a, b) => b.rating - a.rating).slice(0, 6), 
+    [prompts]
+  );
 
   if (loading) {
     return (
@@ -85,6 +155,44 @@ const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTr
     );
   }
 
+  // Show sectioned view for "all" category with enough prompts
+  if (showSections && prompts.length >= 12) {
+    return (
+      <div className="space-y-8">
+        <PromptSection
+          title="Popular Prompts"
+          titleBn="জনপ্রিয় প্রম্পট"
+          prompts={popularPrompts}
+          viewMode={viewMode}
+          language={language}
+          onTryPrompt={onTryPrompt}
+          level="h2"
+        />
+        
+        <PromptSection
+          title="Newest Prompts"
+          titleBn="নতুন প্রম্পট"
+          prompts={newestPrompts}
+          viewMode={viewMode}
+          language={language}
+          onTryPrompt={onTryPrompt}
+          level="h2"
+        />
+        
+        <PromptSection
+          title="Top Rated"
+          titleBn="সর্বাধিক রেটিং"
+          prompts={topRatedPrompts}
+          viewMode={viewMode}
+          language={language}
+          onTryPrompt={onTryPrompt}
+          level="h2"
+        />
+      </div>
+    );
+  }
+
+  // Standard grid view
   return (
     <>
       <div className={viewMode === 'grid' 
@@ -403,7 +511,7 @@ const Explore = () => {
             </Badge>
           </div>
 
-          {/* Prompts Grid */}
+          {/* Prompts Grid with H2 sections for SEO */}
           <ExploreGrid 
             prompts={filteredPrompts}
             viewMode={viewMode}
@@ -411,6 +519,7 @@ const Explore = () => {
             loading={promptsLoading}
             noResultsText={currentText.noResults}
             onTryPrompt={handleTryPrompt}
+            showSections={selectedCategory === "all" && !searchQuery}
           />
         </main>
 
