@@ -1,5 +1,6 @@
 import { useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { getPageMetadata } from '@/config/pageMetadata';
 
 interface SEOHeadProps {
   title?: string;
@@ -17,9 +18,9 @@ interface SEOHeadProps {
 }
 
 export const SEOHead = ({
-  title = "bdprompt.com — সবচেয়ে বড় বাংলা AI প্রম্পট হাব",
-  description = "বাংলা প্রম্পট টেমপ্লেট — কন্টেন্ট, ইমেজ, কোড, মার্কেটিং। ৫০০+ AI প্রম্পট এক ক্লিকে কপি করে প্রয়োগ করুন।",
-  keywords = "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh",
+  title,
+  description,
+  keywords,
   canonicalUrl, // No default - will be computed from route
   ogImage = "https://bdprompt.com/og-image.png",
   ogType = 'website',
@@ -32,6 +33,14 @@ export const SEOHead = ({
 }: SEOHeadProps) => {
   const location = useLocation();
   
+  // Get route-based metadata as fallback when props not provided
+  const routeMetadata = getPageMetadata(location.pathname, language);
+  
+  // Use provided props or fallback to route-based metadata
+  const finalTitle = title || routeMetadata.title;
+  const finalDescription = description || routeMetadata.description;
+  const finalKeywords = keywords || routeMetadata.keywords || "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা";
+  
   // Auto-generate canonical URL from current route if not explicitly provided
   // Homepage gets trailing slash, all other pages don't
   const finalCanonicalUrl = canonicalUrl || 
@@ -42,7 +51,7 @@ export const SEOHead = ({
   // Use useLayoutEffect for synchronous DOM updates (better for SEO crawlers)
   useLayoutEffect(() => {
     // Update document title
-    document.title = title;
+    document.title = finalTitle;
     
     // Update meta tags
     const updateMeta = (name: string, content: string, property = false) => {
@@ -57,21 +66,21 @@ export const SEOHead = ({
     };
     
     // Primary meta tags
-    updateMeta('description', description);
-    updateMeta('keywords', keywords);
+    updateMeta('description', finalDescription);
+    updateMeta('keywords', finalKeywords);
     updateMeta('author', author);
     
     // Open Graph
-    updateMeta('og:title', title, true);
-    updateMeta('og:description', description, true);
+    updateMeta('og:title', finalTitle, true);
+    updateMeta('og:description', finalDescription, true);
     updateMeta('og:url', finalCanonicalUrl, true);
     updateMeta('og:image', ogImage, true);
     updateMeta('og:type', ogType, true);
     updateMeta('og:locale', language === 'bn' ? 'bn_BD' : 'en_US', true);
     
     // Twitter
-    updateMeta('twitter:title', title);
-    updateMeta('twitter:description', description);
+    updateMeta('twitter:title', finalTitle);
+    updateMeta('twitter:description', finalDescription);
     updateMeta('twitter:image', ogImage);
     
     // Article specific
@@ -140,7 +149,7 @@ export const SEOHead = ({
       if (breadcrumbScript) breadcrumbScript.remove();
       if (customScript) customScript.remove();
     };
-  }, [title, description, keywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
+  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
   
   return null;
 };
