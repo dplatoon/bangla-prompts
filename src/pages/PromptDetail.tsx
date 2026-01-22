@@ -200,6 +200,22 @@ const PromptDetail = () => {
 
   const currentText = text[language];
 
+  // Generate dynamic OG image URL
+  const getOgImageUrl = () => {
+    if (!prompt) return "https://bdprompt.com/og-image.png";
+    
+    const params = new URLSearchParams({
+      title: prompt.title,
+      titleBn: prompt.titleBn || '',
+      category: prompt.category,
+      author: prompt.author,
+      price: String(prompt.price || 0),
+      rating: String(prompt.rating || 4.5)
+    });
+    
+    return `https://oduvbhiggycaasssfdny.supabase.co/functions/v1/og-image?${params.toString()}`;
+  };
+
   // Generate SEO data
   const getSEOData = () => {
     if (!prompt) return null;
@@ -214,7 +230,9 @@ const PromptDetail = () => {
     
     const keywords = prompt.tags.concat(['bdprompt', 'AI prompt', 'বাংলা প্রম্পট']).join(', ');
     
-    return { title, description, keywords };
+    const ogImage = getOgImageUrl();
+    
+    return { title, description, keywords, ogImage };
   };
 
   const seoData = getSEOData();
@@ -284,6 +302,7 @@ const PromptDetail = () => {
           description={seoData.description}
           keywords={seoData.keywords}
           canonicalUrl={`https://bdprompt.com/prompt/${id}`}
+          ogImage={seoData.ogImage}
           ogType="product"
           language={language}
           author={prompt.author}
