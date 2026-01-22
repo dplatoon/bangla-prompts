@@ -104,27 +104,33 @@ export const SEOHead = ({
     document.documentElement.lang = language;
     
     // Add breadcrumb structured data if provided
+    // Only add if visual Breadcrumbs component hasn't already added it
     if (breadcrumbs && breadcrumbs.length > 0) {
-      const breadcrumbScript = document.getElementById('breadcrumb-ld');
-      const breadcrumbData = {
-        "@context": "https://schema.org",
-        "@type": "BreadcrumbList",
-        "itemListElement": breadcrumbs.map((item, index) => ({
-          "@type": "ListItem",
-          "position": index + 1,
-          "name": item.name,
-          "item": item.url
-        }))
-      };
+      const existingVisualBreadcrumb = document.getElementById('breadcrumb-ld-visual');
       
-      if (breadcrumbScript) {
-        breadcrumbScript.textContent = JSON.stringify(breadcrumbData);
-      } else {
-        const script = document.createElement('script');
-        script.id = 'breadcrumb-ld';
-        script.type = 'application/ld+json';
-        script.textContent = JSON.stringify(breadcrumbData);
-        document.head.appendChild(script);
+      // Skip if visual breadcrumb component already injected schema
+      if (!existingVisualBreadcrumb) {
+        const breadcrumbScript = document.getElementById('breadcrumb-ld');
+        const breadcrumbData = {
+          "@context": "https://schema.org",
+          "@type": "BreadcrumbList",
+          "itemListElement": breadcrumbs.map((item, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "name": item.name,
+            "item": item.url
+          }))
+        };
+        
+        if (breadcrumbScript) {
+          breadcrumbScript.textContent = JSON.stringify(breadcrumbData);
+        } else {
+          const script = document.createElement('script');
+          script.id = 'breadcrumb-ld';
+          script.type = 'application/ld+json';
+          script.textContent = JSON.stringify(breadcrumbData);
+          document.head.appendChild(script);
+        }
       }
     }
     
