@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -24,10 +25,25 @@ const Product = () => {
 
   return (
     <>
-      <SEOHead title={language === 'bn' ? "প্রোডাক্ট | bdprompt.com" : "Product | bdprompt.com"} canonicalUrl="https://bdprompt.com/product" language={language} />
+      <SEOHead 
+        title={language === 'bn' ? "প্রোডাক্ট | bdprompt.com" : "Product | bdprompt.com"} 
+        canonicalUrl="https://bdprompt.com/product" 
+        language={language}
+        breadcrumbs={[
+          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
+          { name: language === 'bn' ? 'প্রোডাক্ট' : 'Product', url: 'https://bdprompt.com/product' }
+        ]}
+      />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 py-8">
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            items={[{ label: "Product", labelBn: "প্রোডাক্ট" }]} 
+            language={language} 
+            className="mb-6" 
+          />
+          
           <header className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">bdprompt.com</Badge>
             <h1 className={`text-4xl lg:text-5xl font-bold mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>

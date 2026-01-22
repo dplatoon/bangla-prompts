@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PromptCard } from "@/components/PromptCard";
 import { usePrompts, promptToPromptData } from "@/hooks/usePrompts";
 import { Loader2, Feather, BookOpen, Pen, Heart } from "lucide-react";
@@ -90,6 +91,14 @@ const Kobita = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="pt-8 pb-16">
+          {/* Breadcrumbs */}
+          <div className="container mx-auto px-4 mb-4">
+            <Breadcrumbs 
+              items={[{ label: "Poetry & Stories", labelBn: "কবিতা ও গল্প" }]} 
+              language={language} 
+            />
+          </div>
+          
           {/* Hero Section */}
           <section className="bg-gradient-to-br from-purple-900 via-primary to-purple-800 py-16 lg:py-24">
             <div className="container mx-auto px-4">

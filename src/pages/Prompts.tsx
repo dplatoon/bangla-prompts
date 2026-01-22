@@ -70,7 +70,7 @@ const Prompts = () => {
       
       <main className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
         {/* Breadcrumbs */}
-        <Breadcrumbs items={breadcrumbItems} language="bn" className="mb-4 sm:mb-6" />
+        <Breadcrumbs items={breadcrumbItems} language={language} className="mb-4 sm:mb-6" />
         
         {/* Hero Section */}
         <section className="text-center mb-8 sm:mb-12">
