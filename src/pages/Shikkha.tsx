@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { PromptCard } from "@/components/PromptCard";
 import { usePrompts, promptToPromptData } from "@/hooks/usePrompts";
 import { Loader2, GraduationCap, BookOpen, Brain, Target } from "lucide-react";
@@ -90,6 +91,14 @@ const Shikkha = () => {
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
         <main className="pt-8 pb-16">
+          {/* Breadcrumbs */}
+          <div className="container mx-auto px-4 mb-4">
+            <Breadcrumbs 
+              items={[{ label: "Education", labelBn: "শিক্ষা" }]} 
+              language={language} 
+            />
+          </div>
+          
           {/* Hero Section */}
           <section className="bg-gradient-hero py-16 lg:py-24">
             <div className="container mx-auto px-4">

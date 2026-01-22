@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -104,7 +105,14 @@ const BecomeCreator = () => {
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 py-8">
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            items={[{ label: "Become Creator", labelBn: "ক্রিয়েটর হন" }]} 
+            language={language} 
+            className="mb-6" 
+          />
+          
           {/* Hero */}
           <header className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">

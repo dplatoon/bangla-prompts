@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
@@ -103,7 +104,14 @@ const Community = () => {
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         
-        <main className="container mx-auto px-4 py-16">
+        <main className="container mx-auto px-4 py-8">
+          {/* Breadcrumbs */}
+          <Breadcrumbs 
+            items={[{ label: "Community", labelBn: "কমিউনিটি" }]} 
+            language={language} 
+            className="mb-6" 
+          />
+          
           {/* Hero */}
           <header className="text-center mb-16">
             <div className="inline-flex items-center gap-2 bg-primary/10 px-4 py-2 rounded-full mb-4">
