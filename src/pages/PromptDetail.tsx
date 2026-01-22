@@ -582,25 +582,26 @@ const PromptDetail = () => {
             </aside>
           </div>
 
-          {/* Related Prompts Section - Full Width for SEO and Engagement */}
+          {/* Related Prompts Section - Full Width with Enhanced SEO */}
           {relatedPrompts.length > 0 && (
-            <section className="mt-12" aria-labelledby="related-prompts-heading">
-              <div className="flex items-center justify-between mb-6">
+            <section className="mt-12 pt-8 border-t border-border" aria-labelledby="related-prompts-heading">
+              {/* Section Header with H2 */}
+              <div className="mb-8">
                 <h2 
                   id="related-prompts-heading"
-                  className={`text-2xl font-bold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}
+                  className={`text-2xl sm:text-3xl font-bold text-foreground mb-2 ${language === 'bn' ? 'font-bengali' : ''}`}
                 >
                   {currentText.relatedPrompts}
                 </h2>
-                <Link 
-                  to={`/explore?category=${prompt.category.toLowerCase().replace(' ', '-')}`}
-                  className={`text-sm text-primary hover:underline flex items-center ${language === 'bn' ? 'font-bengali' : ''}`}
-                >
-                  {language === 'bn' ? 'সব দেখুন' : 'View All'}
-                  <ChevronRight className="w-4 h-4 ml-1" />
-                </Link>
+                <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {language === 'bn' 
+                    ? `${prompt.categoryBn || prompt.category} বিভাগের আরও প্রম্পট` 
+                    : `More prompts from ${prompt.category} category`}
+                </p>
               </div>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+              {/* Prompt Cards Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {relatedPrompts.map((relatedPrompt) => (
                   <PromptCard 
                     key={relatedPrompt.id} 
@@ -609,6 +610,48 @@ const PromptDetail = () => {
                     onTryClick={handleTryRelated}
                   />
                 ))}
+              </div>
+
+              {/* Category Cross-Link CTA */}
+              <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 p-6 bg-muted/50 rounded-lg">
+                <p className={`text-center sm:text-left ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {language === 'bn' 
+                    ? `আরও ${prompt.categoryBn || prompt.category} প্রম্পট দেখুন` 
+                    : `Explore more ${prompt.category} prompts`}
+                </p>
+                <Link 
+                  to={`/explore?category=${prompt.category.toLowerCase().replace(/\s+/g, '-')}`}
+                  className="inline-flex"
+                >
+                  <Button variant="default" className={language === 'bn' ? 'font-bengali' : ''}>
+                    {language === 'bn' ? `সব ${prompt.categoryBn || prompt.category} প্রম্পট` : `All ${prompt.category} Prompts`}
+                    <ChevronRight className="w-4 h-4 ml-1" />
+                  </Button>
+                </Link>
+              </div>
+
+              {/* Additional Internal Links for SEO */}
+              <div className="mt-6 flex flex-wrap justify-center gap-2">
+                <Link 
+                  to="/explore" 
+                  className={`text-sm text-muted-foreground hover:text-primary transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {language === 'bn' ? 'সব প্রম্পট এক্সপ্লোর করুন' : 'Explore All Prompts'}
+                </Link>
+                <span className="text-muted-foreground">•</span>
+                <Link 
+                  to="/prompts" 
+                  className={`text-sm text-muted-foreground hover:text-primary transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {language === 'bn' ? 'ক্যাটাগরি দেখুন' : 'Browse Categories'}
+                </Link>
+                <span className="text-muted-foreground">•</span>
+                <Link 
+                  to="/guide" 
+                  className={`text-sm text-muted-foreground hover:text-primary transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {language === 'bn' ? 'প্রম্পট গাইড' : 'Prompt Guide'}
+                </Link>
               </div>
             </section>
           )}
