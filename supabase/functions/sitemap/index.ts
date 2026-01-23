@@ -142,20 +142,21 @@ async function generateSitemapIndex(baseUrl: string, today: string, supabase: an
 
   console.log(`Total prompts: ${totalPrompts}, Sitemap pages needed: ${promptSitemapCount}`)
 
-  const functionUrl = `${Deno.env.get('SUPABASE_URL')}/functions/v1/sitemap`
+  // Use production domain for sitemap URLs (Vercel rewrites handle the proxy)
+  const sitemapBaseUrl = baseUrl
 
   let sitemapIndex = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <!-- Static Pages Sitemap -->
   <sitemap>
-    <loc>${functionUrl}?type=pages</loc>
+    <loc>${sitemapBaseUrl}/sitemap-pages.xml</loc>
     <lastmod>${today}</lastmod>
   </sitemap>
   
   <!-- Categories Sitemap -->
   <sitemap>
-    <loc>${functionUrl}?type=categories</loc>
+    <loc>${sitemapBaseUrl}/sitemap-categories.xml</loc>
     <lastmod>${today}</lastmod>
   </sitemap>
 `
@@ -165,7 +166,7 @@ async function generateSitemapIndex(baseUrl: string, today: string, supabase: an
     sitemapIndex += `
   <!-- Prompts Sitemap (Page ${i} of ${Math.max(1, promptSitemapCount)}) -->
   <sitemap>
-    <loc>${functionUrl}?type=prompts-${i}</loc>
+    <loc>${sitemapBaseUrl}/sitemap-prompts-${i}.xml</loc>
     <lastmod>${today}</lastmod>
   </sitemap>`
   }
@@ -198,13 +199,15 @@ const staticPages = [
     { url: '/resources', priority: '0.7', changefreq: 'weekly' },
     { url: '/become-creator', priority: '0.7', changefreq: 'monthly' },
     { url: '/support', priority: '0.5', changefreq: 'monthly' },
+    { url: '/sitemap', priority: '0.5', changefreq: 'weekly' },
+    { url: '/auth', priority: '0.4', changefreq: 'monthly' },
     { url: '/legal', priority: '0.3', changefreq: 'yearly' },
     { url: '/privacy', priority: '0.3', changefreq: 'yearly' },
     { url: '/terms', priority: '0.3', changefreq: 'yearly' },
     { url: '/cookies', priority: '0.3', changefreq: 'yearly' },
     { url: '/dmca', priority: '0.3', changefreq: 'yearly' },
     { url: '/guidelines', priority: '0.3', changefreq: 'yearly' },
-    // Prompt category pages
+    // Prompt category pages (SEO landing pages)
     { url: '/prompts', priority: '0.9', changefreq: 'daily' },
     { url: '/prompts/seo-bangla', priority: '0.8', changefreq: 'weekly' },
     { url: '/prompts/marketing', priority: '0.8', changefreq: 'weekly' },

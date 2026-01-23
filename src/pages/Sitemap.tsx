@@ -65,7 +65,8 @@ const Sitemap = () => {
     { path: '/prompts', label: { bn: 'প্রম্পট লাইব্রেরি', en: 'Prompt Library' }, icon: FileText },
     { path: '/blog', label: { bn: 'ব্লগ', en: 'Blog' }, icon: FileText },
     { path: '/product', label: { bn: 'প্রোডাক্ট', en: 'Product' }, icon: Briefcase },
-    { path: '/api', label: { bn: 'API', en: 'API' }, icon: Code }
+    { path: '/api', label: { bn: 'API', en: 'API' }, icon: Code },
+    { path: '/auth', label: { bn: 'লগইন/সাইন আপ', en: 'Login/Sign Up' }, icon: Users }
   ];
 
   const exploreCategories = [
