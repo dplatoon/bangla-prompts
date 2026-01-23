@@ -25,15 +25,17 @@ const Blog = () => {
     bn: [
       {
         id: 1,
-        title: "ChatGPT-তে বাংলা প্রম্পট ব্যবহারের সেরা টিপস",
-        excerpt: "ChatGPT-তে বাংলায় কার্যকর প্রম্পট লেখার জন্য কিছু গুরুত্বপূর্ণ টিপস শিখুন যা আপনার আউটপুট মানের উন্নতি করবে।",
-        category: "টিউটোরিয়াল",
-        author: "রাহুল শর্মা",
-        date: "২৮ নভেম্বর, ২০২৪",
-        readTime: "৫ মিনিট"
+        slug: "chatgpt-bangla-prompt",
+        title: "ChatGPT বাংলা প্রম্পট: ছাত্র ও পেশাদারদের জন্য সেরা ২০+ প্রম্পট গাইড",
+        excerpt: "বাংলায় ChatGPT ব্যবহার করে পড়াশোনা, কাজ ও সৃজনশীলতায় এগিয়ে যান। সেরা প্রম্পট কপি করে সরাসরি ব্যবহার করুন।",
+        category: "গাইড",
+        author: "BD Prompt টিম",
+        date: "২৩ জানুয়ারি, ২০২৬",
+        readTime: "১২ মিনিট"
       },
       {
         id: 2,
+        slug: "#",
         title: "AI দিয়ে বাংলা কন্টেন্ট মার্কেটিং: একটি সম্পূর্ণ গাইড",
         excerpt: "AI টুলস ব্যবহার করে আপনার বাংলা কন্টেন্ট মার্কেটিং স্ট্র্যাটেজি কিভাবে উন্নত করবেন তা জানুন।",
         category: "মার্কেটিং",
@@ -43,7 +45,8 @@ const Blog = () => {
       },
       {
         id: 3,
-        title: "২০২৪ সালে AI প্রম্পট ইঞ্জিনিয়ারিং: যা জানা দরকার",
+        slug: "#",
+        title: "২০২৬ সালে AI প্রম্পট ইঞ্জিনিয়ারিং: যা জানা দরকার",
         excerpt: "প্রম্পট ইঞ্জিনিয়ারিং এর মৌলিক ধারণা থেকে শুরু করে অ্যাডভান্সড টেকনিক পর্যন্ত সব কিছু।",
         category: "এডুকেশন",
         author: "আহমেদ খান",
@@ -52,6 +55,7 @@ const Blog = () => {
       },
       {
         id: 4,
+        slug: "#",
         title: "Midjourney-তে বাংলা আর্ট প্রম্পট তৈরির কৌশল",
         excerpt: "Midjourney ব্যবহার করে সুন্দর বাংলা থিমড আর্টওয়ার্ক তৈরি করার প্রম্পট টেকনিক শিখুন।",
         category: "ইমেজ জেনারেশন",
@@ -63,15 +67,17 @@ const Blog = () => {
     en: [
       {
         id: 1,
-        title: "Best Tips for Using Bengali Prompts in ChatGPT",
-        excerpt: "Learn important tips for writing effective Bengali prompts in ChatGPT that will improve your output quality.",
-        category: "Tutorial",
-        author: "Rahul Sharma",
-        date: "November 28, 2024",
-        readTime: "5 min"
+        slug: "chatgpt-bangla-prompt",
+        title: "ChatGPT Bangla Prompts: Ultimate Guide for Students & Professionals",
+        excerpt: "Master ChatGPT in Bengali for studies, work, and creativity. Copy and use the best prompts directly.",
+        category: "Guide",
+        author: "BD Prompt Team",
+        date: "January 23, 2026",
+        readTime: "12 min"
       },
       {
         id: 2,
+        slug: "#",
         title: "Bangla Content Marketing with AI: A Complete Guide",
         excerpt: "Learn how to improve your Bangla content marketing strategy using AI tools.",
         category: "Marketing",
@@ -81,7 +87,8 @@ const Blog = () => {
       },
       {
         id: 3,
-        title: "AI Prompt Engineering in 2024: What You Need to Know",
+        slug: "#",
+        title: "AI Prompt Engineering in 2026: What You Need to Know",
         excerpt: "From basic concepts to advanced techniques in prompt engineering.",
         category: "Education",
         author: "Ahmed Khan",
@@ -90,6 +97,7 @@ const Blog = () => {
       },
       {
         id: 4,
+        slug: "#",
         title: "Creating Bengali Art Prompts for Midjourney",
         excerpt: "Learn prompt techniques for creating beautiful Bengali-themed artwork using Midjourney.",
         category: "Image Generation",
@@ -177,7 +185,10 @@ const Blog = () => {
                     {currentPosts[0].readTime}
                   </span>
                 </div>
-                <Link to="#" className={`text-primary font-medium inline-flex items-center gap-1 hover:gap-2 transition-all ${language === 'bn' ? 'font-bengali' : ''}`}>
+                <Link 
+                  to={currentPosts[0].slug === '#' ? '#' : `/blog/${currentPosts[0].slug}`} 
+                  className={`text-primary font-medium inline-flex items-center gap-1 hover:gap-2 transition-all ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
                   {currentText.readMore}
                   <ArrowRight className="w-4 h-4" />
                 </Link>

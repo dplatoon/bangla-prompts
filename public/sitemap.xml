@@ -294,6 +294,15 @@
   </url>
   
   <url>
+    <loc>https://bdprompt.com/blog/chatgpt-bangla-prompt</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/blog/chatgpt-bangla-prompt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/blog/chatgpt-bangla-prompt?lang=en" />
+    <lastmod>2026-01-23</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  
+  <url>
     <loc>https://bdprompt.com/support</loc>
     <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/support" />
     <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/support?lang=en" />
