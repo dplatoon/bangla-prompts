@@ -226,6 +226,13 @@ export const pageMetadata: Record<string, PageMetadata> = {
     description: 'BdPrompt অ্যাডমিন ড্যাশবোর্ড। প্রম্পট এবং ক্যাটাগরি ম্যানেজ করুন।',
     descriptionEn: 'BdPrompt admin dashboard. Manage prompts and categories.',
     keywords: 'admin, dashboard, management'
+  },
+  '/blog/chatgpt-bangla-prompt': {
+    title: 'ChatGPT বাংলা প্রম্পট: ছাত্র ও পেশাদারদের জন্য সেরা ২০+ প্রম্পট গাইড | BdPrompt',
+    titleEn: 'ChatGPT Bangla Prompts: Ultimate Guide for Students & Professionals | BdPrompt',
+    description: 'বাংলায় ChatGPT ব্যবহার করে পড়াশোনা, কাজ ও সৃজনশীলতায় এগিয়ে যান। ছাত্র ও পেশাদারদের জন্য সেরা প্রম্পট কপি করুন।',
+    descriptionEn: 'Master ChatGPT in Bengali for studies, work, and creativity. Copy the best prompts for students and professionals.',
+    keywords: 'ChatGPT বাংলা প্রম্পট, বাংলা AI প্রম্পট, ChatGPT Bangladesh, AI prompts Bengali, ছাত্রদের জন্য ChatGPT'
   }
 };
 

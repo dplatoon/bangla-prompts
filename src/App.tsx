@@ -27,6 +27,7 @@ const BecomeCreator = lazy(() => import("./pages/BecomeCreator"));
 const Guidelines = lazy(() => import("./pages/Guidelines"));
 const Support = lazy(() => import("./pages/Support"));
 const Blog = lazy(() => import("./pages/Blog"));
+const BlogPostChatGPTBanglaPrompt = lazy(() => import("./pages/BlogPostChatGPTBanglaPrompt"));
 const Legal = lazy(() => import("./pages/Legal"));
 const Privacy = lazy(() => import("./pages/Privacy"));
 const Terms = lazy(() => import("./pages/Terms"));
@@ -104,6 +105,7 @@ const App = () => {
                 <Route path="/guidelines" element={<Guidelines />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/blog" element={<Blog />} />
+                <Route path="/blog/chatgpt-bangla-prompt" element={<BlogPostChatGPTBanglaPrompt />} />
                 <Route path="/legal" element={<Legal />} />
                 <Route path="/privacy" element={<Privacy />} />
                 <Route path="/terms" element={<Terms />} />
