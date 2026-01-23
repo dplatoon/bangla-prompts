@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import Prerender from "vite-plugin-prerender";
+import { prerenderRoutes } from "./src/config/prerenderRoutes";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -125,6 +127,37 @@ export default defineConfig(({ mode }) => ({
         skipWaiting: true,
         clientsClaim: true
       }
+    }),
+    // Pre-render static HTML for SEO (production only)
+    mode === 'production' && Prerender({
+      staticDir: path.resolve(__dirname, 'dist'),
+      routes: prerenderRoutes,
+      renderer: {
+        // Wait for React app to fully render before capturing HTML
+        renderAfterDocumentEvent: 'app-rendered',
+        // Timeout for rendering each page (ms)
+        timeout: 30000,
+        // Inject a base tag to ensure assets load correctly
+        injectProperty: '__PRERENDER_INJECTED',
+        // Headless Chrome options
+        headless: true,
+      },
+      // Post-process rendered HTML
+      postProcess(renderedRoute: { route: string; html: string }) {
+        // Ensure proper lang attribute
+        renderedRoute.html = renderedRoute.html.replace(
+          '<html',
+          '<html lang="bn"'
+        );
+        
+        // Add prerender indicator comment for debugging
+        renderedRoute.html = renderedRoute.html.replace(
+          '</head>',
+          `<!-- Pre-rendered at build time for SEO - ${new Date().toISOString()} -->\n</head>`
+        );
+        
+        return renderedRoute;
+      },
     }),
   ].filter(Boolean),
   resolve: {
