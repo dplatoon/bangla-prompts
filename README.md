@@ -1,73 +1,124 @@
-# Welcome to your Lovable project
+# BD Prompt - বাংলাদেশের সবচেয়ে বড় AI প্রম্পট হাব
 
-## Project info
+🇧🇩 **বাংলাদেশের #১ AI প্রম্পট প্ল্যাটফর্ম** - ChatGPT, Claude, Gemini এবং অন্যান্য AI মডেলের জন্য ৫০০+ প্রিমিয়াম বাংলা প্রম্পট।
 
-**URL**: https://lovable.dev/projects/8787d62d-ea8a-489d-9b35-936ad6e92151
+**Live Site:** [https://bdprompt.com](https://bdprompt.com)
 
-## How can I edit this code?
+## 🚀 Features
 
-There are several ways of editing your application.
+- ✅ **৫০০+ প্রিমিয়াম প্রম্পট** - শিক্ষা, ব্যবসা, কন্টেন্ট, কোড, মার্কেটিং এবং আরও অনেক ক্যাটাগরি
+- ✅ **এক ক্লিকে কপি** - সহজে যেকোনো প্রম্পট কপি করে সরাসরি ব্যবহার করুন
+- ✅ **ChatGPT, Claude, Gemini সাপোর্ট** - সব জনপ্রিয় AI মডেলের সাথে কাজ করে
+- ✅ **বাংলা এবং ইংরেজি** - দুটি ভাষায়ই প্রম্পট পাওয়া যায়
+- ✅ **সম্পূর্ণ বিনামূল্যে** - কোনো পেমেন্ট বা সাবস্ক্রিপশন লাগে না
 
-**Use Lovable**
+## 🛠️ Technology Stack
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/8787d62d-ea8a-489d-9b35-936ad6e92151) and start prompting.
+- **Frontend Framework:** React 18 + TypeScript
+- **Build Tool:** Vite
+- **Routing:** React Router DOM v6
+- **UI Components:** shadcn/ui + Radix UI
+- **Styling:** Tailwind CSS
+- **Backend:** Supabase (Authentication + Database)
+- **State Management:** TanStack React Query
+- **Deployment:** Vercel
 
-Changes made via Lovable will be committed automatically to this repo.
+## 📦 Installation
 
-**Use your preferred IDE**
+### Prerequisites
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+- Node.js 18+ and npm installed
+- Supabase account (for backend services)
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Steps
 
-Follow these steps:
+1. **Clone the repository:**
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+```bash
+git clone https://github.com/Start-bd/bangla-prompt.git
+cd bangla-prompt
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. **Install dependencies:**
 
-# Step 3: Install the necessary dependencies.
-npm i
+```bash
+npm install
+```
 
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. **Set up environment variables:**
+
+Copy `.env.example` to `.env` and fill in your Supabase credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit `.env`:
+
+```env
+VITE_SUPABASE_PROJECT_ID=your_project_id
+VITE_SUPABASE_PUBLISHABLE_KEY=your_anon_key
+VITE_SUPABASE_URL=https://your_project_id.supabase.co
+```
+
+4. **Run the development server:**
+
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+The app will be available at `http://localhost:5173`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## 🏗️ Build for Production
 
-**Use GitHub Codespaces**
+```bash
+npm run build
+```
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+The production-ready files will be in the `dist/` folder.
 
-## What technologies are used for this project?
+## 📂 Project Structure
 
-This project is built with:
+```
+bangla-prompt/
+├── public/              # Static assets
+├── src/
+│   ├── components/      # Reusable React components
+│   ├── pages/           # Route pages
+│   ├── integrations/    # Supabase client setup
+│   ├── hooks/           # Custom React hooks
+│   ├── lib/             # Utility functions
+│   └── App.tsx          # Main app component
+├── index.html           # HTML entry point (SEO metadata)
+├── package.json         # Dependencies
+├── vite.config.ts       # Vite configuration
+└── README.md            # This file
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## 🤝 Contributing
 
-## How can I deploy this project?
+Contributions are welcome! Please follow these steps:
 
-Simply open [Lovable](https://lovable.dev/projects/8787d62d-ea8a-489d-9b35-936ad6e92151) and click on Share -> Publish.
+1. Fork the repository
+2. Create a new branch (`git checkout -b feature/your-feature`)
+3. Commit your changes (`git commit -m 'Add some feature'`)
+4. Push to the branch (`git push origin feature/your-feature`)
+5. Open a Pull Request
 
-## Can I connect a custom domain to my Lovable project?
+## 📄 License
 
-Yes, you can!
+This project is open-source and available under the [MIT License](LICENSE).
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+## 🔗 Links
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+- **Live Site:** [bdprompt.com](https://bdprompt.com)
+- **GitHub:** [github.com/Start-bd/bangla-prompt](https://github.com/Start-bd/bangla-prompt)
+- **Support:** [bdprompt.com/support](https://bdprompt.com/support)
+
+## 📧 Contact
+
+For questions or support, email: **hello@bdprompt.com**
+
+---
+
+**Made with ❤️ in Bangladesh** 🇧🇩
