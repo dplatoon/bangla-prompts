@@ -125,6 +125,14 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  define: {
+    // Fallback for env vars if .env isn't loaded
+    ...(process.env.VITE_SUPABASE_URL ? {} : {
+      'import.meta.env.VITE_SUPABASE_URL': JSON.stringify("https://oduvbhiggycaasssfdny.supabase.co"),
+      'import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY': JSON.stringify("eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9kdXZiaGlnZ3ljYWFzc3NmZG55Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjQ0MjI5NDgsImV4cCI6MjA3OTk5ODk0OH0.xrXZ3BMvjN9EjPirSKW_a5s7dNh65SU3d1PMVj0vMTY"),
+      'import.meta.env.VITE_SUPABASE_PROJECT_ID': JSON.stringify("oduvbhiggycaasssfdny"),
+    }),
+  },
   build: {
     rollupOptions: {
       output: {
