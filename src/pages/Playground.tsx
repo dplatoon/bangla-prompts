@@ -324,7 +324,7 @@ const Playground = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "AI প্লেগ্রাউন্ড | bdprompt.com" : "AI Playground | bdprompt.com"}
+        title={language === 'bn' ? "প্লেগ্রাউন্ড | AI প্রম্পট টেস্ট করুন | BdPrompt" : "Playground | Test AI Prompts | BdPrompt"}
         description={language === 'bn' ? "AI প্লেগ্রাউন্ডে আপনার প্রম্পট টেস্ট করুন। বাংলা ও ইংরেজিতে কন্টেন্ট জেনারেট করুন।" : "Test your prompts in the AI Playground. Generate content in Bengali and English."}
         canonicalUrl="https://bdprompt.com/playground"
         language={language}

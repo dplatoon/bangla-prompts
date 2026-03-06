@@ -88,7 +88,7 @@ const Community = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "কমিউনিটি | bdprompt.com" : "Community | bdprompt.com"}
+        title={language === 'bn' ? "কমিউনিটি | প্রম্পট শেয়ার করুন | BdPrompt" : "Community | Share Prompts | BdPrompt"}
         description={language === 'bn' ? "বাংলাদেশের সবচেয়ে বড় AI প্রম্পট ক্রিয়েটর কমিউনিটি। Discord, Facebook, Telegram এ যোগ দিন।" : "Bangladesh's largest AI prompt creator community. Join Discord, Facebook, Telegram."}
         keywords={language === 'bn' ? "bdprompt কমিউনিটি, AI প্রম্পট ক্রিয়েটর, বাংলাদেশ AI" : "bdprompt community, AI prompt creators, Bangladesh AI"}
         canonicalUrl="https://bdprompt.com/community"

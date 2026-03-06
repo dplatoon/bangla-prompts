@@ -74,7 +74,7 @@ const Profile = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "আমার প্রোফাইল | bdprompt.com" : "My Profile | bdprompt.com"}
+        title={language === 'bn' ? "প্রোফাইল | আমার অ্যাকাউন্ট | BdPrompt" : "Profile | My Account | BdPrompt"}
         description={language === 'bn' ? "আপনার সেভ করা প্রম্পট, কেনাকাটা এবং API ব্যবহার দেখুন।" : "View your saved prompts, purchases, and API usage."}
         canonicalUrl="https://bdprompt.com/profile"
         ogImage="https://bdprompt.com/og-image.png"

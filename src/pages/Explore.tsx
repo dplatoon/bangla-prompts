@@ -380,19 +380,19 @@ const Explore = () => {
   
   const seoTitle = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn' 
-      ? `${currentCategoryLabelBn || currentCategoryLabel} প্রম্পট | bdprompt.com`
-      : `${currentCategoryLabel} Prompts | bdprompt.com`
+      ? `${currentCategoryLabelBn || currentCategoryLabel} প্রম্পট | বাংলা AI প্রম্পট | BdPrompt`
+      : `${currentCategoryLabel} Prompts | Bangla AI Prompts | BdPrompt`
     : language === 'bn' 
-      ? "প্রম্পট এক্সপ্লোর করুন | bdprompt.com" 
-      : "Explore Prompts | bdprompt.com";
+      ? "প্রম্পট এক্সপ্লোর করুন | 500+ বাংলা AI প্রম্পট | BdPrompt" 
+      : "Explore Prompts | 500+ Bangla AI Prompts | BdPrompt";
 
   const seoDescription = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn'
-      ? `${currentCategoryLabelBn || currentCategoryLabel} ক্যাটাগরির AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য বাংলা প্রম্পট।`
-      : `Explore ${currentCategoryLabel} AI prompts. Bengali prompts for ChatGPT, Claude, Gemini.`
+      ? `${currentCategoryLabelBn || currentCategoryLabel} ক্যাটাগরির বাংলা AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য।`
+      : `Explore ${currentCategoryLabel} Bangla AI prompts. For ChatGPT, Claude, Gemini.`
     : language === 'bn' 
-      ? "৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন। কন্টেন্ট, ইমেজ, কোড, মার্কেটিং প্রম্পট খুঁজুন।" 
-      : "Explore 500+ Bangla AI prompts. Find content, image, code, and marketing prompts.";
+      ? "বিভিন্ন ক্যাটাগরিতে 500+ বাংলা AI প্রম্পট ব্রাউজ করুন। ChatGPT, Claude, Gemini-এর জন্য।" 
+      : "Browse 500+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.";
 
   // Build breadcrumb items dynamically based on current category
   const breadcrumbItems = useMemo(() => {
@@ -521,6 +521,57 @@ const Explore = () => {
             onTryPrompt={handleTryPrompt}
             showSections={selectedCategory === "all" && !searchQuery}
           />
+
+          {/* Category Cross-Links for SEO */}
+          {categories && categories.length > 0 && (
+            <section className="mt-12 sm:mt-16 border-t border-border pt-8">
+              <h2 className={`text-xl sm:text-2xl font-bold text-foreground mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {language === 'bn' ? 'সব ক্যাটাগরি এক্সপ্লোর করুন' : 'Explore All Categories'}
+              </h2>
+              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+                {categories.map(cat => (
+                  <a 
+                    key={cat.id}
+                    href={`/explore/${cat.slug}`}
+                    className={`block p-4 rounded-lg border border-border hover:border-primary hover:bg-primary/5 transition-colors text-center ${
+                      selectedCategory === cat.slug ? 'border-primary bg-primary/10' : ''
+                    }`}
+                  >
+                    <span className={`text-sm font-medium text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {language === 'bn' ? cat.name_bn : cat.name_en}
+                    </span>
+                  </a>
+                ))}
+              </div>
+              
+              {/* Additional cross-links */}
+              <div className="mt-8 flex flex-wrap gap-3">
+                <a href="/guide" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '📖 প্রম্পট গাইড পড়ুন' : '📖 Read Prompt Guide'}
+                </a>
+                <span className="text-muted-foreground">•</span>
+                <a href="/playground" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '🧪 প্লেগ্রাউন্ডে টেস্ট করুন' : '🧪 Test in Playground'}
+                </a>
+                <span className="text-muted-foreground">•</span>
+                <a href="/packs" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '📦 প্রম্পট প্যাক দেখুন' : '📦 View Prompt Packs'}
+                </a>
+                <span className="text-muted-foreground">•</span>
+                <a href="/blog" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '📝 ব্লগ পড়ুন' : '📝 Read Blog'}
+                </a>
+                <span className="text-muted-foreground">•</span>
+                <a href="/become-creator" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '✍️ ক্রিয়েটর হন' : '✍️ Become a Creator'}
+                </a>
+                <span className="text-muted-foreground">•</span>
+                <a href="/sitemap" className="text-sm text-primary hover:underline">
+                  {language === 'bn' ? '🗺️ সাইটম্যাপ' : '🗺️ Sitemap'}
+                </a>
+              </div>
+            </section>
+          )}
         </main>
 
         <Footer language={language} />

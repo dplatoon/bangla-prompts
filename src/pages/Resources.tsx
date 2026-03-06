@@ -20,12 +20,12 @@ const Resources = () => {
 
   const seoContent = {
     bn: {
-      title: "বাংলা ইউজারদের জন্য সেরা AI টুলস ও রিসোর্স | bdprompt.com",
+      title: "রিসোর্স | AI টুলস এবং গাইড | BdPrompt",
       description: "বাংলাদেশি ব্যবহারকারীদের জন্য সেরা AI টুলস এবং রিসোর্স। ChatGPT, Claude, Gemini, এবং আরও অনেক AI প্ল্যাটফর্মের গাইড ও টিপস।",
       keywords: "AI টুলস বাংলা, ChatGPT বাংলাদেশ, AI রিসোর্স, বাংলা AI গাইড, Gemini বাংলা, Claude AI"
     },
     en: {
-      title: "Best AI Tools & Resources for Bengali Users | bdprompt.com",
+      title: "Resources | AI Tools and Guides | BdPrompt",
       description: "Best AI tools and resources for Bangladeshi users. Guides and tips for ChatGPT, Claude, Gemini, and many more AI platforms.",
       keywords: "AI tools Bengali, ChatGPT Bangladesh, AI resources, Bengali AI guide, Gemini Bengali, Claude AI"
     }

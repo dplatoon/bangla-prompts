@@ -214,7 +214,7 @@ const Auth = () => {
   return (
     <>
       <SEOHead 
-        title={mode === 'login' ? "লগইন | bdprompt.com" : mode === 'signup' ? "সাইন আপ | bdprompt.com" : "পাসওয়ার্ড রিসেট | bdprompt.com"}
+        title={mode === 'login' ? "লগইন / সাইন আপ | BdPrompt" : mode === 'signup' ? "সাইন আপ | BdPrompt" : "পাসওয়ার্ড রিসেট | BdPrompt"}
         description="bdprompt-এ লগইন বা সাইন আপ করুন। বাংলা AI প্রম্পট অ্যাক্সেস করুন।"
         canonicalUrl="https://bdprompt.com/auth"
         ogImage="https://bdprompt.com/og-image.png"

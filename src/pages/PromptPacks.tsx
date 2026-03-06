@@ -122,7 +122,7 @@ const PromptPacks = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "প্রম্পট প্যাক | bdprompt.com" : "Prompt Packs | bdprompt.com"}
+        title={language === 'bn' ? "প্রম্পট প্যাক | কিউরেটেড কালেকশন | BdPrompt" : "Prompt Packs | Curated Collections | BdPrompt"}
         description={language === 'bn' ? "প্রিমিয়াম প্রম্পট প্যাক কিনুন। স্টার্টার, প্রো এবং এন্টারপ্রাইজ প্যাক উপলব্ধ।" : "Buy premium prompt packs. Starter, Pro, and Enterprise packs available."}
         canonicalUrl="https://bdprompt.com/packs"
         language={language}

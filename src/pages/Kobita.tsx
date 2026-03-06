@@ -30,12 +30,12 @@ const Kobita = () => {
 
   const seoContent = {
     bn: {
-      title: "বাংলা কবিতা ও গল্প লেখার AI প্রম্পট | bdprompt.com",
+      title: "কবিতা প্রম্পট | সৃজনশীল লেখা AI | BdPrompt",
       description: "রবীন্দ্রনাথ বা জীবনানন্দের মতো কবিতা লেখার জন্য AI প্রম্পট। বাংলা সাহিত্য সৃষ্টি করুন! কবিতা, গল্প, উপন্যাস, এবং সৃজনশীল লেখার জন্য প্রম্পট।",
       keywords: "বাংলা কবিতা AI, গল্প লেখার প্রম্পট, সৃজনশীল লেখা, বাংলা সাহিত্য AI, কবিতা জেনারেটর, ChatGPT কবিতা"
     },
     en: {
-      title: "Bengali Poetry & Story Writing AI Prompts | bdprompt.com",
+      title: "Poetry Prompts | Creative Writing AI | BdPrompt",
       description: "AI prompts to write poetry like Rabindranath or Jibanananda. Create Bengali literature! Prompts for poetry, stories, novels, and creative writing.",
       keywords: "Bengali poetry AI, story writing prompts, creative writing, Bengali literature AI, poetry generator, ChatGPT poetry"
     }

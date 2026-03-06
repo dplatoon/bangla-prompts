@@ -19,7 +19,7 @@ const NotFound = () => {
   return (
     <>
       <SEOHead 
-        title="৪০৪ - পেজ পাওয়া যায়নি | bdprompt.com"
+        title="৪০৪ - পেজ পাওয়া যায়নি | BdPrompt"
         description="আপনি যে পেজটি খুঁজছেন তা পাওয়া যায়নি। হোমপেজে ফিরে যান।"
         canonicalUrl="https://bdprompt.com/404"
         ogImage="https://bdprompt.com/og-image.png"
