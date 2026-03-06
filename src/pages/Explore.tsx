@@ -219,7 +219,7 @@ const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTr
 };
 
 const Explore = () => {
-  const { categorySlug } = useParams();
+  const { category: categorySlug } = useParams();
   const navigate = useNavigate();
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
   const [searchQuery, setSearchQuery] = useState("");
