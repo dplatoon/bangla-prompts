@@ -30,12 +30,12 @@ const Business = () => {
 
   const seoContent = {
     bn: {
-      title: "বাংলা ব্যবসায়িক AI প্রম্পট — মার্কেটিং, চ্যাটবট, কাস্টমার সাপোর্ট | bdprompt.com",
+      title: "ব্যবসা AI প্রম্পট | মার্কেটিং ও সেলস | BdPrompt",
       description: "বাংলাদেশি ব্যবসার জন্য AI প্রম্পট: ফেসবুক মেসেঞ্জার বট, মার্কেটিং কপি, লোকাল কনটেন্ট! ই-কমার্স, সোশ্যাল মিডিয়া, এবং কাস্টমার সার্ভিসের জন্য।",
       keywords: "ব্যবসায়িক AI প্রম্পট, মার্কেটিং প্রম্পট বাংলা, ফেসবুক মার্কেটিং, মেসেঞ্জার বট, বাংলাদেশ ই-কমার্স, ChatGPT ব্যবসা"
     },
     en: {
-      title: "Bengali Business AI Prompts — Marketing, Chatbot, Customer Support | bdprompt.com",
+      title: "Business AI Prompts | Marketing & Sales | BdPrompt",
       description: "AI prompts for Bangladeshi businesses: Facebook Messenger bots, marketing copy, local content! For e-commerce, social media, and customer service.",
       keywords: "business AI prompts, Bengali marketing prompts, Facebook marketing, Messenger bot, Bangladesh ecommerce, ChatGPT business"
     }

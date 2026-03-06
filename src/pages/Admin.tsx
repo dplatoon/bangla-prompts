@@ -76,7 +76,7 @@ const Admin = () => {
   return (
     <>
       <SEOHead 
-        title="Admin Dashboard | bdprompt.com"
+        title="Admin Dashboard | BdPrompt"
         description="Manage prompts, categories, and site analytics."
         canonicalUrl="https://bdprompt.com/admin"
         ogImage="https://bdprompt.com/og-image.png"

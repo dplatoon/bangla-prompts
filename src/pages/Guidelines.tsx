@@ -102,7 +102,7 @@ const Guidelines = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "প্রম্পট গাইডলাইন | bdprompt.com" : "Prompt Guidelines | bdprompt.com"}
+        title={language === 'bn' ? "গাইডলাইন | প্রম্পট সাবমিশন নিয়ম | BdPrompt" : "Guidelines | Prompt Submission Rules | BdPrompt"}
         description={language === 'bn' ? "bdprompt-এ প্রম্পট জমা দেওয়ার গাইডলাইন। উচ্চমানের প্রম্পট তৈরির নির্দেশিকা।" : "Guidelines for submitting prompts on bdprompt. Instructions for creating high-quality prompts."}
         canonicalUrl="https://bdprompt.com/guidelines"
         language={language}

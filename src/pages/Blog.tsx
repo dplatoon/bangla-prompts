@@ -130,7 +130,7 @@ const Blog = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "ব্লগ | bdprompt.com" : "Blog | bdprompt.com"}
+        title={language === 'bn' ? "ব্লগ | AI টিপস এবং গাইড | BdPrompt" : "Blog | AI Tips and Guides | BdPrompt"}
         description={language === 'bn' ? "AI, প্রম্পট ইঞ্জিনিয়ারিং এবং বাংলা কন্টেন্ট নিয়ে আর্টিকেল পড়ুন।" : "Read articles about AI, prompt engineering, and Bengali content."}
         canonicalUrl="https://bdprompt.com/blog"
         language={language}

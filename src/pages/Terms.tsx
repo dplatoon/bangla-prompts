@@ -11,7 +11,7 @@ const Terms = () => {
 
   return (
     <>
-      <SEOHead title={language === 'bn' ? "সেবার শর্তাবলী | bdprompt.com" : "Terms of Service | bdprompt.com"} canonicalUrl="https://bdprompt.com/terms" language={language} />
+      <SEOHead title={language === 'bn' ? "টার্মস অফ সার্ভিস | ব্যবহারের শর্ত | BdPrompt" : "Terms of Service | Usage Terms | BdPrompt"} canonicalUrl="https://bdprompt.com/terms" language={language} />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl prose prose-lg dark:prose-invert">

@@ -89,7 +89,7 @@ const BecomeCreator = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "ক্রিয়েটর হন | bdprompt.com" : "Become a Creator | bdprompt.com"}
+        title={language === 'bn' ? "ক্রিয়েটর হন | প্রম্পট বিক্রি করুন | BdPrompt" : "Become a Creator | Sell Prompts | BdPrompt"}
         description={language === 'bn' ? "bdprompt-এ প্রম্পট ক্রিয়েটর হন। আপনার প্রম্পট বিক্রি করে আয় করুন। ৭০% কমিশন।" : "Become a prompt creator on bdprompt. Sell your prompts and earn money. 70% commission."}
         keywords={language === 'bn' ? "প্রম্পট ক্রিয়েটর, আয় করুন, AI প্রম্পট বিক্রি" : "prompt creator, earn money, sell AI prompts"}
         canonicalUrl="https://bdprompt.com/become-creator"

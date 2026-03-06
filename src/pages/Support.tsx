@@ -116,7 +116,7 @@ const Support = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "সাপোর্ট | bdprompt.com" : "Support | bdprompt.com"}
+        title={language === 'bn' ? "সাপোর্ট | সাহায্য কেন্দ্র | BdPrompt" : "Support | Help Center | BdPrompt"}
         description={language === 'bn' ? "bdprompt সাপোর্ট। প্রশ্ন আছে? আমাদের সাথে যোগাযোগ করুন।" : "bdprompt Support. Have questions? Contact us."}
         keywords={language === 'bn' ? "bdprompt সাপোর্ট, সাহায্য, যোগাযোগ, প্রশ্ন" : "bdprompt support, help, contact, FAQ"}
         canonicalUrl="https://bdprompt.com/support"

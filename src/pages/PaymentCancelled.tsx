@@ -53,7 +53,7 @@ const PaymentCancelled = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "পেমেন্ট বাতিল | bdprompt.com" : "Payment Cancelled | bdprompt.com"}
+        title={language === 'bn' ? "পেমেন্ট বাতিল | BdPrompt" : "Payment Cancelled | BdPrompt"}
         description={language === 'bn' ? "আপনার পেমেন্ট বাতিল হয়েছে।" : "Your payment was cancelled."}
         canonicalUrl="https://bdprompt.com/payment-cancelled"
         ogImage="https://bdprompt.com/og-image.png"

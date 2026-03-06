@@ -41,7 +41,7 @@ const PaymentSuccess = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "পেমেন্ট সফল | bdprompt.com" : "Payment Successful | bdprompt.com"}
+        title={language === 'bn' ? "পেমেন্ট সফল | BdPrompt" : "Payment Successful | BdPrompt"}
         description={language === 'bn' ? "আপনার পেমেন্ট সফল হয়েছে।" : "Your payment was successful."}
         canonicalUrl="https://bdprompt.com/payment-success"
         ogImage="https://bdprompt.com/og-image.png"

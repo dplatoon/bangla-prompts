@@ -222,8 +222,8 @@ const PromptDetail = () => {
     if (!prompt) return null;
     
     const title = language === 'bn' && prompt.titleBn 
-      ? `${prompt.titleBn} | bdprompt.com` 
-      : `${prompt.title} | bdprompt.com`;
+      ? `${prompt.titleBn} | BdPrompt` 
+      : `${prompt.title} | BdPrompt`;
     
     const description = language === 'bn' && prompt.descriptionBn 
       ? prompt.descriptionBn 

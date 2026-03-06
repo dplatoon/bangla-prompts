@@ -100,7 +100,7 @@ print(prompts)`
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "API ডকুমেন্টেশন | bdprompt.com" : "API Documentation | bdprompt.com"}
+        title={language === 'bn' ? "API ডকুমেন্টেশন | ডেভেলপার | BdPrompt" : "API Documentation | Developer | BdPrompt"}
         description={language === 'bn' ? "bdprompt API দিয়ে আপনার অ্যাপে বাংলা AI প্রম্পট ইন্টিগ্রেট করুন। RESTful API, দ্রুত রেসপন্স, সম্পূর্ণ ডকুমেন্টেশন।" : "Integrate Bangla AI prompts with bdprompt API. RESTful API, fast response, complete documentation."}
         canonicalUrl="https://bdprompt.com/api"
         language={language}

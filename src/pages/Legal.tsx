@@ -27,7 +27,7 @@ const Legal = () => {
 
   return (
     <>
-      <SEOHead title={language === 'bn' ? "আইনি | bdprompt.com" : "Legal | bdprompt.com"} canonicalUrl="https://bdprompt.com/legal" language={language} />
+      <SEOHead title={language === 'bn' ? "আইনি তথ্য | Legal | BdPrompt" : "Legal Information | BdPrompt"} canonicalUrl="https://bdprompt.com/legal" language={language} />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl">

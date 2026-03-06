@@ -26,7 +26,7 @@ const Product = () => {
   return (
     <>
       <SEOHead 
-        title={language === 'bn' ? "প্রোডাক্ট | bdprompt.com" : "Product | bdprompt.com"} 
+        title={language === 'bn' ? "প্রোডাক্ট | BdPrompt ফিচার | বাংলা AI প্রম্পট" : "Product | BdPrompt Features | Bangla AI Prompts"} 
         canonicalUrl="https://bdprompt.com/product" 
         language={language}
         breadcrumbs={[

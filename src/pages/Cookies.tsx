@@ -11,7 +11,7 @@ const Cookies = () => {
 
   return (
     <>
-      <SEOHead title={language === 'bn' ? "কুকি পলিসি | bdprompt.com" : "Cookie Policy | bdprompt.com"} canonicalUrl="https://bdprompt.com/cookies" language={language} />
+      <SEOHead title={language === 'bn' ? "কুকি পলিসি | BdPrompt" : "Cookie Policy | BdPrompt"} canonicalUrl="https://bdprompt.com/cookies" language={language} />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl prose prose-lg dark:prose-invert">

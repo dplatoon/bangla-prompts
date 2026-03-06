@@ -11,7 +11,7 @@ const DMCA = () => {
 
   return (
     <>
-      <SEOHead title="DMCA | bdprompt.com" canonicalUrl="https://bdprompt.com/dmca" language={language} />
+      <SEOHead title="DMCA | কপিরাইট নীতি | BdPrompt" canonicalUrl="https://bdprompt.com/dmca" language={language} />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl prose prose-lg dark:prose-invert">

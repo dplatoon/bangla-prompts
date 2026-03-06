@@ -88,7 +88,7 @@ const PromptCategory = () => {
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
-        title={`${category.title} | BD Prompt`}
+        title={`${category.title} | BdPrompt`}
         description={category.description}
         keywords={`${category.title}, ChatGPT prompts, AI prompts, বাংলা প্রম্পট, BD Prompt, ${category.slug}`}
         canonicalUrl={`https://bdprompt.com/prompts/${category.slug}`}

@@ -11,7 +11,7 @@ const Privacy = () => {
 
   return (
     <>
-      <SEOHead title={language === 'bn' ? "প্রাইভেসি পলিসি | bdprompt.com" : "Privacy Policy | bdprompt.com"} canonicalUrl="https://bdprompt.com/privacy" language={language} />
+      <SEOHead title={language === 'bn' ? "প্রাইভেসি পলিসি | ডেটা সুরক্ষা | BdPrompt" : "Privacy Policy | Data Protection | BdPrompt"} canonicalUrl="https://bdprompt.com/privacy" language={language} />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
         <main className="container mx-auto px-4 py-16 max-w-4xl prose prose-lg dark:prose-invert">

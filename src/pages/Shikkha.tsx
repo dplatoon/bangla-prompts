@@ -30,12 +30,12 @@ const Shikkha = () => {
 
   const seoContent = {
     bn: {
-      title: "শিক্ষার জন্য বাংলা AI প্রম্পট — SSC, HSC, বিশ্ববিদ্যালয় | bdprompt.com",
+      title: "শিক্ষা প্রম্পট | পড়াশোনার AI সহায়তা | BdPrompt",
       description: "SSC, HSC বা বিশ্ববিদ্যালয়ের ছাত্রদের জন্য বাংলা AI প্রম্পট। ChatGPT দিয়ে পড়াশোনা সহজ করুন! নোট তৈরি, পরীক্ষার প্রস্তুতি, রিসার্চ সব কিছুর জন্য প্রম্পট।",
       keywords: "শিক্ষা AI প্রম্পট, SSC প্রম্পট, HSC ChatGPT, বাংলা স্টাডি প্রম্পট, ছাত্রদের জন্য AI, বিশ্ববিদ্যালয় প্রম্পট"
     },
     en: {
-      title: "Bangla AI Prompts for Education — SSC, HSC, University | bdprompt.com",
+      title: "Education Prompts | Study AI Assistance | BdPrompt",
       description: "Bangla AI prompts for SSC, HSC, and university students. Make studying easier with ChatGPT! Prompts for notes, exam prep, and research.",
       keywords: "education AI prompts, SSC prompts, HSC ChatGPT, Bangla study prompts, AI for students, university prompts"
     }
