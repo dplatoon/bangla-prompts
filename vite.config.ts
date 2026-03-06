@@ -113,6 +113,7 @@ export default defineConfig(({ mode }) => ({
             }
           }
         ],
+        navigateFallbackDenylist: [/^\/~oauth/],
         globPatterns: ['**/*.{js,css,html,ico,png,svg,webp}'],
         skipWaiting: true,
         clientsClaim: true
