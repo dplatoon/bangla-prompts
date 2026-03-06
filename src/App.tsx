@@ -47,57 +47,50 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       staleTime: 1000 * 60 * 5, // 5 minutes
-      gcTime: 1000 * 60 * 30, // 30 minutes (previously cacheTime)
+      gcTime: 1000 * 60 * 30, // 30 minutes
       refetchOnWindowFocus: false,
     },
   },
 });
 
 const App = () => {
-  const [showSplash, setShowSplash] = useState(true);
-  const [appReady, setAppReady] = useState(false);
-
-  useEffect(() => {
-    // Check if this is the first visit in this session
-    const hasSeenSplash = sessionStorage.getItem('splash_shown');
-    if (hasSeenSplash) {
-      setShowSplash(false);
-      setAppReady(true);
+  // SEO FIX: showSplash is only for VISUAL overlay, routes always render immediately
+  // Bots and crawlers will always see the full DOM regardless of splash state
+  const [showSplash, setShowSplash] = useState(() => {
+    // Skip splash for non-root pages so bots crawling deep links see content immediately
+    if (typeof window !== 'undefined' && window.location.pathname !== '/') {
+      return false;
     }
-  }, []);
+    return !sessionStorage.getItem('splash_shown');
+  });
 
   const handleSplashComplete = () => {
     sessionStorage.setItem('splash_shown', 'true');
     setShowSplash(false);
-    setAppReady(true);
   };
 
   return (
-    <ErrorBoundary>
-      <QueryClientProvider client={queryClient}>
-        <TooltipProvider>
-          {/* Splash screen on initial load */}
-          {showSplash && <SplashScreen onComplete={handleSplashComplete} />}
-          
-          <Toaster />
-          <Sonner />
-          <BrowserRouter
-            future={{
-              v7_startTransition: true,
-              v7_relativeSplatPath: true,
-            }}
-          >
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <ErrorBoundary>
+          {/* SEO FIX: BrowserRouter and Routes render ALWAYS - splash is a visual overlay only */}
+          <BrowserRouter>
             <Suspense fallback={<PageLoader />}>
               <Routes>
                 {/* Critical path - eagerly loaded */}
                 <Route path="/" element={<Index />} />
                 <Route path="/prompt/:id" element={<PromptDetail />} />
                 <Route path="/explore" element={<Explore />} />
-                <Route path="/explore/:categorySlug" element={<Explore />} />
+                <Route path="/explore/:category" element={<Explore />} />
                 <Route path="/auth" element={<Auth />} />
-                
                 {/* Lazy loaded routes */}
                 <Route path="/playground" element={<Playground />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/payment-success" element={<PaymentSuccess />} />
+                <Route path="/payment-cancelled" element={<PaymentCancelled />} />
                 <Route path="/packs" element={<PromptPacks />} />
                 <Route path="/api" element={<API />} />
                 <Route path="/community" element={<Community />} />
@@ -117,22 +110,24 @@ const App = () => {
                 <Route path="/business" element={<Business />} />
                 <Route path="/resources" element={<Resources />} />
                 <Route path="/prompts" element={<Prompts />} />
-                <Route path="/prompts/:slug" element={<PromptCategory />} />
+                <Route path="/prompts/:category" element={<PromptCategory />} />
                 <Route path="/guide" element={<Guide />} />
                 <Route path="/sitemap" element={<Sitemap />} />
-                <Route path="/admin" element={<Admin />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/payment-success" element={<PaymentSuccess />} />
-                <Route path="/payment-cancelled" element={<PaymentCancelled />} />
-                
                 {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </BrowserRouter>
-        </TooltipProvider>
-      </QueryClientProvider>
-    </ErrorBoundary>
+
+          {/* SEO FIX: Splash is a CSS overlay on top of already-rendered routes */}
+          {showSplash && (
+            <div style={{ position: 'fixed', inset: 0, zIndex: 9999 }}>
+              <SplashScreen onComplete={handleSplashComplete} />
+            </div>
+          )}
+        </ErrorBoundary>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 
