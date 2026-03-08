@@ -178,8 +178,9 @@ describe('usePrompts query construction', () => {
       limit: vi.fn().mockReturnThis(),
       order: vi.fn().mockResolvedValue({ data: [], error: null }),
       in: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
     };
-    mockSupabase.from.mockReturnValue(mockChain);
+    (mockSupabase.from as any).mockReturnValue(mockChain);
 
     const { result } = renderHook(
       () => usePrompts({ search: '50% off_sale' }),
