@@ -543,35 +543,72 @@ const Explore = () => {
                   </a>
                 ))}
               </div>
-              
-              {/* Additional cross-links */}
-              <div className="mt-8 flex flex-wrap gap-3">
-                <a href="/guide" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '📖 প্রম্পট গাইড পড়ুন' : '📖 Read Prompt Guide'}
-                </a>
-                <span className="text-muted-foreground">•</span>
-                <a href="/playground" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '🧪 প্লেগ্রাউন্ডে টেস্ট করুন' : '🧪 Test in Playground'}
-                </a>
-                <span className="text-muted-foreground">•</span>
-                <a href="/packs" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '📦 প্রম্পট প্যাক দেখুন' : '📦 View Prompt Packs'}
-                </a>
-                <span className="text-muted-foreground">•</span>
-                <a href="/blog" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '📝 ব্লগ পড়ুন' : '📝 Read Blog'}
-                </a>
-                <span className="text-muted-foreground">•</span>
-                <a href="/become-creator" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '✍️ ক্রিয়েটর হন' : '✍️ Become a Creator'}
-                </a>
-                <span className="text-muted-foreground">•</span>
-                <a href="/sitemap" className="text-sm text-primary hover:underline">
-                  {language === 'bn' ? '🗺️ সাইটম্যাপ' : '🗺️ Sitemap'}
-                </a>
-              </div>
             </section>
           )}
+
+          {/* SEO Prompt Collections Cross-Links */}
+          <section className="mt-10 sm:mt-12 border-t border-border pt-8">
+            <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-3">
+              {language === 'bn' ? '📚 কিউরেটেড প্রম্পট কালেকশন' : '📚 Curated Prompt Collections'}
+            </h2>
+            <p className="text-sm text-muted-foreground mb-6">
+              {language === 'bn' 
+                ? 'নির্দিষ্ট বিষয়ে বিশেষভাবে তৈরি করা প্রম্পট কালেকশন — এক ক্লিকে কপি করুন।'
+                : 'Handcrafted prompt collections for specific topics — copy with one click.'}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
+              {PROMPT_CATEGORIES.map(cat => (
+                <a
+                  key={cat.slug}
+                  href={`/prompts/${cat.slug}`}
+                  className="flex items-center justify-between p-4 rounded-xl border border-border hover:border-primary/50 hover:bg-accent/5 transition-all group"
+                >
+                  <div className="min-w-0">
+                    <p className="font-medium text-foreground text-sm truncate group-hover:text-primary transition-colors">
+                      {cat.title}
+                    </p>
+                    <p className="text-xs text-muted-foreground mt-0.5">
+                      {cat.prompts.length} টি প্রম্পট
+                    </p>
+                  </div>
+                  <ChevronRight className="h-4 w-4 text-muted-foreground group-hover:text-primary shrink-0 ml-2 transition-colors" />
+                </a>
+              ))}
+            </div>
+          </section>
+
+          {/* Additional cross-links */}
+          <section className="mt-8 border-t border-border pt-6">
+            <div className="flex flex-wrap gap-3">
+              <a href="/guide" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '📖 প্রম্পট গাইড পড়ুন' : '📖 Read Prompt Guide'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/playground" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '🧪 প্লেগ্রাউন্ডে টেস্ট করুন' : '🧪 Test in Playground'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/packs" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '📦 প্রম্পট প্যাক দেখুন' : '📦 View Prompt Packs'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/blog" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '📝 ব্লগ পড়ুন' : '📝 Read Blog'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/prompts" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '🎯 সব প্রম্পট ক্যাটাগরি' : '🎯 All Prompt Categories'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/become-creator" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '✍️ ক্রিয়েটর হন' : '✍️ Become a Creator'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/sitemap" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '🗺️ সাইটম্যাপ' : '🗺️ Sitemap'}
+              </a>
+            </div>
+          </section>
         </main>
 
         <Footer language={language} />
