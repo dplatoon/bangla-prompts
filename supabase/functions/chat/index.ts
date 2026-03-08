@@ -24,7 +24,6 @@ function getCorsHeaders(req: Request): Record<string, string> {
 const RATE_LIMIT_MAX_REQUESTS = 30;
 const RATE_LIMIT_WINDOW_MINUTES = 60;
 
-// Suspicious prompt injection patterns (defense in depth)
 const SUSPICIOUS_PATTERNS = [
   /ignore.*previous.*instructions/i,
   /disregard.*above.*instructions/i,
@@ -47,7 +46,6 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // Verify JWT and get user
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Authentication required" }), {
@@ -70,7 +68,6 @@ serve(async (req) => {
       });
     }
 
-    // Check rate limit
     const { data: withinLimit } = await supabase.rpc("check_rate_limit", {
       _user_id: user.id,
       _function_name: "chat",
@@ -85,7 +82,6 @@ serve(async (req) => {
       });
     }
 
-    // Log usage
     await supabase.rpc("log_ai_usage", {
       _user_id: user.id,
       _function_name: "chat",
@@ -93,7 +89,6 @@ serve(async (req) => {
 
     const { messages } = await req.json();
     
-    // Validate messages array
     if (!Array.isArray(messages) || messages.length === 0 || messages.length > 50) {
       return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
@@ -101,7 +96,6 @@ serve(async (req) => {
       });
     }
 
-    // Validate each message structure and calculate total length
     let totalChars = 0;
     for (const msg of messages) {
       if (!msg || typeof msg !== 'object') {
@@ -122,7 +116,6 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      // Check for suspicious prompt injection patterns (defense in depth)
       if (containsSuspiciousPatterns(msg.content)) {
         console.warn("Suspicious pattern detected in message from user:", user.id);
         return new Response(JSON.stringify({ error: "Invalid request content", code: "VALIDATION_ERROR" }), {
@@ -133,7 +126,6 @@ serve(async (req) => {
       totalChars += msg.content.length;
     }
 
-    // Prevent token exhaustion by limiting total message length
     if (totalChars > 20000) {
       return new Response(JSON.stringify({ error: "Total message length exceeds limit", code: "VALIDATION_ERROR" }), {
         status: 400,
@@ -147,19 +139,24 @@ serve(async (req) => {
       throw new Error("Service configuration error");
     }
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { 
-            role: "system", 
-            content: `You are a helpful AI assistant for bdprompt.com, a Bangla AI prompts marketplace. 
-            
+    // Add timeout to external API call
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { 
+              role: "system", 
+              content: `You are a helpful AI assistant for bdprompt.com, a Bangla AI prompts marketplace. 
+              
 Your responsibilities:
 1. Help users find relevant prompts by understanding their needs
 2. Assist in creating custom prompts with best practices
@@ -168,31 +165,35 @@ Your responsibilities:
 5. Offer prompt engineering tips and suggestions
 
 Be concise, friendly, and culturally aware when dealing with Bangla users. If a user asks in Bangla (বাংলা), respond in Bangla. If they ask in English, respond in English.`
-          },
-          ...messages.slice(-20), // Limit to last 20 messages for context
-        ],
-        stream: true,
-      }),
-    });
+            },
+            ...messages.slice(-20),
+          ],
+          stream: true,
+        }),
+        signal: controller.signal,
+      });
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
-          status: 429,
+      if (!response.ok) {
+        if (response.status === 429) {
+          return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const t = await response.text();
+        console.error("External API error:", response.status, t);
+        return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
+          status: 503,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      const t = await response.text();
-      console.error("External API error:", response.status, t);
-      return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {
-        status: 503,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
-    }
 
-    return new Response(response.body, {
-      headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
-    });
+      return new Response(response.body, {
+        headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
   } catch (e) {
     console.error("chat error:", e);
     return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {

@@ -24,16 +24,13 @@ function getCorsHeaders(req: Request): Record<string, string> {
 serve(async (req) => {
   const corsHeaders = getCorsHeaders(req);
   
-  // Handle CORS preflight
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    // Verify JWT and get user
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
-      console.error("No authorization header provided");
       return new Response(JSON.stringify({ error: "Authentication required" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -42,13 +39,15 @@ serve(async (req) => {
 
     const supabaseUrl = Deno.env.get("SUPABASE_URL")!;
     const supabaseAnonKey = Deno.env.get("SUPABASE_ANON_KEY")!;
-    const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+    const supabaseServiceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
+    
+    // User client for auth verification
+    const supabaseUser = createClient(supabaseUrl, supabaseAnonKey, {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const { data: { user }, error: userError } = await supabase.auth.getUser();
+    const { data: { user }, error: userError } = await supabaseUser.auth.getUser();
     if (userError || !user) {
-      console.error("User authentication failed:", userError);
       return new Response(JSON.stringify({ error: "Invalid authentication" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -57,7 +56,6 @@ serve(async (req) => {
 
     const { promptId, successUrl, cancelUrl } = await req.json();
 
-    // Validate input
     if (!promptId || typeof promptId !== "string") {
       return new Response(JSON.stringify({ error: "Invalid prompt ID" }), {
         status: 400,
@@ -65,8 +63,10 @@ serve(async (req) => {
       });
     }
 
-    // Get prompt details
-    const { data: prompt, error: promptError } = await supabase
+    // Use service role client to read prompt data (bypasses admin-only RLS)
+    const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
+
+    const { data: prompt, error: promptError } = await supabaseAdmin
       .from("prompts")
       .select("id, title_bn, title_en, price, is_free, is_published")
       .eq("id", promptId)
@@ -94,8 +94,8 @@ serve(async (req) => {
       });
     }
 
-    // Check if already purchased
-    const { data: existingPurchase } = await supabase
+    // Check if already purchased (use service role for reliable check)
+    const { data: existingPurchase } = await supabaseAdmin
       .from("prompt_purchases")
       .select("id")
       .eq("user_id", user.id)
@@ -109,7 +109,6 @@ serve(async (req) => {
       });
     }
 
-    // Initialize Stripe
     const stripeSecretKey = Deno.env.get("STRIPE_SECRET_KEY");
     if (!stripeSecretKey) {
       console.error("STRIPE_SECRET_KEY not configured");
@@ -123,47 +122,52 @@ serve(async (req) => {
       apiVersion: "2023-10-16",
     });
 
-    // Convert BDT to USD (using current approximate rate ~121 BDT per USD as of 2025)
-    // For production, consider using a currency API with caching for real-time rates
     const priceInBDT = Number(prompt.price);
-    const BDT_TO_USD_RATE = 121; // Updated rate - review periodically
+    const BDT_TO_USD_RATE = 121;
     const priceInUSD = Math.ceil(priceInBDT / BDT_TO_USD_RATE);
-    const priceInCents = Math.max(50, priceInUSD * 100); // Minimum $0.50 for Stripe
+    const priceInCents = Math.max(50, priceInUSD * 100);
 
     console.log(`Creating checkout for prompt ${promptId}, price: ${priceInBDT} BDT = ${priceInCents} cents USD`);
 
-    // Create Stripe Checkout Session
-    const session = await stripe.checkout.sessions.create({
-      payment_method_types: ["card"],
-      line_items: [
-        {
-          price_data: {
-            currency: "usd",
-            product_data: {
-              name: prompt.title_bn || prompt.title_en,
-              description: `Premium AI Prompt - bdprompt.com`,
+    // Add timeout to Stripe API call
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
+
+    try {
+      const session = await stripe.checkout.sessions.create({
+        payment_method_types: ["card"],
+        line_items: [
+          {
+            price_data: {
+              currency: "usd",
+              product_data: {
+                name: prompt.title_bn || prompt.title_en,
+                description: `Premium AI Prompt - bdprompt.com`,
+              },
+              unit_amount: priceInCents,
             },
-            unit_amount: priceInCents,
+            quantity: 1,
           },
-          quantity: 1,
+        ],
+        mode: "payment",
+        success_url: successUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=success`,
+        cancel_url: cancelUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=cancelled`,
+        metadata: {
+          prompt_id: promptId,
+          user_id: user.id,
+          amount_bdt: priceInBDT.toString(),
         },
-      ],
-      mode: "payment",
-      success_url: successUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=success`,
-      cancel_url: cancelUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=cancelled`,
-      metadata: {
-        prompt_id: promptId,
-        user_id: user.id,
-        amount_bdt: priceInBDT.toString(),
-      },
-      customer_email: user.email,
-    });
+        customer_email: user.email,
+      });
 
-    console.log(`Checkout session created: ${session.id}`);
+      console.log(`Checkout session created: ${session.id}`);
 
-    return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
+      return new Response(JSON.stringify({ url: session.url, sessionId: session.id }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } finally {
+      clearTimeout(timeout);
+    }
   } catch (error) {
     console.error("Checkout error:", error);
     return new Response(

@@ -88,11 +88,11 @@ export const promptToPromptData = (prompt: Prompt): PromptData => {
 };
 
 // Helper function to attach category to prompts
-const attachCategories = async (prompts: any[]): Promise<Prompt[]> => {
+const attachCategories = async (prompts: Partial<Prompt>[]): Promise<Prompt[]> => {
   if (!prompts || prompts.length === 0) return [];
   
   // Get unique category IDs
-  const categoryIds = [...new Set(prompts.map(p => p.category_id).filter(Boolean))];
+  const categoryIds = [...new Set(prompts.map(p => p.category_id).filter((id): id is string => !!id))];
   
   if (categoryIds.length === 0) {
     return prompts.map(p => ({ ...p, category: undefined })) as Prompt[];
@@ -161,7 +161,9 @@ export const usePrompts = (options?: {
       }
 
       if (options?.search) {
-        query = query.or(`title_bn.ilike.%${options.search}%,title_en.ilike.%${options.search}%,description_bn.ilike.%${options.search}%,description_en.ilike.%${options.search}%`);
+        // Escape Postgres LIKE wildcards to prevent query logic flaws
+        const escapedSearch = options.search.replace(/[%_\\]/g, '\\$&');
+        query = query.or(`title_bn.ilike.%${escapedSearch}%,title_en.ilike.%${escapedSearch}%,description_bn.ilike.%${escapedSearch}%,description_en.ilike.%${escapedSearch}%`);
       }
 
       if (options?.isFeatured) {
