@@ -161,7 +161,9 @@ export const usePrompts = (options?: {
       }
 
       if (options?.search) {
-        query = query.or(`title_bn.ilike.%${options.search}%,title_en.ilike.%${options.search}%,description_bn.ilike.%${options.search}%,description_en.ilike.%${options.search}%`);
+        // Escape Postgres LIKE wildcards to prevent query logic flaws
+        const escapedSearch = options.search.replace(/[%_\\]/g, '\\$&');
+        query = query.or(`title_bn.ilike.%${escapedSearch}%,title_en.ilike.%${escapedSearch}%,description_bn.ilike.%${escapedSearch}%,description_en.ilike.%${escapedSearch}%`);
       }
 
       if (options?.isFeatured) {
