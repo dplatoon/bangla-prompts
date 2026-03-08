@@ -52,8 +52,8 @@ describe('useAuth', () => {
   });
 
   it('clears user on sign out event', async () => {
-    let authCallback: Function;
-    mockSupabase.auth.onAuthStateChange.mockImplementation((cb) => {
+    let authCallback: any;
+    (mockSupabase.auth.onAuthStateChange as any).mockImplementation((cb: any) => {
       authCallback = cb;
       return { data: { subscription: mockSubscription } };
     });
