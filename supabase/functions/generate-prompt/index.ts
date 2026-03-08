@@ -24,7 +24,6 @@ function getCorsHeaders(req: Request): Record<string, string> {
 const RATE_LIMIT_MAX_REQUESTS = 20;
 const RATE_LIMIT_WINDOW_MINUTES = 60;
 
-// Map frontend model names to Lovable AI model names
 const MODEL_MAP: Record<string, string> = {
   "gemini-2.5-flash": "google/gemini-2.5-flash",
   "gemini-2.5-pro": "google/gemini-2.5-pro",
@@ -32,7 +31,6 @@ const MODEL_MAP: Record<string, string> = {
   "gemini-3-flash": "google/gemini-3-flash-preview",
 };
 
-// Suspicious prompt injection patterns (defense in depth)
 const SUSPICIOUS_PATTERNS = [
   /ignore.*previous.*instructions/i,
   /disregard.*above.*instructions/i,
@@ -55,7 +53,6 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // Verify JWT and get user
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Authentication required" }), {
@@ -78,7 +75,6 @@ serve(async (req) => {
       });
     }
 
-    // Check rate limit
     const { data: withinLimit } = await supabase.rpc("check_rate_limit", {
       _user_id: user.id,
       _function_name: "generate-prompt",
@@ -93,7 +89,6 @@ serve(async (req) => {
       });
     }
 
-    // Log usage
     await supabase.rpc("log_ai_usage", {
       _user_id: user.id,
       _function_name: "generate-prompt",
@@ -114,7 +109,6 @@ serve(async (req) => {
       });
     }
     
-    // Check for suspicious prompt injection patterns (defense in depth)
     if (containsSuspiciousPatterns(prompt)) {
       console.warn("Suspicious pattern detected in prompt from user:", user.id);
       return new Response(JSON.stringify({ error: "Invalid request content", code: "VALIDATION_ERROR" }), {
@@ -126,65 +120,71 @@ serve(async (req) => {
     const safeTemperature = typeof temperature === "number" ? Math.min(2, Math.max(0, temperature)) : 0.7;
     const safeMaxTokens = typeof maxTokens === "number" ? Math.min(4096, Math.max(50, maxTokens)) : 1024;
     
-    // Map frontend model to Lovable AI model
     const aiModel = MODEL_MAP[model] || "google/gemini-3-flash-preview";
 
     console.log(`Generating with model: ${aiModel}, temperature: ${safeTemperature}, maxTokens: ${safeMaxTokens}, stream: ${stream}`);
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: aiModel,
-        messages: [
-          { 
-            role: "system", 
-            content: "You are a helpful AI assistant for BDPrompt, a Bangla AI prompt platform. Respond in the same language as the user's prompt. If the prompt is in Bangla, respond in Bangla. Be helpful, creative, and concise."
-          },
-          { role: "user", content: prompt }
-        ],
-        temperature: safeTemperature,
-        max_tokens: safeMaxTokens,
-        stream: stream,
-      }),
-    });
+    // Add timeout to external API call
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error("AI service error:", response.status, errorText);
-      
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "Service quota exceeded. Please try again later.", code: "QUOTA_EXCEEDED" }), {
-          status: 402,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      throw new Error("Service error");
-    }
-
-    // If streaming is enabled, pass through the SSE stream
-    if (stream) {
-      return new Response(response.body, {
-        headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+    try {
+      const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${LOVABLE_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: aiModel,
+          messages: [
+            { 
+              role: "system", 
+              content: "You are a helpful AI assistant for BDPrompt, a Bangla AI prompt platform. Respond in the same language as the user's prompt. If the prompt is in Bangla, respond in Bangla. Be helpful, creative, and concise."
+            },
+            { role: "user", content: prompt }
+          ],
+          temperature: safeTemperature,
+          max_tokens: safeMaxTokens,
+          stream: stream,
+        }),
+        signal: controller.signal,
       });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("AI service error:", response.status, errorText);
+        
+        if (response.status === 429) {
+          return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        if (response.status === 402) {
+          return new Response(JSON.stringify({ error: "Service quota exceeded. Please try again later.", code: "QUOTA_EXCEEDED" }), {
+            status: 402,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        throw new Error("Service error");
+      }
+
+      if (stream) {
+        return new Response(response.body, {
+          headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
+        });
+      }
+
+      const data = await response.json();
+      const generatedText = data.choices?.[0]?.message?.content || "";
+
+      return new Response(JSON.stringify({ output: generatedText }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } finally {
+      clearTimeout(timeout);
     }
-
-    // Non-streaming response
-    const data = await response.json();
-    const generatedText = data.choices?.[0]?.message?.content || "";
-
-    return new Response(JSON.stringify({ output: generatedText }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
   } catch (e) {
     console.error("generate-prompt error:", e);
     return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {

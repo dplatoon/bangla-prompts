@@ -24,7 +24,6 @@ function getCorsHeaders(req: Request): Record<string, string> {
 const RATE_LIMIT_MAX_REQUESTS = 15;
 const RATE_LIMIT_WINDOW_MINUTES = 60;
 
-// Suspicious prompt injection patterns (defense in depth)
 const SUSPICIOUS_PATTERNS = [
   /ignore.*previous.*instructions/i,
   /disregard.*above.*instructions/i,
@@ -47,7 +46,6 @@ serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
-    // Verify JWT and get user
     const authHeader = req.headers.get("authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Authentication required" }), {
@@ -70,7 +68,6 @@ serve(async (req) => {
       });
     }
 
-    // Check rate limit
     const { data: withinLimit } = await supabase.rpc("check_rate_limit", {
       _user_id: user.id,
       _function_name: "suggest-prompt",
@@ -85,7 +82,6 @@ serve(async (req) => {
       });
     }
 
-    // Log usage
     await supabase.rpc("log_ai_usage", {
       _user_id: user.id,
       _function_name: "suggest-prompt",
@@ -99,7 +95,6 @@ serve(async (req) => {
       throw new Error("Service configuration error");
     }
     
-    // Validate prompt input
     if (!prompt || typeof prompt !== "string" || prompt.trim().length === 0 || prompt.length > 10000) {
       return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
@@ -107,7 +102,6 @@ serve(async (req) => {
       });
     }
     
-    // Check for suspicious prompt injection patterns (defense in depth)
     if (containsSuspiciousPatterns(prompt)) {
       console.warn("Suspicious pattern detected in prompt from user:", user.id);
       return new Response(JSON.stringify({ error: "Invalid request content", code: "VALIDATION_ERROR" }), {
@@ -116,7 +110,6 @@ serve(async (req) => {
       });
     }
     
-    // Validate language parameter
     if (language && typeof language !== "string" || !['en', 'bn'].includes(language)) {
       return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
         status: 400,
@@ -128,41 +121,50 @@ serve(async (req) => {
       ? `আপনি একজন প্রম্পট ইঞ্জিনিয়ারিং বিশেষজ্ঞ। ব্যবহারকারীর প্রম্পট উন্নত করতে 3টি সংক্ষিপ্ত পরামর্শ দিন। প্রতিটি পরামর্শ একটি বাক্যে দিন। শুধুমাত্র পরামর্শগুলি দিন, অন্য কোনো ব্যাখ্যা নয়।`
       : `You are a prompt engineering expert. Provide 3 brief suggestions to improve the user's prompt. Each suggestion should be one sentence. Only provide the suggestions, no other explanation.`;
 
-    const response = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${OPENAI_API_KEY}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        messages: [
-          { role: "system", content: systemMessage },
-          { role: "user", content: `Prompt to improve: "${prompt}"` }
-        ],
-        temperature: 0.8,
-        max_tokens: 500,
-      }),
-    });
+    // Add timeout to external API call
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 30000);
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
-          status: 429,
-          headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
+    try {
+      const response = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${OPENAI_API_KEY}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          model: "gpt-4o-mini",
+          messages: [
+            { role: "system", content: systemMessage },
+            { role: "user", content: `Prompt to improve: "${prompt}"` }
+          ],
+          temperature: 0.8,
+          max_tokens: 500,
+        }),
+        signal: controller.signal,
+      });
+
+      if (!response.ok) {
+        if (response.status === 429) {
+          return new Response(JSON.stringify({ error: "Service busy. Please try again later.", code: "RATE_LIMIT" }), {
+            status: 429,
+            headers: { ...corsHeaders, "Content-Type": "application/json" },
+          });
+        }
+        const errorText = await response.text();
+        console.error("External API error:", response.status, errorText);
+        throw new Error("Service error");
       }
-      const errorText = await response.text();
-      console.error("External API error:", response.status, errorText);
-      throw new Error("Service error");
+
+      const data = await response.json();
+      const suggestions = data.choices[0].message.content;
+
+      return new Response(JSON.stringify({ suggestions }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    } finally {
+      clearTimeout(timeout);
     }
-
-    const data = await response.json();
-    const suggestions = data.choices[0].message.content;
-
-    return new Response(JSON.stringify({ suggestions }), {
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
   } catch (e) {
     console.error("suggest-prompt error:", e);
     return new Response(JSON.stringify({ error: "Service temporarily unavailable", code: "SERVICE_ERROR" }), {

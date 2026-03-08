@@ -88,7 +88,7 @@ export const promptToPromptData = (prompt: Prompt): PromptData => {
 };
 
 // Helper function to attach category to prompts
-const attachCategories = async (prompts: any[]): Promise<Prompt[]> => {
+const attachCategories = async (prompts: Record<string, unknown>[]): Promise<Prompt[]> => {
   if (!prompts || prompts.length === 0) return [];
   
   // Get unique category IDs
