@@ -29,7 +29,7 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
 
 const PromptCategory = () => {
   const [language, setLanguage] = useState<"bn" | "en">("bn");
-  const { slug } = useParams<{ slug: string }>();
+  const { category: slug } = useParams<{ category: string }>();
   const category = slug ? getCategoryBySlug(slug) : undefined;
 
   // Redirect to 404 if category not found
