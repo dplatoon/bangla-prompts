@@ -133,13 +133,13 @@ describe('usePrompts query construction', () => {
   });
 
   it('builds query with category filter', async () => {
-    // Dynamically import after mocks are set
     const { usePrompts } = await import('../usePrompts');
 
     const mockCategoryChain = {
       select: vi.fn().mockReturnThis(),
       eq: vi.fn().mockReturnThis(),
       single: vi.fn().mockResolvedValue({ data: { id: 'cat-1' }, error: null }),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
     };
 
     const mockPromptsChain = {
@@ -150,10 +150,10 @@ describe('usePrompts query construction', () => {
       limit: vi.fn().mockReturnThis(),
       order: vi.fn().mockResolvedValue({ data: [], error: null }),
       in: vi.fn().mockReturnThis(),
+      maybeSingle: vi.fn().mockResolvedValue({ data: null, error: null }),
     };
 
-    let callCount = 0;
-    mockSupabase.from.mockImplementation((table: string) => {
+    (mockSupabase.from as any).mockImplementation((table: string) => {
       if (table === 'categories') return mockCategoryChain;
       return mockPromptsChain;
     });
