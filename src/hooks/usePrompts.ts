@@ -88,11 +88,11 @@ export const promptToPromptData = (prompt: Prompt): PromptData => {
 };
 
 // Helper function to attach category to prompts
-const attachCategories = async (prompts: Record<string, unknown>[]): Promise<Prompt[]> => {
+const attachCategories = async (prompts: Partial<Prompt>[]): Promise<Prompt[]> => {
   if (!prompts || prompts.length === 0) return [];
   
   // Get unique category IDs
-  const categoryIds = [...new Set(prompts.map(p => p.category_id).filter(Boolean))];
+  const categoryIds = [...new Set(prompts.map(p => p.category_id).filter((id): id is string => !!id))];
   
   if (categoryIds.length === 0) {
     return prompts.map(p => ({ ...p, category: undefined })) as Prompt[];
