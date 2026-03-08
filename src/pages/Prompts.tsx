@@ -119,21 +119,76 @@ const Prompts = () => {
           })}
         </section>
         
+        {/* Explore by Category - Dynamic DB categories */}
+        <section className="mt-12 sm:mt-16 border-t border-border pt-8">
+          <h2 className="text-xl sm:text-2xl font-bold text-foreground mb-3 sm:mb-4">
+            🔍 ডাটাবেস থেকে এক্সপ্লোর করুন
+          </h2>
+          <p className="text-sm text-muted-foreground mb-6">
+            আমাদের ডাইনামিক প্রম্পট লাইব্রেরিতে ফিল্টার, সার্চ এবং সর্ট করে প্রম্পট খুঁজুন।
+          </p>
+          <div className="flex flex-wrap gap-2 sm:gap-3 mb-6">
+            <Link to="/explore" className="px-4 py-2 rounded-lg border border-primary bg-primary/10 text-primary text-sm font-medium hover:bg-primary/20 transition-colors">
+              সব প্রম্পট
+            </Link>
+            <Link to="/explore/business" className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors">
+              ব্যবসা
+            </Link>
+            <Link to="/explore/education" className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors">
+              শিক্ষা
+            </Link>
+            <Link to="/explore/content" className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors">
+              কন্টেন্ট
+            </Link>
+            <Link to="/explore/code" className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors">
+              কোড
+            </Link>
+            <Link to="/explore/marketing" className="px-4 py-2 rounded-lg border border-border text-sm font-medium hover:border-primary hover:bg-primary/5 transition-colors">
+              মার্কেটিং
+            </Link>
+          </div>
+        </section>
+
         {/* CTA Section */}
-        <section className="mt-12 sm:mt-16 text-center bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12">
+        <section className="mt-8 sm:mt-10 text-center bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-xl sm:rounded-2xl p-6 sm:p-8 md:p-12">
           <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-foreground mb-3 sm:mb-4">
             🚀 সব প্রম্পট এক্সপ্লোর করুন
           </h2>
           <p className="text-sm sm:text-base text-muted-foreground mb-4 sm:mb-6 max-w-xl mx-auto px-2">
             আমাদের সম্পূর্ণ প্রম্পট লাইব্রেরি দেখুন - কন্টেন্ট, ইমেজ, কোড, মার্কেটিং সহ আরও অনেক কিছু।
           </p>
-          <Link 
-            to="/explore"
-            className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-primary/90 transition-colors"
-          >
-            সব প্রম্পট দেখুন
-            <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
-          </Link>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center">
+            <Link 
+              to="/explore"
+              className="inline-flex items-center gap-2 bg-primary text-primary-foreground px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-primary/90 transition-colors"
+            >
+              সব প্রম্পট দেখুন
+              <ChevronRight className="h-4 w-4 sm:h-5 sm:w-5" />
+            </Link>
+            <Link 
+              to="/guide"
+              className="inline-flex items-center gap-2 text-primary border border-primary/30 px-4 sm:px-6 py-2.5 sm:py-3 rounded-lg font-semibold text-sm sm:text-base hover:bg-primary/5 transition-colors"
+            >
+              📖 প্রম্পট গাইড
+            </Link>
+          </div>
+        </section>
+
+        {/* Additional Links for SEO */}
+        <section className="mt-8 border-t border-border pt-6">
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to="/playground" className="text-sm text-primary hover:underline">🧪 প্লেগ্রাউন্ড</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/packs" className="text-sm text-primary hover:underline">📦 প্রম্পট প্যাক</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/blog" className="text-sm text-primary hover:underline">📝 ব্লগ</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/become-creator" className="text-sm text-primary hover:underline">✍️ ক্রিয়েটর হন</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/community" className="text-sm text-primary hover:underline">👥 কমিউনিটি</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/sitemap" className="text-sm text-primary hover:underline">🗺️ সাইটম্যাপ</Link>
+          </div>
         </section>
       </main>
       

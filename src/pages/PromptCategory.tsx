@@ -139,6 +139,43 @@ const PromptCategory = () => {
           ))}
         </section>
         
+        {/* Explore Dynamic Prompts CTA */}
+        <section className="border-t border-border pt-10 mb-12">
+          <h2 className="text-xl font-bold text-foreground mb-3">
+            🔍 ডাইনামিক লাইব্রেরিতে এক্সপ্লোর করুন
+          </h2>
+          <p className="text-sm text-muted-foreground mb-4">
+            সার্চ, ফিল্টার এবং সর্ট করে আরও প্রম্পট খুঁজুন আমাদের সম্পূর্ণ লাইব্রেরি থেকে।
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <Link
+              to="/explore"
+              className="inline-flex items-center gap-1.5 px-4 py-2 rounded-lg bg-primary text-primary-foreground text-sm font-medium hover:bg-primary/90 transition-colors"
+            >
+              সব এক্সপ্লোর করুন
+              <ChevronRight className="h-4 w-4" />
+            </Link>
+            <Link
+              to="/explore/business"
+              className="px-4 py-2 rounded-lg border border-border text-sm hover:border-primary hover:bg-primary/5 transition-colors"
+            >
+              ব্যবসা
+            </Link>
+            <Link
+              to="/explore/education"
+              className="px-4 py-2 rounded-lg border border-border text-sm hover:border-primary hover:bg-primary/5 transition-colors"
+            >
+              শিক্ষা
+            </Link>
+            <Link
+              to="/explore/content"
+              className="px-4 py-2 rounded-lg border border-border text-sm hover:border-primary hover:bg-primary/5 transition-colors"
+            >
+              কন্টেন্ট
+            </Link>
+          </div>
+        </section>
+
         {/* Related Categories */}
         <section className="border-t border-border pt-12">
           <h2 className="text-xl font-bold text-foreground mb-6">
@@ -177,6 +214,23 @@ const PromptCategory = () => {
                 <ChevronRight className="h-4 w-4" />
               </Link>
             </Button>
+          </div>
+        </section>
+
+        {/* Additional SEO Links */}
+        <section className="mt-8 border-t border-border pt-6 mb-8">
+          <div className="flex flex-wrap gap-3 justify-center">
+            <Link to="/explore" className="text-sm text-primary hover:underline">🔍 এক্সপ্লোর</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/guide" className="text-sm text-primary hover:underline">📖 গাইড</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/playground" className="text-sm text-primary hover:underline">🧪 প্লেগ্রাউন্ড</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/blog" className="text-sm text-primary hover:underline">📝 ব্লগ</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/packs" className="text-sm text-primary hover:underline">📦 প্রম্পট প্যাক</Link>
+            <span className="text-muted-foreground">•</span>
+            <Link to="/sitemap" className="text-sm text-primary hover:underline">🗺️ সাইটম্যাপ</Link>
           </div>
         </section>
       </main>
