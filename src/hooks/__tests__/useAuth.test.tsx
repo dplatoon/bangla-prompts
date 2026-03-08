@@ -31,8 +31,8 @@ describe('useAuth', () => {
   });
 
   it('responds to auth state changes', async () => {
-    let authCallback: Function;
-    mockSupabase.auth.onAuthStateChange.mockImplementation((cb) => {
+    let authCallback: any;
+    (mockSupabase.auth.onAuthStateChange as any).mockImplementation((cb: any) => {
       authCallback = cb;
       return { data: { subscription: mockSubscription } };
     });
