@@ -1,8 +1,8 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { corsHeadersPublic } from '../_shared/cors.ts'
 
 const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  ...corsHeadersPublic,
   'Content-Type': 'application/xml; charset=utf-8',
   'Cache-Control': 'public, max-age=3600, s-maxage=86400',
 }

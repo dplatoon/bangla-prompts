@@ -4,7 +4,7 @@ import Stripe from "https://esm.sh/stripe@14.21.0?target=deno";
 import { getCorsHeaders } from "../_shared/cors.ts";
 
 serve(async (req) => {
-  const corsHeaders = getCorsHeaders(req);
+  const corsHeaders = getCorsHeaders(req, { extraHeaders: ["stripe-signature"] });
   
   // Handle CORS preflight
   if (req.method === "OPTIONS") {
