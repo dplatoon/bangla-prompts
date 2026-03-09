@@ -82,7 +82,7 @@ Deno.serve(async (req) => {
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!
     const supabaseKey = Deno.env.get('SUPABASE_ANON_KEY')!
     const supabase = createClient(supabaseUrl, supabaseKey)
-    const baseUrl = 'https://bangla-prompt.lovable.app'
+    const baseUrl = 'https://bdprompt.com'
     const today = new Date().toISOString().split('T')[0]
 
     // Handle different sitemap types
