@@ -5,69 +5,69 @@
   
   <!-- Homepage -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/?lang=en" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://bangla-prompt.lovable.app/" />
+    <loc>https://bdprompt.com/</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
     <image:image>
-      <image:loc>https://bangla-prompt.lovable.app/og-image.png</image:loc>
+      <image:loc>https://bdprompt.com/og-image.png</image:loc>
       <image:title>BdPrompt - বাংলা AI প্রম্পট হাব</image:title>
     </image:image>
   </url>
   
   <!-- Main Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore?lang=en" />
+    <loc>https://bdprompt.com/explore</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/playground</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/playground" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/playground?lang=en" />
+    <loc>https://bdprompt.com/playground</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/playground" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/playground?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/guide</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/guide" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/guide?lang=en" />
+    <loc>https://bdprompt.com/guide</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/guide" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/guide?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/packs</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/packs" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/packs?lang=en" />
+    <loc>https://bdprompt.com/packs</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/packs" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/packs?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/product</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/product" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/product?lang=en" />
+    <loc>https://bdprompt.com/product</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/product" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/product?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/api</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/api" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/api?lang=en" />
+    <loc>https://bdprompt.com/api</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/api" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/api?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
@@ -75,36 +75,36 @@
   
   <!-- SEO Landing Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/shikkha</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/shikkha" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/shikkha?lang=en" />
+    <loc>https://bdprompt.com/shikkha</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/shikkha" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/shikkha?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/kobita</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/kobita" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/kobita?lang=en" />
+    <loc>https://bdprompt.com/kobita</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/kobita" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/kobita?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/business</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/business" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/business?lang=en" />
+    <loc>https://bdprompt.com/business</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/business" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/business?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/resources</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/resources" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/resources?lang=en" />
+    <loc>https://bdprompt.com/resources</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/resources" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/resources?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
@@ -112,54 +112,54 @@
   
   <!-- Category Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/business</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/business" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/business?lang=en" />
+    <loc>https://bdprompt.com/explore/business</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/business" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/business?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/code</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/code" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/code?lang=en" />
+    <loc>https://bdprompt.com/explore/code</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/code" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/code?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/content</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/content" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/content?lang=en" />
+    <loc>https://bdprompt.com/explore/content</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/content" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/content?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/education</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/education" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/education?lang=en" />
+    <loc>https://bdprompt.com/explore/education</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/education" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/education?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/image</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/image" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/image?lang=en" />
+    <loc>https://bdprompt.com/explore/image</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/image" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/image?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/explore/marketing</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/explore/marketing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/explore/marketing?lang=en" />
+    <loc>https://bdprompt.com/explore/marketing</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/explore/marketing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/explore/marketing?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
@@ -167,99 +167,99 @@
   
   <!-- SEO Prompt Category Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts?lang=en" />
+    <loc>https://bdprompt.com/prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/seo-bangla</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/seo-bangla" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/seo-bangla?lang=en" />
+    <loc>https://bdprompt.com/prompts/seo-bangla</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/seo-bangla" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/seo-bangla?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/marketing</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/marketing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/marketing?lang=en" />
+    <loc>https://bdprompt.com/prompts/marketing</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/marketing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/marketing?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/freelancing</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/freelancing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/freelancing?lang=en" />
+    <loc>https://bdprompt.com/prompts/freelancing</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/freelancing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/freelancing?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/students</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/students" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/students?lang=en" />
+    <loc>https://bdprompt.com/prompts/students</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/students" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/students?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/coding</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/coding" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/coding?lang=en" />
+    <loc>https://bdprompt.com/prompts/coding</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/coding" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/coding?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/business</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/business" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/business?lang=en" />
+    <loc>https://bdprompt.com/prompts/business</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/business" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/business?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/creative-art</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/creative-art" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/creative-art?lang=en" />
+    <loc>https://bdprompt.com/prompts/creative-art</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/creative-art" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/creative-art?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/youtube-growth</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/youtube-growth" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/youtube-growth?lang=en" />
+    <loc>https://bdprompt.com/prompts/youtube-growth</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/youtube-growth" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/youtube-growth?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/bangla-writing</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/bangla-writing" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/bangla-writing?lang=en" />
+    <loc>https://bdprompt.com/prompts/bangla-writing</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/bangla-writing" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/bangla-writing?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/prompts/productivity</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/prompts/productivity" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/prompts/productivity?lang=en" />
+    <loc>https://bdprompt.com/prompts/productivity</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/productivity" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/prompts/productivity?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
@@ -267,61 +267,61 @@
   
   <!-- Community Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/community</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/community" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/community?lang=en" />
+    <loc>https://bdprompt.com/community</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/community" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/community?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/become-creator</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/become-creator" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/become-creator?lang=en" />
+    <loc>https://bdprompt.com/become-creator</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/become-creator" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/become-creator?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/blog</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/blog" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/blog?lang=en" />
+    <loc>https://bdprompt.com/blog</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/blog" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/blog?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>daily</changefreq>
     <priority>0.8</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/blog/chatgpt-bangla-prompt</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/blog/chatgpt-bangla-prompt" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/blog/chatgpt-bangla-prompt?lang=en" />
+    <loc>https://bdprompt.com/blog/chatgpt-bangla-prompt</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/blog/chatgpt-bangla-prompt" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/blog/chatgpt-bangla-prompt?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/support</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/support" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/support?lang=en" />
+    <loc>https://bdprompt.com/support</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/support" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/support?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/sitemap</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/sitemap" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/sitemap?lang=en" />
+    <loc>https://bdprompt.com/sitemap</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/sitemap" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/sitemap?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/auth</loc>
+    <loc>https://bdprompt.com/auth</loc>
     <lastmod>2026-03-09</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.4</priority>
@@ -329,54 +329,54 @@
   
   <!-- Legal Pages -->
   <url>
-    <loc>https://bangla-prompt.lovable.app/legal</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/legal" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/legal?lang=en" />
+    <loc>https://bdprompt.com/legal</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/legal" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/legal?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/privacy</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/privacy" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/privacy?lang=en" />
+    <loc>https://bdprompt.com/privacy</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/privacy" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/privacy?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/terms</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/terms" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/terms?lang=en" />
+    <loc>https://bdprompt.com/terms</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/terms" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/terms?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/cookies</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/cookies" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/cookies?lang=en" />
+    <loc>https://bdprompt.com/cookies</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/cookies" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/cookies?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/dmca</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/dmca" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/dmca?lang=en" />
+    <loc>https://bdprompt.com/dmca</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/dmca" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/dmca?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
   
   <url>
-    <loc>https://bangla-prompt.lovable.app/guidelines</loc>
-    <xhtml:link rel="alternate" hreflang="bn" href="https://bangla-prompt.lovable.app/guidelines" />
-    <xhtml:link rel="alternate" hreflang="en" href="https://bangla-prompt.lovable.app/guidelines?lang=en" />
+    <loc>https://bdprompt.com/guidelines</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/guidelines" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/guidelines?lang=en" />
     <lastmod>2026-03-09</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
