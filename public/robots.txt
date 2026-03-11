@@ -1,26 +1,31 @@
 # robots.txt for bdprompt.com
 # Bangla AI Prompts Hub
 
-# Dynamic Sitemap (served via clean URL)
 Sitemap: https://bdprompt.com/sitemap.xml
 
-# Google (no crawl-delay needed - Google ignores it anyway)
 User-agent: Googlebot
 Allow: /
 Disallow: /auth
 Disallow: /api/
+Disallow: /account
+Disallow: /profile
+Disallow: /settings
+Disallow: /checkout
+Disallow: /admin
+Disallow: /private
 
 User-agent: Googlebot-Image
 Allow: /
 
-# Bing (reduced crawl-delay for faster indexing)
 User-agent: Bingbot
 Allow: /
 Disallow: /auth
 Disallow: /api/
+Disallow: /account
+Disallow: /profile
+Disallow: /settings
 Crawl-delay: 0.5
 
-# Social Media Crawlers
 User-agent: Twitterbot
 Allow: /
 
@@ -30,13 +35,6 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
-User-agent: Pinterest
-Allow: /
-
-User-agent: Slackbot
-Allow: /
-
-# AI Crawlers
 User-agent: GPTBot
 Allow: /
 
@@ -52,7 +50,6 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
-# Other Search Engines (reduced crawl-delays)
 User-agent: DuckDuckBot
 Allow: /
 Crawl-delay: 0.5
@@ -61,19 +58,17 @@ User-agent: Yandex
 Allow: /
 Crawl-delay: 0.5
 
-User-agent: Baiduspider
-Allow: /
-Crawl-delay: 1
-
-# Default rule for all other bots (reduced crawl-delay)
 User-agent: *
 Allow: /
 Disallow: /auth
 Disallow: /api/
+Disallow: /account
+Disallow: /profile
+Disallow: /settings
+Disallow: /checkout
+Disallow: /admin
+Disallow: /private
 Disallow: /*.json$
 Disallow: /*?*sort=
 Disallow: /*?*filter=
 Crawl-delay: 0.5
-
-# Host
-Host: https://bdprompt.com
