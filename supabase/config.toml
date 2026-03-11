@@ -1,4 +1,4 @@
-project_id = "oduvbhiggycaasssfdny"
+project_id = "lazqucrttzggymmzsqvs"
 
 [functions.generate-prompt]
 verify_jwt = true
@@ -16,4 +16,7 @@ verify_jwt = false
 verify_jwt = true
 
 [functions.stripe-webhook]
+verify_jwt = false
+
+[functions.og-image]
 verify_jwt = false
