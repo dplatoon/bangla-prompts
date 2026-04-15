@@ -5,14 +5,13 @@ interface SplashScreenProps {
   minDisplayTime?: number;
 }
 
-export const SplashScreen = ({ onComplete, minDisplayTime = 800 }: SplashScreenProps) => {
+export const SplashScreen = ({ onComplete, minDisplayTime = 700 }: SplashScreenProps) => {
   const [isVisible, setIsVisible] = useState(true);
   const [isExiting, setIsExiting] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsExiting(true);
-      // Wait for exit animation to complete
       setTimeout(() => {
         setIsVisible(false);
         onComplete?.();
@@ -33,55 +32,47 @@ export const SplashScreen = ({ onComplete, minDisplayTime = 800 }: SplashScreenP
       aria-label="লোড হচ্ছে..."
       aria-busy="true"
     >
-      {/* Logo Container with Animation */}
-      <div className={`relative transition-all duration-500 ${isExiting ? 'scale-110 opacity-0' : 'scale-100 opacity-100'}`}>
-        {/* Pulsing glow effect behind logo */}
-        <div className="absolute inset-0 -m-4 rounded-full bg-primary/20 animate-ping" style={{ animationDuration: '1.5s' }} />
-        <div className="absolute inset-0 -m-2 rounded-full bg-primary/10 animate-pulse" />
+      <div className={`relative transition-all duration-500 ${isExiting ? 'scale-105 opacity-0' : 'scale-100 opacity-100'}`}>
+        {/* Subtle glow */}
+        <div className="absolute inset-0 -m-6 rounded-full bg-primary/10 animate-pulse" style={{ animationDuration: '2s' }} />
         
         {/* Logo */}
         <img
           src="/favicon.png"
           alt="BD Prompt Logo"
-          className="relative w-20 h-20 md:w-24 md:h-24 rounded-2xl shadow-elegant animate-bounce"
-          style={{ animationDuration: '1s' }}
+          className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl shadow-elegant"
         />
       </div>
 
       {/* Brand Name */}
-      <div className={`mt-6 text-center transition-all duration-500 delay-100 ${isExiting ? 'translate-y-4 opacity-0' : 'translate-y-0 opacity-100'}`}>
-        <h1 className="text-2xl md:text-3xl font-bold text-primary font-bengali">
-          BD Prompt
+      <div className={`mt-5 text-center transition-all duration-500 delay-100 ${isExiting ? 'translate-y-2 opacity-0' : 'translate-y-0 opacity-100'}`}>
+        <h1 className="text-xl md:text-2xl font-bold text-primary">
+          BdPrompt
         </h1>
-        <p className="mt-2 text-sm text-muted-foreground font-bengali">
+        <p className="mt-1 text-sm text-muted-foreground font-bengali">
           বাংলা AI প্রম্পট হাব
         </p>
       </div>
 
-      {/* Loading Spinner */}
-      <div className={`mt-8 transition-all duration-300 delay-200 ${isExiting ? 'opacity-0' : 'opacity-100'}`}>
-        <div className="flex items-center gap-1">
-          <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-          <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-          <div className="w-2 h-2 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+      {/* Minimal loading indicator */}
+      <div className={`mt-6 transition-all duration-300 delay-200 ${isExiting ? 'opacity-0' : 'opacity-100'}`}>
+        <div className="w-8 h-1 bg-primary/20 rounded-full overflow-hidden">
+          <div className="h-full bg-primary rounded-full animate-pulse" style={{ width: '60%', animationDuration: '1s' }} />
         </div>
       </div>
     </div>
   );
 };
 
-// Inline PageLoader for lazy-loaded routes (smaller, faster)
 export const PageLoader = () => (
-  <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-4">
+  <div className="min-h-screen bg-background flex flex-col items-center justify-center gap-3">
     <img
       src="/favicon.png"
       alt="Loading"
-      className="w-12 h-12 rounded-xl animate-pulse"
+      className="w-10 h-10 rounded-xl animate-pulse"
     />
-    <div className="flex items-center gap-1">
-      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '0ms' }} />
-      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '150ms' }} />
-      <div className="w-1.5 h-1.5 rounded-full bg-primary animate-bounce" style={{ animationDelay: '300ms' }} />
+    <div className="w-6 h-0.5 bg-primary/30 rounded-full overflow-hidden">
+      <div className="h-full bg-primary rounded-full animate-pulse" style={{ width: '50%' }} />
     </div>
   </div>
 );

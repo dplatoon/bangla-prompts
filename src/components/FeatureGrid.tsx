@@ -18,7 +18,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "প্লেগ্রাউন্ড",
           description: "প্রম্পট টেস্ট করুন এবং রিয়েল-টাইমে ফলাফল দেখুন",
           action: "এখনই চেষ্টা করুন",
-          color: "bg-gradient-primary",
+          iconBg: "bg-primary text-primary-foreground",
           href: "/playground"
         },
         {
@@ -26,7 +26,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "প্রম্পট প্যাকস", 
           description: "বিশেষ ক্যাটেগরির জন্য কিউরেটেড প্রম্পট কালেকশন",
           action: "ব্রাউজ করুন",
-          color: "bg-gradient-accent",
+          iconBg: "bg-accent text-accent-foreground",
           href: "/packs"
         },
         {
@@ -34,7 +34,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "ক্রিয়েটর প্রোগ্রাম",
           description: "আপনার প্রম্পট বিক্রি করুন এবং আয় করুন",
           action: "যোগদান করুন",
-          color: "bg-primary",
+          iconBg: "bg-primary text-primary-foreground",
           href: "/become-creator"
         },
         {
@@ -42,7 +42,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "রিসোর্স",
           description: "AI টুলস ও গাইডলাইন সম্পর্কে জানুন",
           action: "দেখুন",
-          color: "bg-secondary",
+          iconBg: "bg-secondary text-secondary-foreground",
           href: "/resources"
         }
       ]
@@ -56,7 +56,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "Playground",
           description: "Test prompts and see results in real-time",
           action: "Try Now",
-          color: "bg-gradient-primary",
+          iconBg: "bg-primary text-primary-foreground",
           href: "/playground"
         },
         {
@@ -64,7 +64,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "Prompt Packs",
           description: "Curated prompt collections for specific categories",
           action: "Browse",
-          color: "bg-gradient-accent",
+          iconBg: "bg-accent text-accent-foreground",
           href: "/packs"
         },
         {
@@ -72,7 +72,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "Creator Program", 
           description: "Sell your prompts and earn revenue",
           action: "Join Now",
-          color: "bg-primary",
+          iconBg: "bg-primary text-primary-foreground",
           href: "/become-creator"
         },
         {
@@ -80,7 +80,7 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
           title: "Resources",
           description: "AI tools and guidelines to get started",
           action: "View",
-          color: "bg-secondary",
+          iconBg: "bg-secondary text-secondary-foreground",
           href: "/resources"
         }
       ]
@@ -90,42 +90,39 @@ export const FeatureGrid = ({ language }: FeatureGridProps) => {
   const currentText = text[language];
 
   return (
-    <section className="py-20 bg-background">
+    <section className="py-20 lg:py-24 bg-background">
       <div className="container mx-auto px-4">
-        <div className="text-center space-y-4 mb-16">
-          <h2 className={`text-3xl lg:text-5xl font-bold text-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+        <div className="text-center space-y-3 mb-14">
+          <h2 className={`text-3xl lg:text-4xl font-bold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
             {currentText.title}
           </h2>
-          <p className={`text-xl text-muted-foreground max-w-2xl mx-auto ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+          <p className={`text-lg text-muted-foreground max-w-2xl mx-auto ${language === 'bn' ? 'font-bengali' : ''}`}>
             {currentText.subtitle}
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
           {currentText.features.map((feature, index) => {
             const Icon = feature.icon;
             return (
-              <Link key={index} to={feature.href} className="block">
-                <Card className="group hover:shadow-accent transition-smooth border-border/50 hover:border-primary/20 bg-card/80 backdrop-blur-sm h-full">
-                  <CardHeader className="text-center pb-4">
-                    <div className={`w-16 h-16 ${feature.color} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform shadow-primary`}>
-                      <Icon className="w-8 h-8 text-primary-foreground" />
+              <Link key={index} to={feature.href} className="block group">
+                <Card className="h-full border-border/40 hover:border-primary/30 bg-card hover:shadow-lg transition-all duration-300 hover:-translate-y-1">
+                  <CardHeader className="text-center pb-3">
+                    <div className={`w-14 h-14 ${feature.iconBg} rounded-2xl flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className="w-7 h-7" />
                     </div>
                     <CardTitle className={`text-lg ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {feature.title}
                     </CardTitle>
-                    <CardDescription className={`text-sm ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+                    <CardDescription className={`text-sm leading-relaxed ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {feature.description}
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="pt-0">
-                    <Button 
-                      variant="ghost" 
-                      className={`w-full group/btn text-primary hover:bg-primary/5 ${language === 'bn' ? 'font-bengali' : ''}`}
-                    >
+                    <div className={`flex items-center justify-center text-sm font-medium text-primary group-hover:gap-2 transition-all ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {feature.action}
-                      <ArrowRight className="ml-2 w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                    </Button>
+                      <ArrowRight className="ml-1 w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                    </div>
                   </CardContent>
                 </Card>
               </Link>
