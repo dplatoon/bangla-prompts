@@ -84,7 +84,7 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               <h1 className={`font-bold text-sm sm:text-lg text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.title}
               </h1>
-              <p className={`text-[10px] sm:text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              <p className={`text-[10px] sm:text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.subtitle}
               </p>
             </div>

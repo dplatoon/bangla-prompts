@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Sparkles, Copy, Play } from "lucide-react";
+import { ArrowRight, Sparkles, Copy, Play, CheckCircle2 } from "lucide-react";
 import { romanToBangla } from "@/utils/transliteration";
 import { useToast } from "@/hooks/use-toast";
 import { trackTransliterationUsed } from "@/utils/analytics";
@@ -16,13 +16,9 @@ export const Hero = ({ language }: HeroProps) => {
   const [banglaOutput, setBanglaOutput] = useState("");
   const { toast } = useToast();
 
-  // Semantic HTML structure for SEO
-
   const handleTranslitChange = (value: string) => {
     setTranslitInput(value);
     setBanglaOutput(romanToBangla(value));
-    
-    // Track transliteration usage when input reaches meaningful length
     if (value.length === 10) {
       trackTransliterationUsed(value.length);
     }
@@ -36,14 +32,16 @@ export const Hero = ({ language }: HeroProps) => {
       submitBtn: "প্রম্পট জমা দিন",
       tryPrompt: "এখনই চেষ্টা করুন",
       placeholder: "আপনার প্রম্পট লিখুন...",
-      stats: {
-        prompts: "৬০+",
-        promptsLabel: "প্রম্পট টেমপ্লেট",
-        users: "১k+",
-        usersLabel: "সক্রিয় ব্যবহারকারী",
-        copies: "৫k+",
-        copiesLabel: "কপি করা হয়েছে"
-      }
+      translitTitle: "লাইভ ট্রান্সলিটেরেশন",
+      translitPlaceholder: "Roman bangla likhun...",
+      translitOutput: "Roman Bangla টাইপ করুন এবং বাংলায় দেখুন",
+      copied: "কপি হয়েছে!",
+      copiedDesc: "বাংলা টেক্সট কপি হয়েছে",
+      stats: [
+        { value: "৬০+", label: "প্রম্পট টেমপ্লেট" },
+        { value: "১k+", label: "সক্রিয় ব্যবহারকারী" },
+        { value: "৫k+", label: "কপি করা হয়েছে" }
+      ]
     },
     en: {
       headline: "Bangla AI Prompt Generator — For Students, Writers, Businesses",
@@ -52,14 +50,16 @@ export const Hero = ({ language }: HeroProps) => {
       submitBtn: "Submit Prompt",
       tryPrompt: "Try Now",
       placeholder: "Write your prompt...",
-      stats: {
-        prompts: "60+",
-        promptsLabel: "Prompt Templates",
-        users: "1k+",
-        usersLabel: "Active Users",
-        copies: "5k+",
-        copiesLabel: "Times Copied"
-      }
+      translitTitle: "Live Transliteration",
+      translitPlaceholder: "Type in Roman Bangla...",
+      translitOutput: "Type in Roman Bangla to see Bangla output",
+      copied: "Copied!",
+      copiedDesc: "Bangla text copied",
+      stats: [
+        { value: "60+", label: "Prompt Templates" },
+        { value: "1k+", label: "Active Users" },
+        { value: "5k+", label: "Times Copied" }
+      ]
     }
   };
 
@@ -67,36 +67,39 @@ export const Hero = ({ language }: HeroProps) => {
 
   return (
     <section 
-      className="relative overflow-hidden bg-gradient-hero py-12 sm:py-16 lg:py-32"
+      className="relative overflow-hidden bg-gradient-hero py-16 sm:py-20 lg:py-28"
       aria-labelledby="hero-heading"
       itemScope 
       itemType="https://schema.org/WebPageElement"
     >
       {/* Background Pattern */}
       <div className="absolute inset-0 bg-grid-pattern opacity-5" aria-hidden="true"></div>
+      {/* Decorative blurs */}
+      <div className="absolute top-20 -left-32 w-64 h-64 bg-accent/20 rounded-full blur-3xl" aria-hidden="true" />
+      <div className="absolute bottom-10 right-0 w-80 h-80 bg-primary-foreground/5 rounded-full blur-3xl" aria-hidden="true" />
       
       <div className="container relative mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* Left Content */}
-          <header className="space-y-6 sm:space-y-8">
-            <div className="space-y-3 sm:space-y-4">
-              <div className="inline-flex items-center space-x-2 bg-accent-light px-3 sm:px-4 py-1.5 sm:py-2 rounded-full" role="status">
-                <Sparkles className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-accent" aria-hidden="true" />
-                <span className={`text-xs sm:text-sm font-medium text-accent-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+          <header className="space-y-8">
+            <div className="space-y-5">
+              <div className="inline-flex items-center space-x-2 bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 rounded-full border border-primary-foreground/10" role="status">
+                <Sparkles className="w-4 h-4 text-accent" aria-hidden="true" />
+                <span className={`text-sm font-medium text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                   {language === 'bn' ? 'নতুন প্রম্পট যোগ হচ্ছে প্রতিদিন' : 'New prompts added daily'}
                 </span>
               </div>
               
               <h1 
                 id="hero-heading"
-                className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-primary-foreground leading-tight ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                className={`text-3xl sm:text-4xl md:text-5xl lg:text-[3.5rem] xl:text-6xl font-extrabold text-primary-foreground leading-[1.15] tracking-tight ${language === 'bn' ? 'font-bengali' : ''}`}
                 itemProp="headline"
               >
                 {currentText.headline}
               </h1>
               
               <p 
-                className={`text-base sm:text-lg lg:text-xl text-primary-foreground/80 max-w-2xl ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}
+                className={`text-lg lg:text-xl text-primary-foreground/80 max-w-xl leading-relaxed ${language === 'bn' ? 'font-bengali' : ''}`}
                 itemProp="description"
               >
                 {currentText.subhead}
@@ -105,13 +108,13 @@ export const Hero = ({ language }: HeroProps) => {
 
             {/* CTAs */}
             <nav className="flex flex-col sm:flex-row gap-3 sm:gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
-              <Button size="lg" variant="secondary" className={`group text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+              <Button size="lg" className={`group bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold text-base px-8 h-12 rounded-xl shadow-lg ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
                 <Link to="/explore">
                   {currentText.exploreBtn}
-                  <ArrowRight className="ml-2 w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+                  <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Link>
               </Button>
-              <Button size="lg" variant="secondary" className={`bg-accent text-accent-foreground hover:bg-accent/90 text-sm sm:text-base ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
+              <Button size="lg" variant="outline" className={`border-primary-foreground/30 text-primary-foreground hover:bg-primary-foreground/10 font-semibold text-base px-8 h-12 rounded-xl ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
                 <Link to="/become-creator">
                   {currentText.submitBtn}
                 </Link>
@@ -119,44 +122,44 @@ export const Hero = ({ language }: HeroProps) => {
             </nav>
 
             {/* Stats */}
-            <aside className="grid grid-cols-3 gap-4 sm:gap-6 pt-6 sm:pt-8" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
-              {Object.entries(currentText.stats).reduce((acc, [key, value], index) => {
-                if (index % 2 === 0) {
-                  const labelKey = currentText.stats[`${key}Label` as keyof typeof currentText.stats];
-                  acc.push(
-                    <div key={key} className="text-center lg:text-left">
-                      <div className={`text-xl sm:text-2xl lg:text-3xl font-bold text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-                        {value}
-                      </div>
-                      <div className={`text-xs sm:text-sm text-primary-foreground/70 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                        {labelKey}
-                      </div>
-                    </div>
-                  );
-                }
-                return acc;
-              }, [] as JSX.Element[])}
-            </aside>
+            <div className="flex gap-8 sm:gap-12 pt-4" aria-label={language === 'bn' ? 'পরিসংখ্যান' : 'Statistics'}>
+              {currentText.stats.map((stat, index) => (
+                <div key={index} className="text-left">
+                  <div className={`text-2xl sm:text-3xl lg:text-4xl font-bold text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {stat.value}
+                  </div>
+                  <div className={`text-sm text-primary-foreground/60 mt-1 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {stat.label}
+                  </div>
+                </div>
+              ))}
+            </div>
           </header>
 
           {/* Right Content - Live Demo */}
-          <aside className="lg:pl-8 mt-4 lg:mt-0" aria-label={language === 'bn' ? 'ট্রান্সলিটেরেশন টুল' : 'Transliteration Tool'}>
-            <article className="bg-card/95 backdrop-blur-sm rounded-xl sm:rounded-2xl shadow-elegant p-4 sm:p-6 border border-border/20">
-              <div className="space-y-3 sm:space-y-4">
+          <aside className="lg:pl-4 mt-4 lg:mt-0" aria-label={language === 'bn' ? 'ট্রান্সলিটেরেশন টুল' : 'Transliteration Tool'}>
+            <article className="bg-card/95 backdrop-blur-md rounded-2xl shadow-2xl p-6 sm:p-8 border border-border/30 ring-1 ring-primary-foreground/5">
+              <div className="space-y-5">
                 <div className="flex items-center justify-between">
-                  <h2 className={`font-semibold text-card-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {language === 'bn' ? 'লাইভ ট্রান্সলিটেরেশন' : 'Live Transliteration'}
-                  </h2>
-                  <div className="flex space-x-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-primary/10 rounded-lg flex items-center justify-center">
+                      <Sparkles className="w-4 h-4 text-primary" />
+                    </div>
+                    <h2 className={`font-semibold text-lg text-card-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                      {currentText.translitTitle}
+                    </h2>
+                  </div>
+                  <div className="flex space-x-1">
                     <Button 
                       size="sm" 
                       variant="ghost"
+                      className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10"
                       onClick={async () => {
                         if (banglaOutput) {
                           await navigator.clipboard.writeText(banglaOutput);
                           toast({
-                            title: language === 'bn' ? "কপি হয়েছে!" : "Copied!",
-                            description: language === 'bn' ? "বাংলা টেক্সট কপি হয়েছে" : "Bangla text copied"
+                            title: currentText.copied,
+                            description: currentText.copiedDesc
                           });
                         }
                       }}
@@ -166,6 +169,7 @@ export const Hero = ({ language }: HeroProps) => {
                     <Button 
                       size="sm" 
                       variant="ghost"
+                      className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10"
                       onClick={() => {
                         setTranslitInput("ami bangla likhte pari");
                         setBanglaOutput(romanToBangla("ami bangla likhte pari"));
@@ -176,38 +180,49 @@ export const Hero = ({ language }: HeroProps) => {
                   </div>
                 </div>
                 
-                <div className="space-y-3">
+                <div className="space-y-4">
                   <label htmlFor="translit-input" className="sr-only">
                     {language === 'bn' ? 'Roman Bangla ইনপুট' : 'Roman Bangla Input'}
                   </label>
                   <Input
                     id="translit-input"
-                    placeholder={language === 'bn' ? 'Roman bangla likhun...' : 'Type in Roman Bangla...'}
+                    placeholder={currentText.translitPlaceholder}
                     value={translitInput}
                     onChange={(e) => handleTranslitChange(e.target.value)}
-                    className="border-border/50 focus:border-primary"
+                    className="border-border/50 focus:border-primary h-12 rounded-xl text-base"
                     aria-describedby="translit-output"
                   />
                   
                   <div 
                     id="translit-output"
-                    className="bg-muted/50 rounded-lg p-4 min-h-[60px] border border-border/30"
+                    className="bg-muted/50 rounded-xl p-5 min-h-[72px] border border-border/30"
                     role="region"
                     aria-live="polite"
                     aria-label={language === 'bn' ? 'বাংলা আউটপুট' : 'Bangla Output'}
                   >
-                    <p className={`text-sm font-bengali text-bengali ${banglaOutput ? 'text-foreground' : 'text-muted-foreground'}`}>
-                      {banglaOutput || 
-                        (language === 'bn' ? 'Roman Bangla টাইপ করুন এবং বাংলায় দেখুন' : 'Type in Roman Bangla to see Bangla output')
-                      }
+                    <p className={`text-base font-bengali text-bengali ${banglaOutput ? 'text-foreground' : 'text-muted-foreground'}`}>
+                      {banglaOutput || currentText.translitOutput}
                     </p>
                   </div>
                   
-                  <Button className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`} variant="outline" asChild>
+                  <Button className={`w-full h-11 rounded-xl font-semibold ${language === 'bn' ? 'font-bengali' : ''}`} variant="default" asChild>
                     <Link to="/playground">
                       {currentText.tryPrompt}
+                      <ArrowRight className="ml-2 w-4 h-4" />
                     </Link>
                   </Button>
+                </div>
+
+                {/* Trust indicators */}
+                <div className="flex items-center gap-4 pt-2 text-xs text-muted-foreground">
+                  <span className="flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                    {language === 'bn' ? '১০০% ফ্রি' : '100% Free'}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
+                    {language === 'bn' ? 'একাউন্ট লাগবে না' : 'No signup needed'}
+                  </span>
                 </div>
               </div>
             </article>
