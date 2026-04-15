@@ -7,19 +7,19 @@
     },
     {
       "source": "/sitemap.xml",
-      "destination": "https://lazqucrttzggymmzsqvs.supabase.co/functions/v1/sitemap?type=index"
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=index"
     },
     {
       "source": "/sitemap-pages.xml",
-      "destination": "https://lazqucrttzggymmzsqvs.supabase.co/functions/v1/sitemap?type=prompts-pages"
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=prompts-pages"
     },
     {
       "source": "/sitemap-categories.xml",
-      "destination": "https://lazqucrttzggymmzsqvs.supabase.co/functions/v1/sitemap?type=categories"
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=categories"
     },
     {
       "source": "/sitemap-prompts-:page.xml",
-      "destination": "https://lazqucrttzggymmzsqvs.supabase.co/functions/v1/sitemap?type=prompts-:page"
+      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=prompts-:page"
     }
   ],
   "headers": [
