@@ -3,6 +3,8 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import prerender from "@prerenderer/rollup-plugin";
+import { prerenderRoutes } from "./src/config/prerenderRoutes";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -151,6 +153,25 @@ export default defineConfig(({ mode }) => ({
           'vendor-supabase': ['@supabase/supabase-js'],
         },
       },
+      // Prerender static HTML for SEO. Runs only in production builds.
+      // Each route in prerenderRoutes gets its own dist/<route>/index.html
+      // with unique title, canonical, and meta tags baked in by SEOHead.
+      plugins: mode === 'production' ? [
+        prerender({
+          routes: prerenderRoutes,
+          renderer: '@prerenderer/renderer-puppeteer',
+          rendererOptions: {
+            // Wait for SEOHead's useLayoutEffect to write meta tags
+            renderAfterTime: 1500,
+            maxConcurrentRoutes: 4,
+            headless: true,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
+          },
+          server: {
+            port: 0,
+          },
+        }),
+      ] : [],
     },
     minify: 'esbuild',
     chunkSizeWarningLimit: 600,
