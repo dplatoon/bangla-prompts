@@ -164,7 +164,7 @@ export default defineConfig(({ mode }) => ({
             // Wait for SEOHead's useLayoutEffect to write meta tags
             renderAfterTime: 1500,
             maxConcurrentRoutes: 4,
-            headless: 'new',
+            headless: true,
             args: ['--no-sandbox', '--disable-setuid-sandbox'],
           },
           server: {
