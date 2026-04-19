@@ -1,116 +1,59 @@
 
 
-# Master Audit Report: BdPrompt.com
+# Audit Report: What Actually Happened
 
-After reconnecting GitHub and domain, here is a complete audit of connections, pages, security, and SEO.
+I tested the live site as Googlebot would see it. Here is what I found:
 
----
+## The Critical Issue (Confirmed Live)
 
-## Status Summary
+When I fetched `/explore/business`, `/guide`, `/playground`, and `/kobita` with a Googlebot user agent, **every page returned identical static HTML**:
 
-| Area | Status | Issues Found |
-|------|--------|-------------|
-| Publishing | OK | Site is published and public |
-| Database connection | OK | Supabase queries returning data (200s) |
-| Authentication | OK | Google OAuth + email/password working |
-| Security (RLS) | OK | All findings previously addressed |
-| Edge Functions | OK | Deployed and accessible |
+| Tag | What Crawlers See on EVERY Page |
+|---|---|
+| `<title>` | "বাংলা AI প্রম্পট জেনারেটর \| 500+ প্রম্পট \| BdPrompt" (homepage default) |
+| `<link rel="canonical">` | **MISSING** — only an HTML comment exists |
+| `og:url` | `https://bdprompt.com/` (homepage on every page) |
+| `og:title` | Homepage default |
 
----
+## Why This Is Happening
 
-## Issues Found
+`SEOHead.tsx` updates titles/canonicals at runtime using `useLayoutEffect` — but this runs **client-side after JavaScript executes**. The static `index.html` Lovable's CDN serves on first request has only the homepage defaults. Google's initial crawl sees those defaults.
 
-### 1. FAKE AggregateRating STILL in index.html (CRITICAL - SEO Penalty Risk)
+`src/config/prerenderRoutes.ts` exists but **no prerender plugin is wired into `vite.config.ts`** — so the file is dead code.
 
-Lines 123-129 of `index.html` still contain fabricated review data:
-```json
-"aggregateRating": {
-  "ratingValue": "4.9",
-  "ratingCount": "1245"
-}
-```
-This was supposed to be removed in a previous fix but is still present. Google can penalize the site for fake structured data.
+The CSV report you uploaded was correct: 27 duplicate titles, 27 missing canonicals, all pointing to homepage.
 
-**Fix**: Remove the entire `aggregateRating` block (lines 123-129) from the SoftwareApplication JSON-LD.
+## Good News
 
----
+- Page **content** does render for crawlers (Lovable hosting handles SPA HTML for content). I fetched `/explore/business` and saw the prompt cards in markdown.
+- The `pageMetadata.ts` config and `SEOHead` component are well-built — they just need to run at build time, not runtime.
+- Recent fixes (favicon, OG image consistency, removed fake aggregateRating) are intact.
 
-### 2. vercel.json references WRONG Supabase project (CRITICAL)
+## The Fix: Build-Time Prerendering
 
-`vercel.json` sitemap rewrites point to `lazqucrttzggymmzsqvs.supabase.co` -- this is an old/different project. The current project is `oduvbhiggycaasssfdny`.
+Add `vite-plugin-prerender` (or `vite-plugin-ssr`'s static mode) so each route in `prerenderRoutes.ts` gets a real HTML file at build time with its own title, canonical, and meta tags baked in.
 
-However, since Lovable hosting does not use `vercel.json` (it has built-in SPA fallback), this file is inert on Lovable. But if you ever deploy to Vercel, it will break.
+### Plan
 
-**Fix**: Update all sitemap rewrite URLs in `vercel.json` from `lazqucrttzggymmzsqvs` to `oduvbhiggycaasssfdny`, OR delete `vercel.json` entirely if not deploying to Vercel.
+1. **Install** `@prerenderer/rollup-plugin` + `puppeteer` as dev dependencies
+2. **Wire it into `vite.config.ts`** to read from `src/config/prerenderRoutes.ts` (already exists with 39 routes)
+3. **Verify `SEOHead`** writes canonical + title synchronously so prerender captures them (it uses `useLayoutEffect` — should work, but verify with a smoke test)
+4. **Update `index.html`** to mark default title/og as fallback only (already done in recent fix — confirmed)
+5. **Test build output**: After `npm run build`, `dist/explore/business/index.html` should contain unique title + self-canonical
+6. **Keep noscript fallback** but make the `<h1>` more generic since each prerendered page will have its own H1 from React content
 
----
+### What This Fixes (Per CSV Report)
 
-### 3. supabase/config.toml has wrong project_id (MEDIUM)
+| Issue | Before | After |
+|---|---|---|
+| Duplicate titles | 27 pages | 0 |
+| Missing canonicals | 27 pages | 0 |
+| H1 detection | 0 H1s | 1 per page |
+| Crawlable content | 12 words | 200-500 words |
+| `og:url` per page | All homepage | Self-referencing |
 
-`supabase/config.toml` line 1 says `project_id = "lazqucrttzggymmzsqvs"` but the actual Cloud project is `oduvbhiggycaasssfdny`. This is auto-managed by Lovable so it should not be manually edited, but it indicates a mismatch from the reconnection.
+### Out of Scope (for this round)
 
-**Fix**: This file is auto-generated -- no manual action needed. Lovable Cloud manages it.
-
----
-
-### 4. Missing explicit favicon link in index.html (LOW)
-
-There is no `<link rel="icon" ...>` tag in `<head>`. The browser relies on the default `/favicon.ico` fallback. While `favicon.ico` exists, an explicit link is more reliable and allows specifying the PNG version.
-
-**Fix**: Add `<link rel="icon" type="image/png" sizes="64x64" href="/favicon.png">` to `<head>`.
-
----
-
-### 5. Duplicate OG image references (LOW - Consistency)
-
-Line 54 of `index.html` points to a Google Storage URL for og:image:
-```
-https://storage.googleapis.com/gpt-engineer-file-uploads/.../social-1773901277875-OG.webp
-```
-But line 77 (JSON-LD) and the SEOHead component use `https://bdprompt.com/og-image.png`.
-
-These are inconsistent. The Google Storage URL is from the old GPT Engineer era.
-
-**Fix**: Update lines 54 and 66 to use `https://bdprompt.com/og-image.png` for consistency.
-
----
-
-### 6. Old favicon.jpg still present (LOW - Cleanup)
-
-`public/favicon.jpg` is an orphaned file not referenced anywhere.
-
-**Fix**: Delete `public/favicon.jpg`.
-
----
-
-### 7. Security Definer View linter warning (INFO - Already Addressed)
-
-The `prompts_public` view uses SECURITY DEFINER, which triggers a linter warning. This is intentional (implements paywall logic) and already documented as an accepted pattern.
-
-**No action needed.**
-
----
-
-## Pages Audit (All 27+ Routes)
-
-All routes in `App.tsx` are properly configured:
-- Critical pages (/, /prompt/:id, /explore, /auth) are eagerly loaded
-- All other pages use code splitting via `lazy()`
-- SEOHead component handles dynamic meta tags per route
-- `pageMetadata.ts` provides unique bilingual titles/descriptions for all routes
-- Canonical URLs are auto-generated from `useLocation().pathname`
-
-**All pages are functional.** No missing routes or broken imports detected.
-
----
-
-## What Needs Fixing (4 items)
-
-1. Remove fake `aggregateRating` from `index.html` (lines 123-129)
-2. Update `vercel.json` sitemap URLs to use correct project ref (or delete the file)
-3. Add explicit `<link rel="icon">` to `index.html` head
-4. Replace old Google Storage OG image URLs with `https://bdprompt.com/og-image.png` (lines 54, 66)
-
-### Optional Cleanup
-5. Delete orphaned `public/favicon.jpg`
+- Dynamic routes like `/prompt/:slug` — would need DB fetch at build time. Recommend Phase 2.
+- Migrating to Next.js (overkill; prerendering solves 95% of the SEO issue).
 
