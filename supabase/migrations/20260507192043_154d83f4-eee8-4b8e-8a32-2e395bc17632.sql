@@ -1,0 +1,1 @@
+ALTER VIEW public.prompts_public SET (security_invoker = true);
