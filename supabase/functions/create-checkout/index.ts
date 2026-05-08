@@ -45,6 +45,37 @@ serve(async (req) => {
       });
     }
 
+    // Validate redirect URLs against allowlist to prevent open redirect / phishing
+    const ALLOWED_REDIRECT_ORIGINS = [
+      "https://bdprompt.com",
+      "https://www.bdprompt.com",
+      "https://id-preview--8787d62d-ea8a-489d-9b35-936ad6e92151.lovable.app",
+      "https://bangla-prompt.lovable.app",
+      "http://localhost:5173",
+      "http://localhost:3000",
+    ];
+    const isSafeRedirectUrl = (url: unknown): boolean => {
+      if (typeof url !== "string") return false;
+      try {
+        const u = new URL(url);
+        return ALLOWED_REDIRECT_ORIGINS.includes(u.origin);
+      } catch {
+        return false;
+      }
+    };
+    if (successUrl !== undefined && !isSafeRedirectUrl(successUrl)) {
+      return new Response(JSON.stringify({ error: "Invalid success URL" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+    if (cancelUrl !== undefined && !isSafeRedirectUrl(cancelUrl)) {
+      return new Response(JSON.stringify({ error: "Invalid cancel URL" }), {
+        status: 400,
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+      });
+    }
+
     // Use service role client to read prompt data (bypasses admin-only RLS)
     const supabaseAdmin = createClient(supabaseUrl, supabaseServiceKey);
 
