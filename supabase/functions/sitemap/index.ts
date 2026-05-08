@@ -167,7 +167,7 @@ ${entries}
     return new Response('Unknown sitemap type', { status: 400 })
   } catch (err) {
     console.error('Sitemap error:', err)
-    return new Response(JSON.stringify({ error: err instanceof Error ? err.message : 'Unknown error' }), {
+    return new Response(JSON.stringify({ error: 'Failed to generate sitemap' }), {
       status: 500,
       headers: { ...CORS, 'Content-Type': 'application/json' },
     })
