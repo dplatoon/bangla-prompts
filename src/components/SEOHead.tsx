@@ -15,6 +15,7 @@ interface SEOHeadProps {
   modifiedTime?: string;
   breadcrumbs?: Array<{ name: string; url: string }>;
   structuredData?: Record<string, unknown>;
+  noindex?: boolean;
 }
 
 export const SEOHead = ({
@@ -30,6 +31,7 @@ export const SEOHead = ({
   modifiedTime,
   breadcrumbs,
   structuredData,
+  noindex = false,
 }: SEOHeadProps) => {
   const location = useLocation();
   
@@ -69,6 +71,12 @@ export const SEOHead = ({
     updateMeta('description', finalDescription);
     updateMeta('keywords', finalKeywords);
     updateMeta('author', author);
+
+    // Robots directive (allows pages like 404 to opt out of indexing)
+    updateMeta('robots', noindex
+      ? 'noindex, follow'
+      : 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1');
+    updateMeta('googlebot', noindex ? 'noindex, follow' : 'index, follow');
     
     // Open Graph
     updateMeta('og:title', finalTitle, true);
@@ -155,7 +163,7 @@ export const SEOHead = ({
       if (breadcrumbScript) breadcrumbScript.remove();
       if (customScript) customScript.remove();
     };
-  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
+  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData, noindex]);
   
   return null;
 };

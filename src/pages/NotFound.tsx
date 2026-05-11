@@ -24,6 +24,7 @@ const NotFound = () => {
         canonicalUrl="https://bdprompt.com/404"
         ogImage="https://bdprompt.com/og-image.png"
         language="bn"
+        noindex
       />
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center px-4">
