@@ -81,9 +81,9 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               <span className="text-primary-foreground font-bold text-base sm:text-lg">B</span>
             </div>
             <div className="hidden xs:block sm:block">
-              <h1 className={`font-bold text-sm sm:text-lg text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
+              <span className={`block font-bold text-sm sm:text-lg text-primary ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.title}
-              </h1>
+              </span>
               <p className={`text-[10px] sm:text-xs text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
                 {currentText.subtitle}
               </p>
