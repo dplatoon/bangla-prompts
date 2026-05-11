@@ -163,7 +163,7 @@ export const SEOHead = ({
       if (breadcrumbScript) breadcrumbScript.remove();
       if (customScript) customScript.remove();
     };
-  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData]);
+  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData, noindex]);
   
   return null;
 };
