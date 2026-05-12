@@ -1,59 +1,71 @@
+## Plan: SEO Re-audit Fixes (12 May 2026)
 
+The auditor's report is partially stale — three items are already fixed in code and just need a fresh re-fetch to confirm. The remaining items split into "real code work" and "hosting-layer (out of scope for the React app)".
 
-# Audit Report: What Actually Happened
+---
 
-I tested the live site as Googlebot would see it. Here is what I found:
+### Already done (verify with re-deploy, no code change needed)
 
-## The Critical Issue (Confirmed Live)
+1. **`og:locale = bn_BD`** — `index.html` line 54 already sets `bn_BD` as primary and `en_US` as alternate. `SEOHead.tsx` line 87 also writes `bn_BD` for Bangla pages. The auditor's snippet looks like a cached fetch.
+2. **`/` defaults to Bangla metadata** — `index.html` `<title>`, description, and `og:title` are all Bangla; `pageMetadata['/']` returns Bangla as primary.
+3. **Soft-404 noindex (interim)** — `NotFound.tsx` already passes `noindex` to `SEOHead`, which writes `<meta name="robots" content="noindex, follow">` once React mounts. This is the interim mitigation the auditor described.
 
-When I fetched `/explore/business`, `/guide`, `/playground`, and `/kobita` with a Googlebot user agent, **every page returned identical static HTML**:
+No action — just republish so the live HTML reflects current code.
 
-| Tag | What Crawlers See on EVERY Page |
-|---|---|
-| `<title>` | "বাংলা AI প্রম্পট জেনারেটর \| 500+ প্রম্পট \| BdPrompt" (homepage default) |
-| `<link rel="canonical">` | **MISSING** — only an HTML comment exists |
-| `og:url` | `https://bdprompt.com/` (homepage on every page) |
-| `og:title` | Homepage default |
+---
 
-## Why This Is Happening
+### Code fixes to ship
 
-`SEOHead.tsx` updates titles/canonicals at runtime using `useLayoutEffect` — but this runs **client-side after JavaScript executes**. The static `index.html` Lovable's CDN serves on first request has only the homepage defaults. Google's initial crawl sees those defaults.
+**1. Remove duplicate `FAQPage` JSON-LD from `index.html`** (5 min)
 
-`src/config/prerenderRoutes.ts` exists but **no prerender plugin is wired into `vite.config.ts`** — so the file is dead code.
+Two `FAQPage` schemas currently exist:
+- `index.html` lines 122–153 (3 Bangla Q&As, static)
+- `src/components/FAQ.tsx` lines 71–96 (6 Q&As, language-aware, matches visible content)
 
-The CSV report you uploaded was correct: 27 duplicate titles, 27 missing canonicals, all pointing to homepage.
+Keep the inline `FAQ.tsx` one (it matches visible content and is bilingual), delete the static one in `index.html`.
 
-## Good News
+**2. Per-URL sitemap `<lastmod>` from database** (optional, ~1–2 hrs)
 
-- Page **content** does render for crawlers (Lovable hosting handles SPA HTML for content). I fetched `/explore/business` and saw the prompt cards in markdown.
-- The `pageMetadata.ts` config and `SEOHead` component are well-built — they just need to run at build time, not runtime.
-- Recent fixes (favicon, OG image consistency, removed fake aggregateRating) are intact.
+Currently `scripts/generate-sitemap.mjs` writes today's date to every URL. Better: fetch `updated_at` per prompt/category from the database and write per-row `<lastmod>`. Approach:
 
-## The Fix: Build-Time Prerendering
+- Extend `generate-sitemap.mjs` to read `VITE_SUPABASE_URL` + anon key from `.env`
+- Fetch `prompts.updated_at` and `prompt_packs.updated_at` via the public REST API
+- Map each known route in `public/sitemap.xml` to the most recent matching `updated_at` (e.g., `/explore/business` → max `updated_at` of business-category prompts; static pages keep today's date)
+- Write per-URL `<lastmod>` values
 
-Add `vite-plugin-prerender` (or `vite-plugin-ssr`'s static mode) so each route in `prerenderRoutes.ts` gets a real HTML file at build time with its own title, canonical, and meta tags baked in.
+This is the only meaningful SEO improvement still gated on actual work.
 
-### Plan
+---
 
-1. **Install** `@prerenderer/rollup-plugin` + `puppeteer` as dev dependencies
-2. **Wire it into `vite.config.ts`** to read from `src/config/prerenderRoutes.ts` (already exists with 39 routes)
-3. **Verify `SEOHead`** writes canonical + title synchronously so prerender captures them (it uses `useLayoutEffect` — should work, but verify with a smoke test)
-4. **Update `index.html`** to mark default title/og as fallback only (already done in recent fix — confirmed)
-5. **Test build output**: After `npm run build`, `dist/explore/business/index.html` should contain unique title + self-canonical
-6. **Keep noscript fallback** but make the `<h1>` more generic since each prerendered page will have its own H1 from React content
+### Out of scope (Lovable hosting layer — cannot be changed from the codebase)
 
-### What This Fixes (Per CSV Report)
+These items in the audit require infrastructure config that Lovable hosting manages automatically:
 
-| Issue | Before | After |
-|---|---|---|
-| Duplicate titles | 27 pages | 0 |
-| Missing canonicals | 27 pages | 0 |
-| H1 detection | 0 H1s | 1 per page |
-| Crawlable content | 12 words | 200-500 words |
-| `og:url` per page | All homepage | Self-referencing |
+- **True 404 status code for unknown routes** — Lovable's SPA fallback always returns `index.html` with HTTP 200. The interim React-side `noindex` (already shipped) is the best the app can do.
+- **`Cache-Control: stale-while-revalidate` on HTML** — Set by Lovable's CDN, not the app.
+- **Per-URL response headers** — Same.
 
-### Out of Scope (for this round)
+I'll mention these in the closing note so the user knows they're not forgotten, just not fixable from React.
 
-- Dynamic routes like `/prompt/:slug` — would need DB fetch at build time. Recommend Phase 2.
-- Migrating to Next.js (overkill; prerendering solves 95% of the SEO issue).
+---
 
+### Files touched
+
+- `index.html` — delete the static `<script type="application/ld+json">` FAQPage block (lines 122–153)
+- `scripts/generate-sitemap.mjs` — extend to fetch `updated_at` per URL (only if user wants the sitemap improvement now)
+
+### Validation
+
+After publish:
+- `curl -s https://bdprompt.com/ | grep -c '"@type": "FAQPage"'` → should be `0` (the one in `<head>`); FAQ schema only appears once React renders the FAQ section
+- `curl -s https://bdprompt.com/ | grep 'og:locale'` → should show `bn_BD` then `en_US:alternate`
+- `curl -s -o /dev/null -w "%{http_code}" https://bdprompt.com/this-does-not-exist-xyz` — will still be 200 (hosting), but the noindex meta will appear after JS runs
+
+---
+
+### Question before I implement
+
+The duplicate FAQPage removal is unambiguous. The per-URL sitemap is half a day of work and requires a DB read at build time. Want me to:
+
+(A) Just remove the duplicate FAQ schema (5 min, ships the only real outstanding code fix), **or**
+(B) Do both — remove duplicate FAQ schema **and** wire sitemap `<lastmod>` to per-URL `updated_at` from the database?
