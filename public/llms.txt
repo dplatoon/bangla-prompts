@@ -1,0 +1,43 @@
+# BdPrompt
+
+> বাংলাদেশের সবচেয়ে বড় বাংলা AI প্রম্পট হাব — ৫০০+ কিউরেটেড প্রম্পট ChatGPT, Claude, Gemini, Midjourney এবং DALL·E-এর জন্য।
+
+BdPrompt (bdprompt.com) is a Bangla-first AI prompt library for content creators, students, freelancers, and businesses in Bangladesh. Prompts are hand-written in Bangla, organized by category, and copy-ready for major LLM and image-generation tools. Both free and premium ("paid") prompts are available; premium prompts unlock the full template after purchase.
+
+## Pages
+
+- [Home](/): বাংলা AI প্রম্পট জেনারেটর, ৫০০+ প্রম্পট।
+- [Explore](/explore): সব ক্যাটাগরিতে প্রম্পট ব্রাউজ করুন।
+- [Guide](/guide): বাংলা AI প্রম্পট লেখার গাইড ও টিপস।
+- [Playground](/playground): রিয়েল-টাইমে AI প্রম্পট টেস্ট করুন।
+- [Prompt Packs](/packs): কিউরেটেড প্রিমিয়াম প্রম্পট কালেকশন।
+- [Blog](/blog): AI, prompt engineering, এবং বাংলা কন্টেন্ট নিয়ে আর্টিকেল।
+- [Community](/community): BdPrompt কমিউনিটি ও ক্রিয়েটর প্রোগ্রাম।
+- [Become a Creator](/become-creator): প্রম্পট বিক্রি করে আয় করুন।
+- [Resources](/resources): AI টুলস ও রিসোর্স।
+- [Support](/support): সাহায্য কেন্দ্র।
+
+## Categories
+
+- [Business prompts](/explore/business): মার্কেটিং, বিক্রয়, কাস্টমার সার্ভিস।
+- [Education prompts](/explore/education): পড়াশোনা, অ্যাসাইনমেন্ট, গবেষণা।
+- [Content prompts](/explore/content): ব্লগ, সোশ্যাল মিডিয়া, কপিরাইটিং।
+- [Code prompts](/explore/code): প্রোগ্রামিং, বাগ ফিক্স, কোড রিভিউ।
+- [Image prompts](/explore/image): DALL·E, Midjourney, Stable Diffusion।
+- [Marketing prompts](/explore/marketing): SEO, বিজ্ঞাপন, সোশ্যাল মিডিয়া।
+
+## SEO Landing Pages
+
+- [Shikkha (শিক্ষা)](/shikkha): বাংলা শিক্ষামূলক প্রম্পট হাব।
+- [Kobita (কবিতা)](/kobita): বাংলা কবিতা ও সাহিত্য প্রম্পট।
+- [Business (ব্যবসা)](/business): বাংলাদেশি ব্যবসার জন্য প্রম্পট।
+
+## Optional
+
+- [Privacy Policy](/privacy)
+- [Terms of Service](/terms)
+- [Cookie Policy](/cookies)
+- [DMCA](/dmca)
+- [Guidelines](/guidelines)
+- [Sitemap (HTML)](/sitemap)
+- [XML Sitemap](/sitemap.xml)
