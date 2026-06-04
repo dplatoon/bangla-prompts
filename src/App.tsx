@@ -42,6 +42,7 @@ const Prompts = lazy(() => import("./pages/Prompts"));
 const PromptCategory = lazy(() => import("./pages/PromptCategory"));
 const Guide = lazy(() => import("./pages/Guide"));
 const Sitemap = lazy(() => import("./pages/Sitemap"));
+const YoutubeScriptPrompts = lazy(() => import("./pages/YoutubeScriptPrompts"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -113,6 +114,7 @@ const App = () => {
                 <Route path="/prompts/:category" element={<PromptCategory />} />
                 <Route path="/guide" element={<Guide />} />
                 <Route path="/sitemap" element={<Sitemap />} />
+                <Route path="/youtube-script-prompts" element={<YoutubeScriptPrompts />} />
                 {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
