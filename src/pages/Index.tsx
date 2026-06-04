@@ -40,13 +40,13 @@ const Index = () => {
 
   const seoContent = {
     bn: {
-      title: "BdPrompt — #1 AI Prompt Generator in Bengali (বাংলা) | ৫০০+ প্রম্পট",
-      description: "Generate powerful AI prompts in Bengali for students, writers, businesses & creators. 100% free. Made for Bangladesh & global Bengali speakers. ৫০০+ প্রম্পট এক ক্লিকে কপি করুন।",
+      title: "Free Bangla AI Prompt Generator — 500+ Prompts for ChatGPT, Claude & Gemini",
+      description: "বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ৫০০+ ready prompts। ChatGPT, Claude ও Gemini সাপোর্টেড।",
       keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh, প্রম্পট টেমপ্লেট, বাংলা কন্টেন্ট, AI কন্টেন্ট রাইটিং, SSC প্রম্পট, HSC ChatGPT"
     },
     en: {
-      title: "BdPrompt — #1 AI Prompt Generator in Bangla | 500+ Prompts",
-      description: "Generate powerful AI prompts in Bangla for students, writers, businesses & creators. 100% free. Made for Bangladesh & global Bangla speakers.",
+      title: "Free Bangla AI Prompt Generator — 500+ Prompts for ChatGPT, Claude & Gemini",
+      description: "Generate free Bangla AI prompts for ChatGPT, Claude & Gemini. 500+ ready-to-use prompts for students, freelancers & businesses. No signup needed.",
       keywords: "Bangla AI prompts, Bangla prompts, ChatGPT Bangla, AI prompts Bangladesh, prompt templates, Bangla content writing, SSC prompts, HSC ChatGPT"
     }
   };

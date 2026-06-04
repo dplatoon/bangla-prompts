@@ -26,8 +26,8 @@ export const Hero = ({ language }: HeroProps) => {
 
   const text = {
     bn: {
-      headline: "বাংলা AI প্রম্পট জেনারেটর — শিক্ষার্থী, লেখক, ব্যবসায়ীদের জন্য",
-      subhead: "শিক্ষা, কবিতা, ব্যবসা, মার্কেটিং — ৬০+ প্রম্পট দিয়ে ChatGPT, Claude, Gemini ব্যবহার করুন।",
+      headline: "বাংলায় AI Prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে",
+      subhead: "Students, freelancers, writers ও businesses — ChatGPT, Claude এবং Gemini-এর জন্য ৫০০+ ready-to-use বাংলা prompts। এক ক্লিকে কপি করুন, কোনো signup লাগবে না।",
       exploreBtn: "প্রম্পট এক্সপ্লোর করুন",
       submitBtn: "প্রম্পট জমা দিন",
       tryPrompt: "এখনই চেষ্টা করুন",
@@ -44,8 +44,8 @@ export const Hero = ({ language }: HeroProps) => {
       ]
     },
     en: {
-      headline: "Bangla AI Prompt Generator — For Students, Writers, Businesses",
-      subhead: "Education, poetry, business, marketing — use 60+ prompts with ChatGPT, Claude, Gemini.",
+      headline: "Free Bangla AI Prompt Generator — Built for Bangladesh",
+      subhead: "Students, freelancers, writers & businesses — 500+ ready-to-use Bangla prompts for ChatGPT, Claude & Gemini. One-click copy, no signup needed.",
       exploreBtn: "Explore Prompts",
       submitBtn: "Submit Prompt",
       tryPrompt: "Try Now",
