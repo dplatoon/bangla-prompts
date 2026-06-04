@@ -161,7 +161,14 @@ export default function YoutubeScriptPrompts() {
 
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
-      <SEOHead />
+      <SEOHead
+        title="YouTube Script বাংলা AI Prompt | Free ChatGPT Prompts | BdPrompt"
+        description="বাংলাদেশি YouTuber-দের জন্য free বাংলা YouTube script AI prompts — tech, vlog, education, faceless চ্যানেলের জন্য ChatGPT, Claude, Gemini-তে কাজ করে।"
+        keywords="YouTube script prompt, বাংলা YouTube prompt, ChatGPT YouTube script, faceless channel prompt, Bangla YouTuber AI"
+        canonicalUrl="https://bdprompt.com/youtube-script-prompts"
+        ogImage="https://bdprompt.com/og-image.png"
+        ogType="website"
+      />
 
       {/* NAV */}
       <nav className="bg-teal-900 text-white">
