@@ -87,6 +87,7 @@ export const SEOHead = ({
     updateMeta('og:locale', language === 'bn' ? 'bn_BD' : 'en_US', true);
     
     // Twitter
+    updateMeta('twitter:card', 'summary_large_image');
     updateMeta('twitter:title', finalTitle);
     updateMeta('twitter:description', finalDescription);
     updateMeta('twitter:image', ogImage);
