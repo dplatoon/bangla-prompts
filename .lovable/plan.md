@@ -1,71 +1,45 @@
-## Plan: SEO Re-audit Fixes (12 May 2026)
+## New Page: YouTube Script AI Prompts
 
-The auditor's report is partially stale — three items are already fixed in code and just need a fresh re-fetch to confirm. The remaining items split into "real code work" and "hosting-layer (out of scope for the React app)".
+Add a new route `/youtube-script-prompts` with a self-contained, bilingual landing page following the detailed spec provided.
 
----
+### Route & file structure
+- New page: `src/pages/YoutubeScriptPrompts.tsx` (default export, React + hooks + Tailwind only)
+- Register route in `src/App.tsx` with lazy import, alongside existing pages
+- Add SEO metadata entry in `src/config/pageMetadata.ts` for `/youtube-script-prompts` (Bangla + English title/description) so the existing `SEOHead` component picks it up with self-referencing canonical
+- Add the URL to `src/config/prerenderRoutes.ts` and `scripts/generate-sitemap.mjs` so it ships in the sitemap and prerender list
+- Add a footer/nav-friendly internal link from `Header.tsx` (or at least Footer) so the page isn't an orphan
 
-### Already done (verify with re-deploy, no code change needed)
+### Page sections (single component, top-to-bottom)
+1. **Nav bar** — BdPrompt logo + BETA chip, links (Explore, Prompts, Guide, Packs hidden on mobile), amber CTA "বিনামূল্যে শুরু করুন" linking to `/auth`
+2. **Hero** — teal gradient bg, pulsing live badge ("১,৮৯০+ বাংলাদেশি YouTuber ব্যবহার করছেন"), H1 "YouTube Script লেখার বাংলা AI Prompt", subhead, two CTAs (scroll to prompts / link to `/playground`), 4-check trust bar
+3. **Stats bar** — white, 4 stats (6+ prompts, 13K+ copies, 4.9★, 3 AI platforms)
+4. **Filter + prompt grid**
+   - Search input, category pills (All/Tech/Education/Vlog/Faceless/Marketing/News), AI pills (All/ChatGPT/Claude/Gemini) with amber active state
+   - Local `PROMPTS` array of 6 items per spec
+   - 2-col grid (1 col mobile). Each card: category + free/paid badge, EN title + BN subtitle, ★ rating + uses, AI chips, monospace preview box with gradient fade + expand toggle, "📋 Copy Prompt" (teal full-width, flips to "✅ Copied!" 2s) + "Try →" outline linking to `/playground`
+   - Empty state with search icon
+5. **How to use** — teal-50 bg, H2 "কীভাবে ব্যবহার করবেন?", 3 numbered cards (১/২/৩)
+6. **FAQ** — 4 expandable `<details>` items in Bangla; also emit FAQPage JSON-LD inline for rich-result eligibility
+7. **Bottom CTA** — teal-900 bg, H2 with "Viral YouTube Video" highlighted amber, two buttons
+8. **Footer** — teal-950, copyright + "Made with 💚 in Bangladesh"
 
-1. **`og:locale = bn_BD`** — `index.html` line 54 already sets `bn_BD` as primary and `en_US` as alternate. `SEOHead.tsx` line 87 also writes `bn_BD` for Bangla pages. The auditor's snippet looks like a cached fetch.
-2. **`/` defaults to Bangla metadata** — `index.html` `<title>`, description, and `og:title` are all Bangla; `pageMetadata['/']` returns Bangla as primary.
-3. **Soft-404 noindex (interim)** — `NotFound.tsx` already passes `noindex` to `SEOHead`, which writes `<meta name="robots" content="noindex, follow">` once React mounts. This is the interim mitigation the auditor described.
+### State (single component)
+`selectedCategory`, `selectedAI`, `searchQuery`, `copiedId` (2s timeout reset), `expandedPromptId`. Real-time filter combining all three. `navigator.clipboard.writeText` for copy.
 
-No action — just republish so the live HTML reflects current code.
+### Styling decisions
+- Use Tailwind utility classes directly with the literal palette in the spec (teal-900/950, amber-400, gray-50). This page is intentionally a standalone landing-style page outside the shared design-token system, per the spec ("Tailwind CSS only, no custom CSS"). All other site pages remain on semantic tokens.
+- Font: rely on Tailwind defaults (system sans). Bangla text inherits Noto Sans Bengali via global CSS.
+- Fully responsive: 1-col grids on mobile, 2-col on `md:`, nav links hidden under `md:`.
 
----
+### SEO
+- `SEOHead` (existing component) added at top with route-specific title/description from `pageMetadata.ts` → self-referencing canonical handled automatically
+- FAQPage JSON-LD injected via `<script type="application/ld+json">` in the FAQ section
+- Single H1, semantic H2s per section, descriptive alt text where icons are decorative (use `aria-hidden`)
 
-### Code fixes to ship
+### Out of scope
+- No DB integration; prompt data is a local array per spec ("Replace prompt text… after generation")
+- No analytics wiring on copy button beyond local state (spec lists it as a post-generation step)
+- No changes to existing pages beyond adding the route, metadata entry, sitemap entry, and one nav/footer link
 
-**1. Remove duplicate `FAQPage` JSON-LD from `index.html`** (5 min)
-
-Two `FAQPage` schemas currently exist:
-- `index.html` lines 122–153 (3 Bangla Q&As, static)
-- `src/components/FAQ.tsx` lines 71–96 (6 Q&As, language-aware, matches visible content)
-
-Keep the inline `FAQ.tsx` one (it matches visible content and is bilingual), delete the static one in `index.html`.
-
-**2. Per-URL sitemap `<lastmod>` from database** (optional, ~1–2 hrs)
-
-Currently `scripts/generate-sitemap.mjs` writes today's date to every URL. Better: fetch `updated_at` per prompt/category from the database and write per-row `<lastmod>`. Approach:
-
-- Extend `generate-sitemap.mjs` to read `VITE_SUPABASE_URL` + anon key from `.env`
-- Fetch `prompts.updated_at` and `prompt_packs.updated_at` via the public REST API
-- Map each known route in `public/sitemap.xml` to the most recent matching `updated_at` (e.g., `/explore/business` → max `updated_at` of business-category prompts; static pages keep today's date)
-- Write per-URL `<lastmod>` values
-
-This is the only meaningful SEO improvement still gated on actual work.
-
----
-
-### Out of scope (Lovable hosting layer — cannot be changed from the codebase)
-
-These items in the audit require infrastructure config that Lovable hosting manages automatically:
-
-- **True 404 status code for unknown routes** — Lovable's SPA fallback always returns `index.html` with HTTP 200. The interim React-side `noindex` (already shipped) is the best the app can do.
-- **`Cache-Control: stale-while-revalidate` on HTML** — Set by Lovable's CDN, not the app.
-- **Per-URL response headers** — Same.
-
-I'll mention these in the closing note so the user knows they're not forgotten, just not fixable from React.
-
----
-
-### Files touched
-
-- `index.html` — delete the static `<script type="application/ld+json">` FAQPage block (lines 122–153)
-- `scripts/generate-sitemap.mjs` — extend to fetch `updated_at` per URL (only if user wants the sitemap improvement now)
-
-### Validation
-
-After publish:
-- `curl -s https://bdprompt.com/ | grep -c '"@type": "FAQPage"'` → should be `0` (the one in `<head>`); FAQ schema only appears once React renders the FAQ section
-- `curl -s https://bdprompt.com/ | grep 'og:locale'` → should show `bn_BD` then `en_US:alternate`
-- `curl -s -o /dev/null -w "%{http_code}" https://bdprompt.com/this-does-not-exist-xyz` — will still be 200 (hosting), but the noindex meta will appear after JS runs
-
----
-
-### Question before I implement
-
-The duplicate FAQPage removal is unambiguous. The per-URL sitemap is half a day of work and requires a DB read at build time. Want me to:
-
-(A) Just remove the duplicate FAQ schema (5 min, ships the only real outstanding code fix), **or**
-(B) Do both — remove duplicate FAQ schema **and** wire sitemap `<lastmod>` to per-URL `updated_at` from the database?
+### Verification
+- Build passes, route renders, filters + copy + expand all work in preview, mobile viewport check, sitemap includes new URL.
