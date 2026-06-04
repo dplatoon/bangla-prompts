@@ -10,6 +10,7 @@ import { ChatAssistant } from "@/components/ChatAssistant";
 import { SEOHead } from "@/components/SEOHead";
 import { FAQ } from "@/components/FAQ";
 import { PWAStatus } from "@/components/PWAStatus";
+import { PromptCategoryLinks } from "@/components/PromptCategoryLinks";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -68,6 +69,7 @@ const Index = () => {
         <main role="main" id="main-content">
           <Hero language={language} />
           <FeatureGrid language={language} />
+          <PromptCategoryLinks language={language} />
           <MostCopiedSection language={language} />
           <PromptShowcase language={language} />
           <FAQ language={language} />

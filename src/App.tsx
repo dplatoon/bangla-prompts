@@ -43,6 +43,12 @@ const PromptCategory = lazy(() => import("./pages/PromptCategory"));
 const Guide = lazy(() => import("./pages/Guide"));
 const Sitemap = lazy(() => import("./pages/Sitemap"));
 const YoutubeScriptPrompts = lazy(() => import("./pages/YoutubeScriptPrompts"));
+const ImageGenerationPrompts = lazy(() => import("./pages/ImageGenerationPrompts"));
+const FacebookPostPrompts = lazy(() => import("./pages/FacebookPostPrompts"));
+const SSCExamPrompts = lazy(() => import("./pages/SSCExamPrompts"));
+const AdCopyPrompts = lazy(() => import("./pages/AdCopyPrompts"));
+const VideoGenerationPrompts = lazy(() => import("./pages/VideoGenerationPrompts"));
+const FreelancerPrompts = lazy(() => import("./pages/FreelancerPrompts"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -115,6 +121,12 @@ const App = () => {
                 <Route path="/guide" element={<Guide />} />
                 <Route path="/sitemap" element={<Sitemap />} />
                 <Route path="/youtube-script-prompts" element={<YoutubeScriptPrompts />} />
+                <Route path="/image-generation-prompts" element={<ImageGenerationPrompts />} />
+                <Route path="/facebook-post-prompts" element={<FacebookPostPrompts />} />
+                <Route path="/ssc-exam-prompts" element={<SSCExamPrompts />} />
+                <Route path="/ad-copy-prompts" element={<AdCopyPrompts />} />
+                <Route path="/video-generation-prompts" element={<VideoGenerationPrompts />} />
+                <Route path="/freelancer-prompts" element={<FreelancerPrompts />} />
                 {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
