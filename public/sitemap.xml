@@ -17,6 +17,16 @@
       <image:title>BdPrompt - বাংলা AI প্রম্পট হাব</image:title>
     </image:image>
   </url>
+
+  <!-- YouTube Script Prompts landing -->
+  <url>
+    <loc>https://bdprompt.com/youtube-script-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/youtube-script-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/youtube-script-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
   
   <!-- Main Pages -->
   <url>

@@ -36,6 +36,9 @@ export const prerenderRoutes = [
   '/api',
   '/resources',
   '/blog',
+
+  // Topic landing pages
+  '/youtube-script-prompts',
   
   // Community pages
   '/community',

@@ -233,6 +233,13 @@ export const pageMetadata: Record<string, PageMetadata> = {
     description: 'বাংলায় ChatGPT ব্যবহার করে পড়াশোনা, কাজ ও সৃজনশীলতায় এগিয়ে যান। ছাত্র ও পেশাদারদের জন্য সেরা প্রম্পট কপি করুন।',
     descriptionEn: 'Master ChatGPT in Bengali for studies, work, and creativity. Copy the best prompts for students and professionals.',
     keywords: 'ChatGPT বাংলা প্রম্পট, বাংলা AI প্রম্পট, ChatGPT Bangladesh, AI prompts Bengali, ছাত্রদের জন্য ChatGPT'
+  },
+  '/youtube-script-prompts': {
+    title: 'YouTube Script বাংলা AI Prompt | Free ChatGPT Prompts | BdPrompt',
+    titleEn: 'YouTube Script Bangla AI Prompts | Free ChatGPT Prompts | BdPrompt',
+    description: 'বাংলাদেশি YouTuber-দের জন্য free বাংলা YouTube script AI prompts — tech, vlog, education, faceless চ্যানেলের জন্য ChatGPT, Claude, Gemini-তে কাজ করে।',
+    descriptionEn: 'Free Bangla YouTube script AI prompts for Bangladeshi creators — tech, vlog, education, faceless channels. Works with ChatGPT, Claude, Gemini.',
+    keywords: 'YouTube script prompt, বাংলা YouTube prompt, ChatGPT YouTube script, faceless channel prompt, Bangla YouTuber AI'
   }
 };
 
