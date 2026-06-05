@@ -18,11 +18,65 @@
     </image:image>
   </url>
 
-  <!-- YouTube Script Prompts landing -->
+  <!-- Category Landing Pages — High Priority SEO -->
   <url>
     <loc>https://bdprompt.com/youtube-script-prompts</loc>
     <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/youtube-script-prompts" />
     <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/youtube-script-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/image-generation-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/image-generation-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/image-generation-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/video-generation-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/video-generation-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/video-generation-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/facebook-post-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/facebook-post-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/facebook-post-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/ad-copy-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/ad-copy-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/ad-copy-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/ssc-exam-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/ssc-exam-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/ssc-exam-prompts?lang=en" />
+    <lastmod>2026-06-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+  </url>
+
+  <url>
+    <loc>https://bdprompt.com/freelancer-prompts</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/freelancer-prompts" />
+    <xhtml:link rel="alternate" hreflang="en" href="https://bdprompt.com/freelancer-prompts?lang=en" />
     <lastmod>2026-06-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
