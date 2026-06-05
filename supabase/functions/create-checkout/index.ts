@@ -142,6 +142,11 @@ serve(async (req) => {
 
     console.log(`Creating checkout for prompt ${promptId}, price: ${priceInBDT} BDT = ${priceInCents} cents USD`);
 
+    const rawOrigin = req.headers.get("origin") || "";
+    const safeOrigin = ALLOWED_REDIRECT_ORIGINS.includes(rawOrigin)
+      ? rawOrigin
+      : "https://bdprompt.com";
+
     // Add timeout to Stripe API call
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 30000);
@@ -163,8 +168,8 @@ serve(async (req) => {
           },
         ],
         mode: "payment",
-        success_url: successUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=success`,
-        cancel_url: cancelUrl || `${req.headers.get("origin")}/prompt/${promptId}?purchase=cancelled`,
+        success_url: successUrl || `${safeOrigin}/prompt/${promptId}?purchase=success`,
+        cancel_url: cancelUrl || `${safeOrigin}/prompt/${promptId}?purchase=cancelled`,
         metadata: {
           prompt_id: promptId,
           user_id: user.id,
