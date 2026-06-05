@@ -95,6 +95,8 @@ export const PromptCard = ({
               disabled={isPending}
               className="h-8 w-8 p-0 rounded-lg text-muted-foreground hover:text-primary"
               title={isSaved ? currentText.saved : currentText.save}
+              aria-label={isSaved ? currentText.saved : currentText.save}
+              aria-pressed={isSaved}
             >
               {isPending ? (
                 <Loader2 className="w-4 h-4 animate-spin" />
@@ -109,6 +111,8 @@ export const PromptCard = ({
               size="sm"
               onClick={() => setIsLiked(!isLiked)}
               className="h-8 w-8 p-0 rounded-lg text-muted-foreground hover:text-accent"
+              aria-label={language === 'bn' ? 'লাইক' : 'Like'}
+              aria-pressed={isLiked}
             >
               <Heart className={`w-4 h-4 ${isLiked ? 'fill-current text-accent' : ''}`} />
             </Button>
@@ -166,6 +170,7 @@ export const PromptCard = ({
             size="sm"
             className="px-3 h-9 rounded-lg"
             title={currentText.copy}
+            aria-label={`${currentText.copy} — ${displayTitle}`}
           >
             <Copy className="w-4 h-4" />
           </Button>
