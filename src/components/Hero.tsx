@@ -154,6 +154,7 @@ export const Hero = ({ language }: HeroProps) => {
                       size="sm" 
                       variant="ghost"
                       className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10"
+                      aria-label={language === 'bn' ? 'বাংলা আউটপুট কপি করুন' : 'Copy Bangla output'}
                       onClick={async () => {
                         if (banglaOutput) {
                           await navigator.clipboard.writeText(banglaOutput);
@@ -170,6 +171,7 @@ export const Hero = ({ language }: HeroProps) => {
                       size="sm" 
                       variant="ghost"
                       className="h-8 w-8 p-0 rounded-lg hover:bg-primary/10"
+                      aria-label={language === 'bn' ? 'উদাহরণ ট্রান্সলিটেরেশন চালান' : 'Play sample transliteration'}
                       onClick={() => {
                         setTranslitInput("ami bangla likhte pari");
                         setBanglaOutput(romanToBangla("ami bangla likhte pari"));

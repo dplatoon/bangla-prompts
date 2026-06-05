@@ -188,6 +188,7 @@ const Blog = () => {
                 <Link 
                   to={currentPosts[0].slug === '#' ? '#' : `/blog/${currentPosts[0].slug}`} 
                   className={`text-primary font-medium inline-flex items-center gap-1 hover:gap-2 transition-all ${language === 'bn' ? 'font-bengali' : ''}`}
+                  aria-label={`${currentText.readMore}: ${currentPosts[0].title}`}
                 >
                   {currentText.readMore}
                   <ArrowRight className="w-4 h-4" />

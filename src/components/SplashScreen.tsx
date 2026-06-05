@@ -39,7 +39,7 @@ export const SplashScreen = ({ onComplete, minDisplayTime = 700 }: SplashScreenP
         {/* Logo */}
         <img
           src="/favicon.png"
-          alt="BD Prompt Logo"
+          alt="BdPrompt — বাংলা AI প্রম্পট হাব লোগো"
           className="relative w-16 h-16 md:w-20 md:h-20 rounded-2xl shadow-elegant"
         />
       </div>

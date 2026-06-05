@@ -258,6 +258,9 @@ export const Header = ({ language, onLanguageChange }: HeaderProps) => {
               size="sm"
               className="lg:hidden p-1.5 sm:p-2"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
+              aria-label={isMenuOpen ? (language === 'bn' ? 'মেনু বন্ধ করুন' : 'Close menu') : (language === 'bn' ? 'মেনু খুলুন' : 'Open menu')}
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
             >
               {isMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </Button>
