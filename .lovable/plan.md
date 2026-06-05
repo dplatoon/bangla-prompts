@@ -1,30 +1,32 @@
-## Fixes to apply
+## Plan: Verify GSC, Submit Sitemap, Audit & Fix Indexing
 
-Two outstanding items from yesterday's audit, in priority order.
+### 1. Verify the property in Google Search Console
+- Call site-verification `webResource` endpoint with `verificationMethod=META` for `https://bdprompt.com/` (the meta tag is already live in `index.html`).
+- If it returns 400 `failedToFindMetaTag`, confirm deploy is live and retry.
 
-### 1. Connect Google Search Console (resolves the only failing scan finding)
+### 2. Register property + submit sitemap
+- `PUT /webmasters/v3/sites/https%3A%2F%2Fbdprompt.com%2F` to add it as a Search Console property.
+- `PUT /webmasters/v3/sites/https%3A%2F%2Fbdprompt.com%2F/sitemaps/https%3A%2F%2Fbdprompt.com%2Fsitemap.xml` to (re)submit the sitemap.
+- `GET .../sitemaps/...` to confirm Google sees it without errors.
 
-- Trigger the connector picker for `google_search_console` so you can authorize the OAuth flow inline.
-- Once connected, request a META verification token for `https://bdprompt.com/` via the Site Verification API.
-- Add the returned `<meta name="google-site-verification" content="..." />` tag to `index.html` `<head>`.
-- After redeploy, call the verify endpoint, then `PUT` the site to add it as a Search Console property.
-- Submit `https://bdprompt.com/sitemap.xml` through the Search Console API.
-- Mark the `gsc:gsc` SEO finding as fixed.
+### 3. Run a fresh SEO scan
+- Trigger `seo_chat--trigger_scan` (requires your approval) so the scanner re-evaluates after the recent meta/sitemap/hreflang fixes.
+- While waiting, pull current findings with `seo_chat--list_findings` so I know the baseline.
 
-### 2. Remove unsupported `?lang=en` hreflang alternates from `public/sitemap.xml`
+### 4. Fix anything still blocking crawling
+Based on whatever the scan + GSC sitemap report return, address the typical indexing blockers:
+- **Sitemap parse errors** — if GSC flags any URL, fix the offending entry in `public/sitemap.xml`.
+- **Stale `lastmod` dates** — bump to today on URLs whose pages changed recently so Google reprioritizes recrawl.
+- **Canonical / duplicate-title issues** previously flagged in your CSV audit — verify `SEOHead.tsx` is mounted on each route and emits per-route canonical + unique title. If any page is missing it, add it.
+- **`robots.txt`** — sanity check that no important path is disallowed (currently `/auth`, `/account`, `/profile`, `/settings`, `/checkout`, `/admin`, `/private` are blocked, which is correct).
+- **404s in sitemap** — if any listed route returns 404 in the SPA, remove from sitemap.
+- Mark each addressed finding fixed via `seo_chat--update_findings`.
 
-The app stores language client-side (localStorage). `?lang=en` URLs don't actually render English server-side, so Google treats them as duplicates of the Bengali page and may emit hreflang-return errors.
-
-- Strip every `<xhtml:link rel="alternate" hreflang="en" href="...?lang=en" />` line from `public/sitemap.xml`.
-- Keep the `hreflang="bn"` and `hreflang="x-default"` alternates (both point at the real URL).
-- Leave the `xmlns:xhtml` declaration in place — still used by remaining alternates.
-
-### Out of scope (for later)
-
-- Building real `?lang=en` SSR routes (large change; defer until you actually want English pages indexed separately).
-- Migrating `YoutubeScriptPrompts.tsx` from literal Tailwind colors to semantic tokens (cosmetic, page works fine).
+### Out of scope (call out, don't do)
+- Full SSR/prerender migration (Phase 2 of your uploaded plan) — large architectural change; needs its own approval.
+- Adding new internal-link sections / H2 hierarchy (Phase 3) — content work; separate task.
 
 ### Verification
-
-- After GSC connect: confirm the site shows up in `/webmasters/v3/sites` listing and that verify returned 200.
-- After sitemap edit: grep `public/sitemap.xml` for `lang=en` → should return zero matches.
+- GSC `sites` list contains `https://bdprompt.com/`.
+- GSC `sitemaps` GET returns `isPending: false` with 0 errors/warnings.
+- Re-run scan shows previously failing findings as passing.
