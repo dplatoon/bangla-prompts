@@ -11,12 +11,15 @@ serve(async (req) => {
 
   try {
     const url = new URL(req.url);
-    const title = url.searchParams.get("title") || "AI Prompt";
-    const titleBn = url.searchParams.get("titleBn") || "";
-    const category = url.searchParams.get("category") || "";
-    const author = url.searchParams.get("author") || "bdprompt.com";
-    const price = url.searchParams.get("price") || "0";
-    const rating = url.searchParams.get("rating") || "4.5";
+    const title = (url.searchParams.get("title") || "AI Prompt").slice(0, 200);
+    const titleBn = (url.searchParams.get("titleBn") || "").slice(0, 200);
+    const category = (url.searchParams.get("category") || "").slice(0, 100);
+    const author = (url.searchParams.get("author") || "bdprompt.com").slice(0, 100);
+    const rawPrice = (url.searchParams.get("price") || "0").slice(0, 20);
+    const rawRating = (url.searchParams.get("rating") || "4.5").slice(0, 10);
+    // Validate numeric inputs; fall back to safe defaults if not numeric
+    const price = /^\d+(\.\d+)?$/.test(rawPrice) ? rawPrice : "0";
+    const rating = /^\d+(\.\d+)?$/.test(rawRating) ? rawRating : "4.5";
 
     // Display title (prefer Bengali if available)
     const displayTitle = titleBn || title;
