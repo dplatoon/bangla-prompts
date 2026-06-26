@@ -6,10 +6,6 @@
       "destination": "/explore/:cat"
     },
     {
-      "source": "/sitemap.xml",
-      "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=index"
-    },
-    {
       "source": "/sitemap-pages.xml",
       "destination": "https://oduvbhiggycaasssfdny.supabase.co/functions/v1/sitemap?type=prompts-pages"
     },
