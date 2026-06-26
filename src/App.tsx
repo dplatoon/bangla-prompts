@@ -127,6 +127,8 @@ const App = () => {
                 <Route path="/ad-copy-prompts" element={<AdCopyPrompts />} />
                 <Route path="/video-generation-prompts" element={<VideoGenerationPrompts />} />
                 <Route path="/freelancer-prompts" element={<FreelancerPrompts />} />
+                {/* Real prerendered 404 page (served by host for unmatched routes) */}
+                <Route path="/404" element={<NotFound />} />
                 {/* Fallback */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

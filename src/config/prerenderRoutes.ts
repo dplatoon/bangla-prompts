@@ -22,6 +22,16 @@ export const prerenderRoutes = [
   '/prompts/code',
   '/prompts/image',
   '/prompts/marketing',
+
+  // Additional prompt cluster landing pages (audit fix — were falling back to homepage)
+  '/prompts/seo-bangla',
+  '/prompts/freelancing',
+  '/prompts/students',
+  '/prompts/coding',
+  '/prompts/creative-art',
+  '/prompts/youtube-growth',
+  '/prompts/bangla-writing',
+  '/prompts/productivity',
   
   // SEO landing pages
   '/shikkha',
@@ -36,9 +46,16 @@ export const prerenderRoutes = [
   '/api',
   '/resources',
   '/blog',
+  '/blog/chatgpt-bangla-prompt',
 
-  // Topic landing pages
+  // Topic landing pages (audit fix — money pages were missing from prerender)
   '/youtube-script-prompts',
+  '/image-generation-prompts',
+  '/video-generation-prompts',
+  '/facebook-post-prompts',
+  '/ad-copy-prompts',
+  '/ssc-exam-prompts',
+  '/freelancer-prompts',
   
   // Community pages
   '/community',
@@ -56,6 +73,9 @@ export const prerenderRoutes = [
   
   // Auth pages (prerender for faster initial load)
   '/auth',
+
+  // 404 — prerender so the host can serve it with a real 404 status
+  '/404',
 ];
 
 // Dynamic routes that need special handling
