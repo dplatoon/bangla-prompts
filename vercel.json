@@ -1,4 +1,13 @@
 {
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "www.bdprompt.com" }],
+      "destination": "https://bdprompt.com/$1",
+      "permanent": true,
+      "statusCode": 301
+    }
+  ],
   "rewrites": [
     {
       "source": "/explore",
