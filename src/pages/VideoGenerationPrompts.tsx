@@ -399,7 +399,7 @@ export default function VideoGenerationPrompts() {
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
-        title="AI Video Generation Prompt বাংলা | Sora, Runway, Pika, CapCut | BdPrompt"
+        title="AI Video Generation Prompt বাংলা | Sora, Runway | BdPrompt"
         description="Sora, Runway, Pika, CapCut AI, Kling-এর জন্য বাংলা video generation prompt — cinematic shot, product reel, social media, music video, YouTube intro। বিনামূল্যে।"
         keywords="AI video generation prompt, Sora prompt বাংলা, Runway prompt, Pika video prompt, CapCut AI prompt বাংলা, video AI Bangladesh, AI video maker Bangla"
         canonicalUrl="https://bdprompt.com/video-generation-prompts"

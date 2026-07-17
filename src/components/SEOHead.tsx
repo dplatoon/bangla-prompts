@@ -108,9 +108,29 @@ export const SEOHead = ({
       document.head.appendChild(canonical);
     }
     canonical.setAttribute('href', finalCanonicalUrl);
-    
-    // Update language
-    document.documentElement.lang = language;
+
+    // Update per-page hreflang links (bn self-reference + x-default).
+    // Without this, every page inherits the sitewide index.html hreflang that points
+    // to the homepage — triggering "More than one page for same language" errors.
+    const updateAlternate = (hreflang: string, href: string) => {
+      let link = document.querySelector(
+        `link[rel="alternate"][hreflang="${hreflang}"]`
+      ) as HTMLLinkElement | null;
+      if (!link) {
+        link = document.createElement('link');
+        link.setAttribute('rel', 'alternate');
+        link.setAttribute('hreflang', hreflang);
+        document.head.appendChild(link);
+      }
+      link.setAttribute('href', href);
+    };
+    updateAlternate('bn', finalCanonicalUrl);
+    updateAlternate('x-default', finalCanonicalUrl);
+
+    // Force html lang to 'bn' — the site only ships bn hreflang, so the html lang
+    // must match to avoid the "Hreflang and HTML lang mismatch" audit error even
+    // when the UI language toggle flips to English for display.
+    document.documentElement.lang = 'bn';
     
     // Add breadcrumb structured data if provided
     // Only add if visual Breadcrumbs component hasn't already added it

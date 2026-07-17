@@ -544,8 +544,8 @@ export default function AdCopyPrompts() {
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
-        title="Facebook Ad Copy AI Prompt বাংলা | Google Ads, Daraz, WhatsApp | BdPrompt"
-        description="বাংলাদেশি ব্যবসার জন্য AI বিজ্ঞাপন লেখার prompt — Facebook Ads, Google Ads, Daraz listing, YouTube ad, WhatsApp campaign। ChatGPT দিয়ে বাংলায়, সম্পূর্ণ বিনামূল্যে।"
+        title="Facebook Ad Copy AI Prompt বাংলা | Google Ads | BdPrompt"
+        description="বাংলাদেশি ব্যবসার জন্য AI বিজ্ঞাপন লেখার prompt — Facebook Ads, Google Ads, Daraz listing, YouTube ad, WhatsApp campaign। বিনামূল্যে।"
         keywords="Facebook বিজ্ঞাপন লেখার AI prompt, Google Ads prompt বাংলা, Daraz product listing prompt, WhatsApp marketing prompt, ad copy AI Bangladesh, ChatGPT বিজ্ঞাপন"
         canonicalUrl="https://bdprompt.com/ad-copy-prompts"
         ogImage="https://bdprompt.com/og-image.png"
