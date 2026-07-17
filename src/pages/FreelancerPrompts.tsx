@@ -625,8 +625,8 @@ export default function FreelancerPrompts() {
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
-        title="Fiverr Gig ও Upwork Proposal AI Prompt বাংলা | Freelancer AI | BdPrompt"
-        description="বাংলাদেশি freelancers-দের জন্য AI prompt — Fiverr gig, Upwork proposal, CV, cover letter, client message, cold email। ChatGPT দিয়ে বাংলায়। সম্পূর্ণ বিনামূল্যে।"
+        title="Fiverr Gig ও Upwork Proposal AI Prompt | BdPrompt"
+        description="বাংলাদেশি freelancers-দের জন্য AI prompt — Fiverr gig, Upwork proposal, CV, cover letter, client message, cold email। ChatGPT দিয়ে বাংলায়।"
         keywords="Fiverr গিগ লেখার AI prompt, Upwork proposal prompt বাংলা, ফ্রিল্যান্সারদের জন্য AI prompt, CV বানানোর AI prompt, cover letter AI Bangladesh, freelancer ChatGPT"
         canonicalUrl="https://bdprompt.com/freelancer-prompts"
         ogImage="https://bdprompt.com/og-image.png"

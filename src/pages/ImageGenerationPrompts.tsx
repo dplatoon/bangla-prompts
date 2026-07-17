@@ -265,8 +265,8 @@ export default function ImageGenerationPrompts() {
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
-        title="Image Generation AI Prompt বাংলা | Midjourney DALL-E Stable Diffusion | BdPrompt"
-        description="Midjourney, DALL-E 3, Stable Diffusion, Firefly-র জন্য বাংলা AI image generation prompts — portrait, landscape, product photo, BD culture art। সম্পূর্ণ বিনামূল্যে।"
+        title="Image Generation AI Prompt বাংলা | Midjourney | BdPrompt"
+        description="Midjourney, DALL-E 3, Stable Diffusion, Firefly-র জন্য বাংলা AI image prompt — portrait, landscape, product photo, BD culture art। বিনামূল্যে।"
         keywords="Midjourney prompt বাংলা, DALL-E 3 prompt, Stable Diffusion prompt Bangla, AI image prompt Bangladesh, image generate AI prompt বাংলাদেশ, text2pixel, wordtoimage"
         canonicalUrl="https://bdprompt.com/image-generation-prompts"
         ogImage="https://bdprompt.com/og-image.png"

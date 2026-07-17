@@ -444,7 +444,7 @@ export default function FacebookPostPrompts() {
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
-        title="Facebook Viral Post AI Prompt বাংলা | ChatGPT Facebook পোস্ট | BdPrompt"
+        title="Facebook Viral Post AI Prompt বাংলা | BdPrompt"
         description="বাংলাদেশের জন্য Facebook viral post, business post, engagement post-এর AI prompt — ChatGPT, Claude, Gemini দিয়ে বাংলায় লিখুন। ১০০% বিনামূল্যে।"
         keywords="Facebook viral post AI prompt, Facebook বিজ্ঞাপন লেখার AI prompt, ChatGPT Facebook post বাংলা, বাংলা Facebook post prompt, Facebook engagement prompt Bangladesh"
         canonicalUrl="https://bdprompt.com/facebook-post-prompts"
