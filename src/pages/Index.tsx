@@ -41,12 +41,12 @@ const Index = () => {
 
   const seoContent = {
     bn: {
-      title: "Free Bangla AI Prompt Generator — 500+ Prompts for ChatGPT, Claude & Gemini",
+      title: "বাংলা AI প্রম্পট — 500+ ChatGPT ও Claude প্রম্পট | BdPrompt",
       description: "বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ৫০০+ ready prompts। ChatGPT, Claude ও Gemini সাপোর্টেড।",
       keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh, প্রম্পট টেমপ্লেট, বাংলা কন্টেন্ট, AI কন্টেন্ট রাইটিং, SSC প্রম্পট, HSC ChatGPT"
     },
     en: {
-      title: "Free Bangla AI Prompt Generator — 500+ Prompts for ChatGPT, Claude & Gemini",
+      title: "Bangla AI Prompt Generator — 500+ ChatGPT Prompts | BdPrompt",
       description: "Generate free Bangla AI prompts for ChatGPT, Claude & Gemini. 500+ ready-to-use prompts for students, freelancers & businesses. No signup needed.",
       keywords: "Bangla AI prompts, Bangla prompts, ChatGPT Bangla, AI prompts Bangladesh, prompt templates, Bangla content writing, SSC prompts, HSC ChatGPT"
     }
