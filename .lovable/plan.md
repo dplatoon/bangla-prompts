@@ -1,49 +1,43 @@
-# SEO Audit Fix Implementation Plan
+# SEO Fix Pack — what actually still needs doing
 
-The uploaded `bdprompt.zip` audit is accurate and aligned with our stack. Per your choices:
-- **Skip** the 6 brand-new landing pages (HSC, CV, email, blog, ecommerce, university).
-- **Use** the static audit sitemap as the source of truth (filtered to remove the skipped pages).
+I compared the uploaded fix pack (7 files) against the current project. Most of it is already implemented. Two real gaps remain, plus verification.
 
-## What this fixes
+## Already done (no action needed)
 
-- **Fix A (Critical)** — 16 indexable URLs currently serve the homepage with a homepage canonical (self-deindexing). Adding them to the prerender list gives each its own static HTML with its own canonical, title, and meta.
-- **Fix B (Critical)** — Unknown URLs return HTTP 200 + homepage content (soft-404). Wiring a real prerendered `/404` page through to a `dist/404.html` that the host serves with HTTP 404 kills the soft-404.
-- **Fix C (High/Medium)** — Already correct in code (`og:locale` = `bn_BD`, hreflang `bn` + `x-default`). Deploying the audit's static `sitemap.xml` aligns the route list and uniform hreflang.
+- **Sitemap with prompt pages** (pack 02): `scripts/generate-sitemap.mjs` already fetches all published prompts from the backend and appends `/prompt/{slug}` entries with real `lastmod`, wired into `prebuild`.
+- **og:locale** (pack 03): `index.html` already sets `bn_BD` with an `en_US` alternate, and `SEOHead` keeps it correct per page.
+- **hreflang** (pack 03): `bn` + `x-default` self-references per page — the correct choice, since EN is a client-side toggle with no separate URLs.
+- **JSON-LD** (pack 05): Organization / WebSite / SearchAction in `index.html`, FAQPage from the FAQ component, breadcrumbs via `SEOHead`.
+- **robots.txt** (pack 06): matches the reference and covers more bots.
+- **Custom 404** (pack 07): `/404` is prerendered and `scripts/post-build.mjs` copies it to `dist/404.html`; `NotFound` is `noindex`.
 
-## Changes
+## Gap 1 — `/prompt/*` pages are not prerendered (the P0 issue)
 
-### 1. `src/config/prerenderRoutes.ts` — add 17 missing routes
-Add: `/image-generation-prompts`, `/video-generation-prompts`, `/facebook-post-prompts`, `/ad-copy-prompts`, `/ssc-exam-prompts`, `/freelancer-prompts`, `/prompts/seo-bangla`, `/prompts/freelancing`, `/prompts/students`, `/prompts/coding`, `/prompts/creative-art`, `/prompts/youtube-growth`, `/prompts/bangla-writing`, `/prompts/productivity`, `/blog/chatgpt-bangla-prompt`, `/404`.
+`src/config/prerenderRoutes.ts` is a static list of marketing routes only. Prompt detail pages are absent, so crawlers get the homepage shell with the homepage canonical.
 
-### 2. `src/App.tsx` — register `/404` route
-Add `<Route path="/404" element={<NotFound />} />` so the prerender step produces `dist/404/index.html` with the correct `noindex` head.
+Fix: make the prerender route list dynamic at build time.
 
-### 3. `scripts/post-build.mjs` (new) + `package.json`
-After `vite build`, copy `dist/404/index.html` → `dist/404.html`. Vercel auto-serves a root `404.html` with HTTP 404 for unmatched paths. Wire via `"postbuild"` script.
+- Add a small build script that calls the same public prompts source the sitemap uses and writes the slug list to a generated JSON file.
+- Have `vite.config.ts` read that file and concat `/prompt/{slug}` onto `prerenderRoutes` before handing them to the prerender plugin.
+- If the fetch fails, fall back to the static list only, so the build never breaks.
+- Build-time cost: with ~64 prompts at `renderAfterTime: 1500` and 4 concurrent, roughly a minute extra. If the catalog grows past a few hundred, we lower the wait for prompt routes.
 
-### 4. `vercel.json`
-Remove the `/sitemap.xml` → Supabase Edge Function rewrite so our new static `public/sitemap.xml` is served directly. Keep `/sitemap-pages.xml`, `/sitemap-categories.xml`, `/sitemap-prompts-:page.xml` rewrites (those still proxy useful per-prompt subsitemaps).
+`PromptDetail` already emits a correct self-canonical, unique title/description and prompt structured data, so prerendering alone bakes all of that into static HTML.
 
-### 5. `public/sitemap.xml` — replace with audit's static sitemap
-Deploy the 46-URL static sitemap (audit's 52 minus the 6 skipped new pages). The existing `scripts/generate-sitemap.mjs` already refreshes `<lastmod>` and appends one `<url>` per published prompt — both behaviors are preserved.
+## Gap 2 — duplicate footer block and conflicting copyright year
 
-## Technical Notes
+The static fallback block in `index.html` carries `© 2026 BD Prompt.` plus a duplicated Bangla marketing paragraph, while `src/components/Footer.tsx` renders `© 2025 / © ২০২৫ BD Prompt by Start BD`. Both end up in the served HTML.
 
-- `og:locale` and `hreflang` are **already correct** in `index.html` and `SEOHead.tsx` — no change needed for Fix C beyond the new sitemap.
-- The `/prompts/<slug>` cluster pages all resolve to the existing `PromptCategory.tsx` dynamic route — prerender will render the static shell for each slug.
-- 6 keyword-gap landing pages from the audit are **deliberately not added** (per your decision); they can be built later without re-touching this scaffolding.
-- Audit's Medium-priority `CollectionPage`/`ItemList` schema (Fix D) and blog cluster build-out (M2) are **out of scope** for this pass.
+Fix:
+- Trim the static fallback block to a short JavaScript-required notice plus the nav links crawlers benefit from; drop the duplicated marketing paragraph and the hardcoded `© 2026` line.
+- Make the React footer year dynamic in both the bn and en strings so it never goes stale.
 
-## Acceptance checks (after publish)
+## Not doing
 
-```bash
-# A) Each money page has its own canonical (no longer the homepage)
-for r in image-generation-prompts video-generation-prompts facebook-post-prompts \
-         ad-copy-prompts ssc-exam-prompts freelancer-prompts blog/chatgpt-bangla-prompt; do
-  echo "== /$r =="
-  curl -s "https://bdprompt.com/$r" | grep -o 'rel="canonical" href="[^"]*"' | head -1
-done
+- **Repo access (P2-2)** — a GitHub setting outside this project.
+- **Slug standardization** (`-bn` suffix vs plain) — would change live URLs and break indexed links; only worth doing with redirects, as a separate decision.
+- **Product/AggregateRating schema** — the displayed ratings aren't verified data.
 
-# B) Unknown URLs return HTTP 404
-curl -sI https://bdprompt.com/this-does-not-exist-xyz | grep -i "^HTTP"
-```
+## Verification after publish
+
+Curl two `/prompt/<slug>` URLs and confirm each `<title>` and canonical self-references, and confirm an unknown URL returns HTTP 404.
