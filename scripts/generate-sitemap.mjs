@@ -1,6 +1,7 @@
 // Regenerates public/sitemap.xml at build time.
-// - Refreshes <lastmod> on static URLs.
-// - Appends one <url> per published prompt (/prompt/{slug}) fetched from Supabase.
+// - Appends one <url> per published prompt (/prompt/{slug}) fetched from Supabase,
+//   with a page-specific <lastmod> taken from the row's updated_at/created_at.
+// - Never stamps a build-time date onto static URLs (that is not a real lastmod).
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
@@ -11,8 +12,6 @@ if (!existsSync(sitemapPath)) {
   console.warn('[sitemap] public/sitemap.xml not found, skipping');
   process.exit(0);
 }
-
-const today = new Date().toISOString().split('T')[0];
 
 // Read .env to pick up VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY
 function loadEnv() {
@@ -49,20 +48,17 @@ async function fetchPrompts() {
     const rows = await res.json();
     return rows
       .filter((r) => r.slug)
-      .map((r) => ({
-        slug: r.slug,
-        lastmod: (r.updated_at || r.created_at || today).split('T')[0],
-      }));
+      .map((r) => {
+        const stamp = r.updated_at || r.created_at;
+        return { slug: r.slug, lastmod: stamp ? String(stamp).split('T')[0] : null };
+      });
   } catch (err) {
     console.warn(`[sitemap] fetch error: ${err.message}`);
     return [];
   }
 }
 
-let xml = readFileSync(sitemapPath, 'utf8').replace(
-  /<lastmod>\d{4}-\d{2}-\d{2}<\/lastmod>/g,
-  `<lastmod>${today}</lastmod>`
-);
+let xml = readFileSync(sitemapPath, 'utf8');
 
 // Strip any previously-generated dynamic block, then re-append a fresh one.
 xml = xml.replace(/\s*<!-- BEGIN dynamic prompts -->[\s\S]*?<!-- END dynamic prompts -->/g, '');
@@ -70,9 +66,17 @@ xml = xml.replace(/\s*<!-- BEGIN dynamic prompts -->[\s\S]*?<!-- END dynamic pro
 const prompts = await fetchPrompts();
 if (prompts.length > 0) {
   const block = prompts
-    .map(
-      (p) =>
-        `  <url>\n    <loc>https://bdprompt.com/prompt/${p.slug}</loc>\n    <lastmod>${p.lastmod}</lastmod>\n    <changefreq>weekly</changefreq>\n    <priority>0.7</priority>\n  </url>`
+    .map((p) =>
+      [
+        `  <url>`,
+        `    <loc>https://bdprompt.com/prompt/${p.slug}</loc>`,
+        p.lastmod ? `    <lastmod>${p.lastmod}</lastmod>` : null,
+        `    <changefreq>weekly</changefreq>`,
+        `    <priority>0.7</priority>`,
+        `  </url>`,
+      ]
+        .filter(Boolean)
+        .join('\n')
     )
     .join('\n');
   const dynamic = `\n  <!-- BEGIN dynamic prompts -->\n${block}\n  <!-- END dynamic prompts -->\n`;
@@ -80,4 +84,4 @@ if (prompts.length > 0) {
 }
 
 writeFileSync(sitemapPath, xml);
-console.log(`[sitemap] updated lastmod=${today}, dynamic prompts=${prompts.length}`);
+console.log(`[sitemap] dynamic prompts=${prompts.length}`);
