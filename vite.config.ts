@@ -3,8 +3,25 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 import { VitePWA } from "vite-plugin-pwa";
+import { existsSync, readFileSync } from "node:fs";
 import prerender from "@prerenderer/rollup-plugin";
 import { prerenderRoutes } from "./src/config/prerenderRoutes";
+
+// Dynamic /prompt/{slug} routes, generated at build time by
+// scripts/fetch-prompt-routes.mjs (prebuild). Falls back to the static
+// list only if the file is missing or unreadable, so builds never break.
+function loadPromptRoutes(): string[] {
+  const file = path.resolve(__dirname, "./src/config/generated-prompt-routes.json");
+  try {
+    if (!existsSync(file)) return [];
+    const parsed = JSON.parse(readFileSync(file, "utf8"));
+    return Array.isArray(parsed) ? parsed.filter((r) => typeof r === "string") : [];
+  } catch {
+    return [];
+  }
+}
+
+const allPrerenderRoutes = [...prerenderRoutes, ...loadPromptRoutes()];
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => ({
@@ -158,7 +175,7 @@ export default defineConfig(({ mode }) => ({
       // with unique title, canonical, and meta tags baked in by SEOHead.
       plugins: mode === 'production' ? [
         prerender({
-          routes: prerenderRoutes,
+          routes: allPrerenderRoutes,
           renderer: '@prerenderer/renderer-puppeteer',
           rendererOptions: {
             // Wait for SEOHead's useLayoutEffect to write meta tags
