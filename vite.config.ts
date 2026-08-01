@@ -11,7 +11,7 @@ import { prerenderRoutes } from "./src/config/prerenderRoutes";
 // scripts/fetch-prompt-routes.mjs (prebuild). Falls back to the static
 // list only if the file is missing or unreadable, so builds never break.
 function loadPromptRoutes(): string[] {
-  const file = path.resolve(__dirname, "./src/config/generated-prompt-routes.json");
+  const file = path.resolve(process.cwd(), "src/config/generated-prompt-routes.json");
   try {
     if (!existsSync(file)) return [];
     const parsed = JSON.parse(readFileSync(file, "utf8"));
