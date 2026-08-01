@@ -8,6 +8,8 @@ interface FooterProps {
 }
 
 export const Footer = ({ language }: FooterProps) => {
+  const year = new Date().getFullYear();
+  const yearBn = String(year).replace(/\d/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)]);
   const text = {
     bn: {
       tagline: "বাংলা AI প্রম্পট হাব — আপনার সৃজনশীলতার সঙ্গী",
