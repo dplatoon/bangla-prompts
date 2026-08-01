@@ -49,7 +49,7 @@ export const Footer = ({ language }: FooterProps) => {
         button: "সাবস্ক্রাইব করুন"
       },
       social: "সোশ্যাল মিডিয়া",
-      copyright: "© ২০২৫ BD Prompt by Start BD। সকল অধিকার সংরক্ষিত।",
+      copyright: `© ${yearBn} BD Prompt by Start BD। সকল অধিকার সংরক্ষিত।`,
       madeWith: "💚 দিয়ে বাংলাদেশে তৈরি"
     },
     en: {
@@ -90,7 +90,7 @@ export const Footer = ({ language }: FooterProps) => {
         button: "Subscribe"
       },
       social: "Social Media",
-      copyright: "© 2025 BD Prompt by Start BD. All rights reserved.",
+      copyright: `© ${year} BD Prompt by Start BD. All rights reserved.`,
       madeWith: "Made with 💚 in Bangladesh"
     }
   };
