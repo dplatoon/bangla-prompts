@@ -181,8 +181,14 @@ export const PromptCard = ({
             className="px-3 h-9 rounded-lg"
             asChild
           >
-            <Link to={`/prompt/${navigationSlug}`}>
-              <ExternalLink className="w-4 h-4" />
+            <Link
+              to={`/prompt/${navigationSlug}`}
+              aria-label={`${language === 'bn' ? 'প্রম্পট বিস্তারিত দেখুন' : 'View prompt details'} — ${displayTitle}`}
+            >
+              <ExternalLink className="w-4 h-4" aria-hidden="true" />
+              <span className="sr-only">
+                {language === 'bn' ? 'প্রম্পট বিস্তারিত দেখুন' : 'View prompt details'}
+              </span>
             </Link>
           </Button>
         </div>
