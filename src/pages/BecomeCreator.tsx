@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
@@ -29,7 +30,7 @@ const BecomeCreator = () => {
       subtitle: "আপনার প্রম্পট শেয়ার করুন এবং আয় করুন",
       benefits: "সুবিধাসমূহ",
       benefit1: "প্রতিটি বিক্রয়ে ৭০% কমিশন",
-      benefit2: "১০,০০০+ সক্রিয় ব্যবহারকারীদের কাছে পৌঁছান",
+      benefit2: "BdPrompt-এর অডিয়েন্সের কাছে পৌঁছান",
       benefit3: "ফ্রি মার্কেটিং ও প্রমোশন",
       benefit4: "মাসিক পেমেন্ট (bKash/Nagad)",
       howItWorks: "কিভাবে কাজ করে",
