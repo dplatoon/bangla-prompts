@@ -47,7 +47,7 @@ const Product = () => {
           <header className="text-center mb-16">
             <Badge variant="secondary" className="mb-4">bdprompt.com</Badge>
             <h1 className={`text-4xl lg:text-5xl font-bold mb-4 ${language === 'bn' ? 'font-bengali' : ''}`}>
-              {language === 'bn' ? 'বাংলাদেশের #১ AI প্রম্পট প্ল্যাটফর্ম' : "Bangladesh's #1 AI Prompt Platform"}
+              {language === 'bn' ? 'বাংলাদেশের জন্য তৈরি AI প্রম্পট প্ল্যাটফর্ম' : "AI Prompt Platform Built for Bangladesh"}
             </h1>
             <p className={`text-xl text-muted-foreground max-w-2xl mx-auto mb-8 ${language === 'bn' ? 'font-bengali' : ''}`}>
               {language === 'bn' ? 'বাংলায় AI প্রম্পট খুঁজুন, ব্যবহার করুন এবং তৈরি করুন' : 'Find, use, and create AI prompts in Bengali'}
