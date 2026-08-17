@@ -53,7 +53,7 @@ const PromptPacks = () => {
         originalPrice: 3999,
         prompts: 500,
         icon: Crown,
-        features: ["৫০০+ প্রম্পট", "টিম অ্যাক্সেস", "কাস্টম প্রম্পট রিকোয়েস্ট", "API অ্যাক্সেস", "ডেডিকেটেড সাপোর্ট", "হোয়াইট লেবেল অপশন"],
+        features: ["৬০+ প্রম্পট", "টিম অ্যাক্সেস", "কাস্টম প্রম্পট রিকোয়েস্ট", "API অ্যাক্সেস", "ডেডিকেটেড সাপোর্ট", "হোয়াইট লেবেল অপশন"],
         popular: false
       }
     ],
@@ -88,7 +88,7 @@ const PromptPacks = () => {
         originalPrice: 3999,
         prompts: 500,
         icon: Crown,
-        features: ["500+ Prompts", "Team Access", "Custom Prompt Requests", "API Access", "Dedicated Support", "White Label Option"],
+        features: ["60+ Prompts", "Team Access", "Custom Prompt Requests", "API Access", "Dedicated Support", "White Label Option"],
         popular: false
       }
     ]

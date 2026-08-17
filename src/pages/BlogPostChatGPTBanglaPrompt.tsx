@@ -93,7 +93,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
         }
       ],
       
-      ctaTitle: "আরও ৫০০+ বাংলা প্রম্পট পেতে",
+      ctaTitle: "আরও ৬০+ বাংলা প্রম্পট পেতে",
       ctaDesc: "BD Prompt-এ রেজিস্টার করুন এবং বিনামূল্যে বাংলা AI প্রম্পট ব্যবহার করুন।",
       ctaButton: "প্রম্পট এক্সপ্লোর করুন",
       
@@ -149,7 +149,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
         }
       ],
       
-      ctaTitle: "Get 500+ More Bengali Prompts",
+      ctaTitle: "Get 60+ More Bengali Prompts",
       ctaDesc: "Register on BD Prompt and use Bengali AI prompts for free.",
       ctaButton: "Explore Prompts",
       

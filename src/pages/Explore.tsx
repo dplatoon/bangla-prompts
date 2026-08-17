@@ -24,8 +24,8 @@ const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') =>
     "@type": "ItemList",
     "name": language === 'bn' ? "বাংলা AI প্রম্পট তালিকা" : "Bangla AI Prompts Collection",
     "description": language === 'bn' 
-      ? "bdprompt.com-এ ৫০০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন"
-      : "Explore 500+ Bangla AI prompts on bdprompt.com",
+      ? "bdprompt.com-এ ৬০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন"
+      : "Explore 60+ Bangla AI prompts on bdprompt.com",
     "numberOfItems": prompts.length,
     "itemListElement": prompts.slice(0, 50).map((prompt, index) => ({
       "@type": "ListItem",
@@ -342,7 +342,7 @@ const Explore = () => {
   const text = {
     bn: {
       title: "প্রম্পট এক্সপ্লোর করুন",
-      subtitle: "৫০০+ বাংলা AI প্রম্পট থেকে আপনার পছন্দের প্রম্পট খুঁজুন",
+      subtitle: "৬০+ বাংলা AI প্রম্পট থেকে আপনার পছন্দের প্রম্পট খুঁজুন",
       searchPlaceholder: "প্রম্পট খুঁজুন...",
       allCategories: "সব বিভাগ",
       sortBy: "সাজান",
@@ -356,7 +356,7 @@ const Explore = () => {
     },
     en: {
       title: "Explore Prompts",
-      subtitle: "Find your perfect prompt from 500+ Bangla AI prompts",
+      subtitle: "Find your perfect prompt from 60+ Bangla AI prompts",
       searchPlaceholder: "Search prompts...",
       allCategories: "All Categories",
       sortBy: "Sort by",
@@ -391,16 +391,16 @@ const Explore = () => {
       ? `${currentCategoryLabelBn || currentCategoryLabel} প্রম্পট | বাংলা AI প্রম্পট | BdPrompt`
       : `${currentCategoryLabel} Prompts | Bangla AI Prompts | BdPrompt`
     : language === 'bn' 
-      ? "প্রম্পট এক্সপ্লোর করুন | 500+ বাংলা AI প্রম্পট | BdPrompt" 
-      : "Explore Prompts | 500+ Bangla AI Prompts | BdPrompt";
+      ? "প্রম্পট এক্সপ্লোর করুন | 60+ বাংলা AI প্রম্পট | BdPrompt" 
+      : "Explore Prompts | 60+ Bangla AI Prompts | BdPrompt";
 
   const seoDescription = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn'
       ? `${currentCategoryLabelBn || currentCategoryLabel} ক্যাটাগরির বাংলা AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য।`
       : `Explore ${currentCategoryLabel} Bangla AI prompts. For ChatGPT, Claude, Gemini.`
     : language === 'bn' 
-      ? "বিভিন্ন ক্যাটাগরিতে 500+ বাংলা AI প্রম্পট ব্রাউজ করুন। ChatGPT, Claude, Gemini-এর জন্য।" 
-      : "Browse 500+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.";
+      ? "বিভিন্ন ক্যাটাগরিতে 60+ বাংলা AI প্রম্পট ব্রাউজ করুন। ChatGPT, Claude, Gemini-এর জন্য।" 
+      : "Browse 60+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.";
 
   // Build breadcrumb items dynamically based on current category
   const breadcrumbItems = useMemo(() => {

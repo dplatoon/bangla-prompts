@@ -151,7 +151,7 @@ const Guide = () => {
         }
       ],
       ctaTitle: "এখনই শুরু করুন",
-      ctaDescription: "৫০০+ রেডি-টু-ইউজ প্রম্পট কপি করুন এক ক্লিকে",
+      ctaDescription: "৬০+ রেডি-টু-ইউজ প্রম্পট কপি করুন এক ক্লিকে",
       ctaButton: "প্রম্পট এক্সপ্লোর করুন",
       ctaSecondary: "প্লেগ্রাউন্ডে যান",
       tipsTitle: "প্রো টিপস",
@@ -246,7 +246,7 @@ const Guide = () => {
         }
       ],
       ctaTitle: "Get Started Now",
-      ctaDescription: "Copy 500+ ready-to-use prompts with one click",
+      ctaDescription: "Copy 60+ ready-to-use prompts with one click",
       ctaButton: "Explore Prompts",
       ctaSecondary: "Go to Playground",
       tipsTitle: "Pro Tips",
@@ -337,8 +337,8 @@ const Guide = () => {
           ? "প্রম্পট ইঞ্জিনিয়ারিং গাইড ২০২৬ | ChatGPT বাংলা টিউটোরিয়াল | BdPrompt"
           : "Prompt Engineering Guide 2026 | ChatGPT Bengali Tutorial | BdPrompt"}
         description={language === 'bn'
-          ? "ChatGPT, Claude, Gemini-এর জন্য বাংলায় সম্পূর্ণ প্রম্পট ইঞ্জিনিয়ারিং গাইড। CORE মেথড শিখুন এবং ৫০০+ রেডি প্রম্পট ব্যবহার করুন।"
-          : "Complete prompt engineering guide in Bengali for ChatGPT, Claude, Gemini. Learn CORE Method and use 500+ ready prompts."}
+          ? "ChatGPT, Claude, Gemini-এর জন্য বাংলায় সম্পূর্ণ প্রম্পট ইঞ্জিনিয়ারিং গাইড। CORE মেথড শিখুন এবং ৬০+ রেডি প্রম্পট ব্যবহার করুন।"
+          : "Complete prompt engineering guide in Bengali for ChatGPT, Claude, Gemini. Learn CORE Method and use 60+ ready prompts."}
         keywords={language === 'bn'
           ? "প্রম্পট ইঞ্জিনিয়ারিং, ChatGPT বাংলা, AI গাইড, CORE মেথড, বাংলা AI প্রম্পট, Claude বাংলা"
           : "prompt engineering, ChatGPT Bengali, AI guide, CORE Method, Bangla AI prompts, Claude Bengali"}
