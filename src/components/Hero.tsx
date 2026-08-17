@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { ArrowRight, Sparkles, Copy, Play, CheckCircle2 } from "lucide-react";
+import { ArrowRight, Sparkles, Copy, Play, CheckCircle2, Search } from "lucide-react";
 import { romanToBangla } from "@/utils/transliteration";
 import { useToast } from "@/hooks/use-toast";
 import { trackTransliterationUsed } from "@/utils/analytics";
+import { promptCountLabel, promptCountLabelBn, categoryCountLabel, categoryCountLabelBn } from "@/config/siteStats";
 
 interface HeroProps {
   language: 'bn' | 'en';
@@ -14,7 +15,15 @@ interface HeroProps {
 export const Hero = ({ language }: HeroProps) => {
   const [translitInput, setTranslitInput] = useState("");
   const [banglaOutput, setBanglaOutput] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const { toast } = useToast();
+  const navigate = useNavigate();
+
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const q = searchQuery.trim();
+    navigate(q ? `/explore?q=${encodeURIComponent(q)}` : "/explore");
+  };
 
   const handleTranslitChange = (value: string) => {
     setTranslitInput(value);
@@ -27,9 +36,19 @@ export const Hero = ({ language }: HeroProps) => {
   const text = {
     bn: {
       headline: "বাংলায় AI Prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে",
-      subhead: "Students, freelancers, writers ও businesses — ChatGPT, Claude এবং Gemini-এর জন্য ৫০০+ ready-to-use বাংলা prompts। এক ক্লিকে কপি করুন, কোনো signup লাগবে না।",
+      subhead: `Students, freelancers, writers ও businesses — ChatGPT, Claude এবং Gemini-এর জন্য ${promptCountLabelBn} ready-to-use বাংলা prompts, প্রায় সবগুলোই ফ্রি। সাইনআপ ছাড়াই এক ক্লিকে কপি করুন।`,
       exploreBtn: "প্রম্পট এক্সপ্লোর করুন",
-      submitBtn: "প্রম্পট জমা দিন",
+      playgroundBtn: "প্লেগ্রাউন্ডে চেষ্টা করুন",
+      searchPlaceholder: "প্রম্পট খুঁজুন...",
+      searchLabel: "প্রম্পট সার্চ",
+      searchBtn: "খুঁজুন",
+      audienceLabel: "আপনি কে?",
+      audiences: [
+        { label: "শিক্ষার্থী", to: "/shikkha" },
+        { label: "ফ্রিল্যান্সার", to: "/freelancer-prompts" },
+        { label: "ব্যবসা", to: "/business" },
+        { label: "কন্টেন্ট ক্রিয়েটর", to: "/explore/content" },
+      ],
       tryPrompt: "এখনই চেষ্টা করুন",
       placeholder: "আপনার প্রম্পট লিখুন...",
       translitTitle: "লাইভ ট্রান্সলিটেরেশন",
@@ -37,17 +56,29 @@ export const Hero = ({ language }: HeroProps) => {
       translitOutput: "Roman Bangla টাইপ করুন এবং বাংলায় দেখুন",
       copied: "কপি হয়েছে!",
       copiedDesc: "বাংলা টেক্সট কপি হয়েছে",
+      freeNote: "বেশিরভাগ প্রম্পট ফ্রি",
+      signupNote: "একাউন্ট লাগবে না",
       stats: [
-        { value: "৬০+", label: "প্রম্পট টেমপ্লেট" },
-        { value: "১k+", label: "সক্রিয় ব্যবহারকারী" },
-        { value: "৫k+", label: "কপি করা হয়েছে" }
+        { value: promptCountLabelBn, label: "প্রম্পট টেমপ্লেট" },
+        { value: categoryCountLabelBn, label: "ক্যাটাগরি" },
+        { value: "১০০%", label: "বাংলায় তৈরি" }
       ]
     },
     en: {
       headline: "Free Bangla AI Prompt Generator — Built for Bangladesh",
-      subhead: "Students, freelancers, writers & businesses — 500+ ready-to-use Bangla prompts for ChatGPT, Claude & Gemini. One-click copy, no signup needed.",
+      subhead: `Students, freelancers, writers & businesses — ${promptCountLabel} ready-to-use Bangla prompts for ChatGPT, Claude & Gemini, nearly all free. One-click copy, no signup needed.`,
       exploreBtn: "Explore Prompts",
-      submitBtn: "Submit Prompt",
+      playgroundBtn: "Try the Playground",
+      searchPlaceholder: "Search prompts...",
+      searchLabel: "Search prompts",
+      searchBtn: "Search",
+      audienceLabel: "Who are you?",
+      audiences: [
+        { label: "Student", to: "/shikkha" },
+        { label: "Freelancer", to: "/freelancer-prompts" },
+        { label: "Business", to: "/business" },
+        { label: "Content Creator", to: "/explore/content" },
+      ],
       tryPrompt: "Try Now",
       placeholder: "Write your prompt...",
       translitTitle: "Live Transliteration",
@@ -55,10 +86,12 @@ export const Hero = ({ language }: HeroProps) => {
       translitOutput: "Type in Roman Bangla to see Bangla output",
       copied: "Copied!",
       copiedDesc: "Bangla text copied",
+      freeNote: "Most prompts free",
+      signupNote: "No signup needed",
       stats: [
-        { value: "60+", label: "Prompt Templates" },
-        { value: "1k+", label: "Active Users" },
-        { value: "5k+", label: "Times Copied" }
+        { value: promptCountLabel, label: "Prompt Templates" },
+        { value: categoryCountLabel, label: "Categories" },
+        { value: "100%", label: "Built in Bangla" }
       ]
     }
   };
@@ -106,6 +139,45 @@ export const Hero = ({ language }: HeroProps) => {
               </p>
             </div>
 
+            {/* Search — primary affordance */}
+            <form onSubmit={handleSearchSubmit} role="search" className="flex flex-col sm:flex-row gap-3">
+              <label htmlFor="hero-search" className="sr-only">{currentText.searchLabel}</label>
+              <div className="relative flex-1">
+                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" aria-hidden="true" />
+                <Input
+                  id="hero-search"
+                  type="search"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder={currentText.searchPlaceholder}
+                  className={`h-14 pl-12 rounded-xl text-base bg-card border-transparent shadow-lg ${language === 'bn' ? 'font-bengali' : ''}`}
+                />
+              </div>
+              <Button
+                type="submit"
+                size="lg"
+                className={`h-14 px-8 rounded-xl font-semibold bg-accent text-accent-foreground hover:bg-accent/90 ${language === 'bn' ? 'font-bengali' : ''}`}
+              >
+                {currentText.searchBtn}
+              </Button>
+            </form>
+
+            {/* Audience entry points */}
+            <nav className="flex flex-wrap items-center gap-2" aria-label={currentText.audienceLabel}>
+              <span className={`text-sm text-primary-foreground/60 mr-1 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {currentText.audienceLabel}
+              </span>
+              {currentText.audiences.map((a) => (
+                <Link
+                  key={a.to}
+                  to={a.to}
+                  className={`text-sm px-3 py-1.5 rounded-full border border-primary-foreground/25 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  {a.label}
+                </Link>
+              ))}
+            </nav>
+
             {/* CTAs */}
             <nav className="flex flex-col sm:flex-row gap-3 sm:gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
               <Button size="lg" className={`group bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold text-base px-8 h-12 rounded-xl shadow-lg ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
@@ -115,8 +187,8 @@ export const Hero = ({ language }: HeroProps) => {
                 </Link>
               </Button>
               <Button size="lg" className={`border border-primary-foreground/30 bg-primary-foreground/10 text-primary-foreground hover:bg-primary-foreground/20 font-semibold text-base px-8 h-12 rounded-xl backdrop-blur-sm ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
-                <Link to="/become-creator">
-                  {currentText.submitBtn}
+                <Link to="/playground">
+                  {currentText.playgroundBtn}
                 </Link>
               </Button>
             </nav>
@@ -219,11 +291,11 @@ export const Hero = ({ language }: HeroProps) => {
                 <div className="flex items-center gap-4 pt-2 text-xs text-muted-foreground">
                   <span className="flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                    {language === 'bn' ? '১০০% ফ্রি' : '100% Free'}
+                    {currentText.freeNote}
                   </span>
                   <span className="flex items-center gap-1">
                     <CheckCircle2 className="w-3.5 h-3.5 text-primary" />
-                    {language === 'bn' ? 'একাউন্ট লাগবে না' : 'No signup needed'}
+                    {currentText.signupNote}
                   </span>
                 </div>
               </div>
