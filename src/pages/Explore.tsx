@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
@@ -222,8 +222,9 @@ const ExploreGrid = ({ prompts, viewMode, language, loading, noResultsText, onTr
 const Explore = () => {
   const { category: categorySlug } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(searchParams.get('q') ?? "");
   const [selectedCategory, setSelectedCategory] = useState<string>(categorySlug || "all");
   const [sortBy, setSortBy] = useState<string>("popular");
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
@@ -239,6 +240,12 @@ const Explore = () => {
       setSelectedCategory(categorySlug);
     }
   }, [categorySlug]);
+
+  // Sync ?q= search param (e.g. from the homepage hero search) into state
+  useEffect(() => {
+    const q = searchParams.get('q');
+    if (q !== null) setSearchQuery(q);
+  }, [searchParams]);
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
