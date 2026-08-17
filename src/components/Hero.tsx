@@ -119,7 +119,7 @@ export const Hero = ({ language }: HeroProps) => {
               <div className="inline-flex items-center space-x-2 bg-primary-foreground/15 backdrop-blur-sm px-4 py-2 rounded-full border border-primary-foreground/10" role="status">
                 <Sparkles className="w-4 h-4 text-accent" aria-hidden="true" />
                 <span className={`text-sm font-medium text-primary-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-                  {language === 'bn' ? 'নতুন প্রম্পট যোগ হচ্ছে প্রতিদিন' : 'New prompts added daily'}
+                  {language === 'bn' ? 'নিয়মিত নতুন প্রম্পট যোগ হচ্ছে' : 'New prompts added regularly'}
                 </span>
               </div>
               
