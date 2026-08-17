@@ -698,7 +698,7 @@ export default function VideoGenerationPrompts() {
       {/* FOOTER */}
       <footer className="bg-teal-950 text-teal-200 text-sm">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-2 justify-between items-center">
-          <p>© 2026 BdPrompt by Start BD — বাংলাদেশের #১ Free AI Prompt Generator</p>
+          <p>© {new Date().getFullYear()} BdPrompt by Start BD — বাংলা Free AI Prompt Generator</p>
           <p>Made with 💚 in Bangladesh</p>
         </div>
       </footer>

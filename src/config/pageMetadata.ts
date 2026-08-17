@@ -11,17 +11,17 @@ export interface PageMetadata {
 
 export const pageMetadata: Record<string, PageMetadata> = {
   '/': {
-    title: 'বাংলা AI প্রম্পট জেনারেটর | 500+ প্রম্পট | BdPrompt',
-    titleEn: 'Bangla AI Prompt Generator | 500+ Prompts | BdPrompt',
-    description: '500+ বাংলা AI প্রম্পট ChatGPT, Claude, Gemini-এর জন্য। শিক্ষা, ব্যবসা, কন্টেন্ট, কবিতা এবং আরও অনেক কিছু।',
-    descriptionEn: '500+ Bangla AI prompts for ChatGPT, Claude, Gemini. Education, business, content, poetry and more.',
+    title: 'বাংলা AI প্রম্পট জেনারেটর | 60+ প্রম্পট | BdPrompt',
+    titleEn: 'Bangla AI Prompt Generator | 60+ Prompts | BdPrompt',
+    description: '60+ বাংলা AI প্রম্পট ChatGPT, Claude, Gemini-এর জন্য। শিক্ষা, ব্যবসা, কন্টেন্ট, কবিতা এবং আরও অনেক কিছু।',
+    descriptionEn: '60+ Bangla AI prompts for ChatGPT, Claude, Gemini. Education, business, content, poetry and more.',
     keywords: 'বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh'
   },
   '/explore': {
-    title: 'প্রম্পট এক্সপ্লোর করুন | 500+ বাংলা AI প্রম্পট | BdPrompt',
-    titleEn: 'Explore Prompts | 500+ Bangla AI Prompts | BdPrompt',
-    description: 'বিভিন্ন ক্যাটাগরিতে 500+ বাংলা AI প্রম্পট ব্রাউজ করুন — ব্যবসা, শিক্ষা, কন্টেন্ট, কোড, ইমেজ, মার্কেটিং। ChatGPT, Claude ও Gemini-এর জন্য বাংলায় প্রস্তুত।',
-    descriptionEn: 'Browse 500+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.',
+    title: 'প্রম্পট এক্সপ্লোর করুন | 60+ বাংলা AI প্রম্পট | BdPrompt',
+    titleEn: 'Explore Prompts | 60+ Bangla AI Prompts | BdPrompt',
+    description: 'বিভিন্ন ক্যাটাগরিতে 60+ বাংলা AI প্রম্পট ব্রাউজ করুন — ব্যবসা, শিক্ষা, কন্টেন্ট, কোড, ইমেজ, মার্কেটিং। ChatGPT, Claude ও Gemini-এর জন্য বাংলায় প্রস্তুত।',
+    descriptionEn: 'Browse 60+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.',
     keywords: 'AI প্রম্পট এক্সপ্লোর, browse prompts, বাংলা প্রম্পট ক্যাটাগরি'
   },
   '/explore/business': {
@@ -90,7 +90,7 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/prompts': {
     title: 'সব প্রম্পট ব্রাউজ করুন | বাংলা AI প্রম্পট | BdPrompt',
     titleEn: 'Browse All Prompts | Bangla AI Prompts | BdPrompt',
-    description: 'BdPrompt-এ উপলব্ধ সকল বাংলা AI প্রম্পট ক্যাটাগরি অনুযায়ী ব্রাউজ করুন — ৫০০+ ChatGPT, Claude ও Gemini প্রম্পট, ফ্রি এবং প্রিমিয়াম কালেকশন এক জায়গায়।',
+    description: 'BdPrompt-এ উপলব্ধ সকল বাংলা AI প্রম্পট ক্যাটাগরি অনুযায়ী ব্রাউজ করুন — ৬০+ ChatGPT, Claude ও Gemini প্রম্পট, ফ্রি এবং প্রিমিয়াম কালেকশন এক জায়গায়।',
     descriptionEn: 'Browse all Bangla AI prompts available on BdPrompt by category.',
     keywords: 'সব প্রম্পট, all prompts, বাংলা প্রম্পট তালিকা'
   },
@@ -188,7 +188,7 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/product': {
     title: 'প্রোডাক্ট | BdPrompt ফিচার | বাংলা AI প্রম্পট',
     titleEn: 'Product | BdPrompt Features | Bangla AI Prompts',
-    description: 'BdPrompt-এর ফিচার ও সুবিধা — ৫০০+ বাংলা প্রম্পট লাইব্রেরি, প্লেগ্রাউন্ড, প্রম্পট প্যাক, ক্রিয়েটর টুলস ও API। বাংলাদেশের #১ বাংলা AI প্রম্পট প্ল্যাটফর্ম।',
+    description: 'BdPrompt-এর ফিচার ও সুবিধা — ৬০+ বাংলা প্রম্পট লাইব্রেরি, প্লেগ্রাউন্ড, প্রম্পট প্যাক, ক্রিয়েটর টুলস ও API। বাংলাদেশের জন্য তৈরি বাংলা AI প্রম্পট প্ল্যাটফর্ম।',
     descriptionEn: 'Learn about BdPrompt features and benefits. Bangla AI prompt platform.',
     keywords: 'প্রোডাক্ট, features, বাংলা AI platform'
   },

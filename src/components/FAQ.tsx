@@ -4,6 +4,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import { promptCountLabel, promptCountLabelBn, categoryCountLabel, categoryCountLabelBn } from "@/config/siteStats";
 
 interface FAQProps {
   language: 'bn' | 'en';
@@ -33,8 +34,8 @@ export const FAQ = ({ language }: FAQProps) => {
         answer: "বাংলাদেশি ব্যবসায়ীরা AI প্রম্পট ব্যবহার করে ফেসবুক পোস্ট, মেসেঞ্জার বট স্ক্রিপ্ট, প্রোডাক্ট ডেসক্রিপশন, কাস্টমার সাপোর্ট রেসপন্স এবং মার্কেটিং ক্যাম্পেইন তৈরি করতে পারেন।"
       },
       {
-        question: "bdprompt.com কেন বাংলাদেশের #১ AI প্রম্পট প্ল্যাটফর্ম?",
-        answer: "আমরা বাংলাদেশে প্রথম এবং সবচেয়ে বড় বাংলা AI প্রম্পট কালেকশন। ৫০০+ প্রম্পট, স্থানীয় প্রসঙ্গে তৈরি, এবং বাংলা ভাষায় অপ্টিমাইজড। নিয়মিত নতুন প্রম্পট যোগ হচ্ছে।"
+        question: "bdprompt.com কী অফার করে?",
+        answer: `bdprompt.com-এ ${promptCountLabelBn} বাংলা AI প্রম্পট আছে — ${categoryCountLabelBn}টি ক্যাটাগরিতে সাজানো, বাংলাদেশের স্থানীয় প্রসঙ্গে তৈরি এবং বাংলা ভাষার জন্য অপ্টিমাইজড। নিয়মিত নতুন প্রম্পট যোগ হচ্ছে।`
       }
     ],
     en: [
@@ -59,8 +60,8 @@ export const FAQ = ({ language }: FAQProps) => {
         answer: "Bangladeshi businesses can use AI prompts to create Facebook posts, Messenger bot scripts, product descriptions, customer support responses, and marketing campaigns."
       },
       {
-        question: "Why is bdprompt.com Bangladesh's #1 AI prompt platform?",
-        answer: "We are the first and largest Bangla AI prompt collection in Bangladesh. 500+ prompts, created for local context, and optimized for Bangla language. New prompts are added regularly."
+        question: "What does bdprompt.com offer?",
+        answer: `bdprompt.com has ${promptCountLabel} Bangla AI prompts across ${categoryCountLabel} categories, written for the Bangladeshi context and optimized for the Bangla language. New prompts are added regularly.`
       }
     ]
   };

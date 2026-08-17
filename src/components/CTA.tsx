@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Users, Zap } from "lucide-react";
+import { promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 
 interface CTAProps {
   language: 'bn' | 'en';
@@ -18,10 +19,10 @@ export const CTA = ({ language }: CTAProps) => {
       ],
       joinButton: "ক্রিয়েটর হিসেবে যোগ দিন",
       stats: {
-        creators: "৫০০+",
-        creatorsLabel: "সক্রিয় ক্রিয়েটর",
-        revenue: "৳২০ লাখ+",
-        revenueLabel: "টোটাল আয়"
+        creators: promptCountLabelBn,
+        creatorsLabel: "পাবলিশড প্রম্পট",
+        revenue: "৭০%",
+        revenueLabel: "ক্রিয়েটর কমিশন"
       }
     },
     en: {
@@ -34,10 +35,10 @@ export const CTA = ({ language }: CTAProps) => {
       ],
       joinButton: "Join as Creator",
       stats: {
-        creators: "500+",
-        creatorsLabel: "Active Creators",
-        revenue: "৳20L+",
-        revenueLabel: "Total Revenue"
+        creators: promptCountLabel,
+        creatorsLabel: "Published Prompts",
+        revenue: "70%",
+        revenueLabel: "Creator Commission"
       }
     }
   };

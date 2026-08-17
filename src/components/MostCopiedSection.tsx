@@ -41,14 +41,32 @@ export const MostCopiedSection = ({ language }: MostCopiedSectionProps) => {
 
   const currentText = text[language];
 
-  // Get top 6 prompts by copy count
+  // Top 6 by copy count, but at most one per category first so the row
+  // shows variety instead of six prompts from the same topic.
   const mostCopiedPrompts = useMemo(() => {
     if (!prompts) return [];
-    
-    return prompts
+
+    const ranked = prompts
       .map(promptToPromptData)
-      .sort((a, b) => b.usageCount - a.usageCount)
-      .slice(0, 6);
+      .sort((a, b) => b.usageCount - a.usageCount);
+
+    const seen = new Set<string>();
+    const picked: typeof ranked = [];
+
+    for (const p of ranked) {
+      if (picked.length === 6) break;
+      if (seen.has(p.category)) continue;
+      seen.add(p.category);
+      picked.push(p);
+    }
+
+    // Backfill with the next most-copied prompts if categories run out.
+    for (const p of ranked) {
+      if (picked.length === 6) break;
+      if (!picked.includes(p)) picked.push(p);
+    }
+
+    return picked;
   }, [prompts]);
 
   if (isLoading) {

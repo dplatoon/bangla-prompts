@@ -730,7 +730,7 @@ export default function ImageGenerationPrompts() {
       {/* FOOTER */}
       <footer className="bg-teal-950 text-teal-200 text-sm">
         <div className="max-w-6xl mx-auto px-4 py-8 flex flex-col md:flex-row gap-2 justify-between items-center">
-          <p>© 2026 BdPrompt by Start BD — বাংলাদেশের #১ Free AI Prompt Generator</p>
+          <p>© {new Date().getFullYear()} BdPrompt by Start BD — বাংলা Free AI Prompt Generator</p>
           <div className="flex gap-4">
             <a href="https://text2pixel.com" target="_blank" rel="noopener noreferrer" className="hover:text-white transition">
               text2pixel.com
