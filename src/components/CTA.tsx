@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ArrowRight, Users, Zap } from "lucide-react";
-import { promptCountLabel, promptCountLabelBn, categoryCountLabel, categoryCountLabelBn } from "@/config/siteStats";
+import { promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 
 interface CTAProps {
   language: 'bn' | 'en';
