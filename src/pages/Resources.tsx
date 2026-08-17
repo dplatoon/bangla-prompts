@@ -88,7 +88,7 @@ const Resources = () => {
         },
         {
           name: "bdprompt.com",
-          description: language === 'bn' ? "বাংলাদেশের #১ AI প্রম্পট প্ল্যাটফর্ম।" : "Bangladesh's #1 AI prompt platform.",
+          description: language === 'bn' ? "বাংলা AI প্রম্পট প্ল্যাটফর্ম।" : "Bangla AI prompt platform.",
           url: "https://bdprompt.com",
           free: true,
           bdFriendly: true,

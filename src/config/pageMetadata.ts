@@ -188,7 +188,7 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/product': {
     title: 'প্রোডাক্ট | BdPrompt ফিচার | বাংলা AI প্রম্পট',
     titleEn: 'Product | BdPrompt Features | Bangla AI Prompts',
-    description: 'BdPrompt-এর ফিচার ও সুবিধা — ৬০+ বাংলা প্রম্পট লাইব্রেরি, প্লেগ্রাউন্ড, প্রম্পট প্যাক, ক্রিয়েটর টুলস ও API। বাংলাদেশের #১ বাংলা AI প্রম্পট প্ল্যাটফর্ম।',
+    description: 'BdPrompt-এর ফিচার ও সুবিধা — ৬০+ বাংলা প্রম্পট লাইব্রেরি, প্লেগ্রাউন্ড, প্রম্পট প্যাক, ক্রিয়েটর টুলস ও API। বাংলাদেশের জন্য তৈরি বাংলা AI প্রম্পট প্ল্যাটফর্ম।',
     descriptionEn: 'Learn about BdPrompt features and benefits. Bangla AI prompt platform.',
     keywords: 'প্রোডাক্ট, features, বাংলা AI platform'
   },
