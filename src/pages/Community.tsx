@@ -33,14 +33,14 @@ const Community = () => {
   const text = {
     bn: {
       title: "কমিউনিটি",
-      subtitle: "বাংলাদেশের সবচেয়ে বড় AI প্রম্পট ক্রিয়েটর কমিউনিটিতে যোগ দিন",
+      subtitle: "বাংলা AI প্রম্পট ক্রিয়েটরদের কমিউনিটিতে যোগ দিন",
       stats: {
-        members: "১০,০০০+",
-        membersLabel: "সদস্য",
-        prompts: "৫০০+",
-        promptsLabel: "প্রম্পট",
-        discussions: "২,৫০০+",
-        discussionsLabel: "আলোচনা"
+        members: promptCountLabelBn,
+        membersLabel: "পাবলিশড প্রম্পট",
+        prompts: categoryCountLabelBn,
+        promptsLabel: "ক্যাটাগরি",
+        discussions: "৭০%",
+        discussionsLabel: "ক্রিয়েটর কমিশন"
       },
       topContributors: "শীর্ষ অবদানকারী",
       prompts: "টি প্রম্পট",
@@ -58,14 +58,14 @@ const Community = () => {
     },
     en: {
       title: "Community",
-      subtitle: "Join Bangladesh's largest AI prompt creator community",
+      subtitle: "Join the Bangla AI prompt creator community",
       stats: {
-        members: "10,000+",
-        membersLabel: "Members",
-        prompts: "500+",
-        promptsLabel: "Prompts",
-        discussions: "2,500+",
-        discussionsLabel: "Discussions"
+        members: promptCountLabel,
+        membersLabel: "Published Prompts",
+        prompts: categoryCountLabel,
+        promptsLabel: "Categories",
+        discussions: "70%",
+        discussionsLabel: "Creator Commission"
       },
       topContributors: "Top Contributors",
       prompts: "prompts",

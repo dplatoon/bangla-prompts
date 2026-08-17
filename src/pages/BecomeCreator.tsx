@@ -45,12 +45,12 @@ const BecomeCreator = () => {
       whyJoin: "কেন যোগ দিতে চান",
       submit: "আবেদন জমা দিন",
       stats: {
-        creators: "৫০০+",
-        creatorsLabel: "সক্রিয় ক্রিয়েটর",
-        earned: "৳৫০ লাখ+",
-        earnedLabel: "মোট আয়",
-        prompts: "২,০০০+",
-        promptsLabel: "প্রম্পট বিক্রি"
+        creators: "৭০%",
+        creatorsLabel: "প্রতি বিক্রয়ে কমিশন",
+        earned: "মাসিক",
+        earnedLabel: "পেমেন্ট (bKash/Nagad)",
+        prompts: promptCountLabelBn,
+        promptsLabel: "পাবলিশড প্রম্পট"
       }
     },
     en: {
@@ -58,7 +58,7 @@ const BecomeCreator = () => {
       subtitle: "Share your prompts and earn money",
       benefits: "Benefits",
       benefit1: "70% commission on every sale",
-      benefit2: "Reach 10,000+ active users",
+      benefit2: "Reach the BdPrompt audience",
       benefit3: "Free marketing & promotion",
       benefit4: "Monthly payments (bKash/Nagad)",
       howItWorks: "How It Works",
@@ -74,12 +74,12 @@ const BecomeCreator = () => {
       whyJoin: "Why do you want to join",
       submit: "Submit Application",
       stats: {
-        creators: "500+",
-        creatorsLabel: "Active Creators",
-        earned: "৳50 Lakh+",
-        earnedLabel: "Total Earned",
-        prompts: "2,000+",
-        promptsLabel: "Prompts Sold"
+        creators: "70%",
+        creatorsLabel: "Commission Per Sale",
+        earned: "Monthly",
+        earnedLabel: "Payouts (bKash/Nagad)",
+        prompts: promptCountLabel,
+        promptsLabel: "Published Prompts"
       }
     }
   };
