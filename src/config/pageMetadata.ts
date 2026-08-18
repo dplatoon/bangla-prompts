@@ -104,14 +104,14 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/community': {
     title: 'কমিউনিটি | প্রম্পট শেয়ার করুন | BdPrompt',
     titleEn: 'Community | Share Prompts | BdPrompt',
-    description: 'বাংলাদেশের সবচেয়ে বড় বাংলা AI প্রম্পট ক্রিয়েটর কমিউনিটিতে যোগ দিন — Discord, Facebook ও Telegram-এ প্রম্পট শেয়ার করুন, শিখুন এবং অন্যদের সাথে কানেক্ট হোন।',
+    description: 'BdPrompt-এর বাংলা AI প্রম্পট ক্রিয়েটর কমিউনিটিতে যোগ দিন — Discord, Facebook ও Telegram-এ প্রম্পট শেয়ার করুন, শিখুন এবং অন্যদের সাথে কানেক্ট হোন।',
     descriptionEn: 'Join the BdPrompt community. Share prompts and learn with others.',
     keywords: 'AI কমিউনিটি, prompt sharing, বাংলা AI community'
   },
   '/become-creator': {
     title: 'ক্রিয়েটর হন | প্রম্পট বিক্রি করুন | BdPrompt',
     titleEn: 'Become a Creator | Sell Prompts | BdPrompt',
-    description: 'BdPrompt ক্রিয়েটর প্রোগ্রামে যোগ দিন — আপনার বাংলা AI প্রম্পট বিক্রি করে আয় করুন। ৭০% কমিশন, সহজ পেআউট এবং বাংলাদেশের বড় প্রম্পট মার্কেটপ্লেসে অ্যাক্সেস।',
+    description: 'BdPrompt ক্রিয়েটর প্রোগ্রামে যোগ দিন — আপনার বাংলা AI প্রম্পট বিক্রি করে আয় করুন। ৭০% কমিশন, সহজ পেআউট এবং বাংলাদেশের AI প্রম্পট কমিউনিটিতে অ্যাক্সেস।',
     descriptionEn: 'Join the BdPrompt creator program. Sell your prompts and earn.',
     keywords: 'প্রম্পট ক্রিয়েটর, sell prompts, prompt marketplace'
   },
