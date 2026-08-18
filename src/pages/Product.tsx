@@ -15,12 +15,12 @@ const Product = () => {
   const handleLanguageChange = (lang: 'bn' | 'en') => { setLanguage(lang); localStorage.setItem('bdprompt-language', lang); };
 
   const features = [
-    { icon: Sparkles, title: language === 'bn' ? '৫০০+ প্রম্পট' : '500+ Prompts', desc: language === 'bn' ? 'বাংলায় তৈরি প্রিমিয়াম প্রম্পট' : 'Premium prompts in Bengali' },
+    { icon: Sparkles, title: language === 'bn' ? '৬০+ প্রম্পট' : '60+ Prompts', desc: language === 'bn' ? 'বাংলায় তৈরি প্রিমিয়াম প্রম্পট' : 'Premium prompts in Bengali' },
     { icon: Zap, title: language === 'bn' ? 'এক ক্লিকে কপি' : 'One-Click Copy', desc: language === 'bn' ? 'সহজে কপি ও ব্যবহার করুন' : 'Easy copy and use' },
     { icon: Globe, title: language === 'bn' ? 'দ্বিভাষিক' : 'Bilingual', desc: language === 'bn' ? 'বাংলা ও ইংরেজি সাপোর্ট' : 'Bengali & English support' },
     { icon: Shield, title: language === 'bn' ? 'প্লেগ্রাউন্ড' : 'Playground', desc: language === 'bn' ? 'AI দিয়ে টেস্ট করুন' : 'Test with AI' },
     { icon: Code, title: 'API', desc: language === 'bn' ? 'ডেভেলপারদের জন্য' : 'For developers' },
-    { icon: Users, title: language === 'bn' ? 'কমিউনিটি' : 'Community', desc: language === 'bn' ? '১০,০০০+ সদস্য' : '10,000+ members' }
+    { icon: Users, title: language === 'bn' ? 'কমিউনিটি' : 'Community', desc: language === 'bn' ? 'ক্রিয়েটরদের সাথে কানেক্ট হন' : 'Connect with creators' }
   ];
 
   return (

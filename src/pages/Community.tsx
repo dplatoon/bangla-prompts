@@ -90,7 +90,7 @@ const Community = () => {
     <>
       <SEOHead 
         title={language === 'bn' ? "কমিউনিটি | প্রম্পট শেয়ার করুন | BdPrompt" : "Community | Share Prompts | BdPrompt"}
-        description={language === 'bn' ? "বাংলাদেশের সবচেয়ে বড় AI প্রম্পট ক্রিয়েটর কমিউনিটি। Discord, Facebook, Telegram এ যোগ দিন।" : "Bangladesh's largest AI prompt creator community. Join Discord, Facebook, Telegram."}
+        description={language === 'bn' ? "BdPrompt-এর AI প্রম্পট ক্রিয়েটর কমিউনিটি। Discord, Facebook, Telegram এ যোগ দিন।" : "Join the BdPrompt AI prompt creator community on Discord, Facebook and Telegram."}
         keywords={language === 'bn' ? "bdprompt কমিউনিটি, AI প্রম্পট ক্রিয়েটর, বাংলাদেশ AI" : "bdprompt community, AI prompt creators, Bangladesh AI"}
         canonicalUrl="https://bdprompt.com/community"
         ogImage="https://bdprompt.com/og-image.png"
