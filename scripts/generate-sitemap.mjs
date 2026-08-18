@@ -63,17 +63,11 @@ let xml = readFileSync(sitemapPath, 'utf8');
 // Strip any previously-generated dynamic block, then re-append a fresh one.
 xml = xml.replace(/\s*<!-- BEGIN dynamic prompts -->[\s\S]*?<!-- END dynamic prompts -->/g, '');
 
-// Remove stale <lastmod> from static URLs: the hand-maintained static entries
+// Remove stale <lastmod> from static URLs. The hand-maintained static entries
 // do not have real page-specific timestamps, so keeping them violates the
-// sitemap-lastmod policy. Only dynamic prompt URLs keep their DB lastmod.
-xml = xml.replace(/(\s*<url>(?:[\s\S]*?<\/url>))(?![\s\S]*?<!-- BEGIN dynamic prompts -->)/g, (match) => {
-  return match.replace(/\n\s*<lastmod>[^<]+<\/lastmod>/g, '');
-});
-
-// Safer: strip <lastmod> from every static <url> that appears before the
-// dynamic prompts block. Re-run until no static lastmod remains.
-xml = xml.replace(/(<url>[\s\S]*?<\/url>)(?=\s*<!-- BEGIN dynamic prompts -->|\s*<\/urlset>)/g, (match) => {
-  if (match.includes('<loc>https://bdprompt.com/prompt/')) return match;
+// sitemap-lastmod policy. Only dynamic /prompt/{slug} URLs keep their DB lastmod.
+xml = xml.replace(/<url>[\s\S]*?<\/url>/g, (match) => {
+  if (/<loc>https:\/\/bdprompt\.com\/prompt\//.test(match)) return match;
   return match.replace(/\n\s*<lastmod>[^<]+<\/lastmod>/g, '');
 });
 
