@@ -15,17 +15,18 @@ import { PromptCategoryLinks } from "@/components/PromptCategoryLinks";
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
 
-  // Auto-detect language based on user location (simplified)
+  // Auto-detect language based on user preference, but stay Bengali during
+  // prerender so search engines always see the default Bangla content.
   useEffect(() => {
-    // Check localStorage first
+    // Prerender bots (Puppeteer/headless) should keep the bn default.
+    if ((navigator as Navigator & { webdriver?: boolean }).webdriver) return;
+
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en';
     if (savedLang) {
       setLanguage(savedLang);
       return;
     }
 
-    // In a real app, you'd use IP geolocation or browser language
-    // For now, defaulting to Bengali for BD users
     const browserLang = navigator.language;
     if (browserLang.includes('bn') || browserLang.includes('BD')) {
       setLanguage('bn');
