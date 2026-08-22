@@ -834,7 +834,6 @@ export default function FreelancerPrompts() {
               </details>
             ))}
           </div>
-          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
         </div>
       </section>
 

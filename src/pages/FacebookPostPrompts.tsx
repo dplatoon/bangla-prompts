@@ -775,10 +775,6 @@ export default function FacebookPostPrompts() {
             </details>
           ))}
         </div>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-        />
       </section>
 
       {/* CROSS-LINKS */}
