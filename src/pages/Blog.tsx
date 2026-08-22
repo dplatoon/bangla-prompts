@@ -124,13 +124,13 @@ const Blog = () => {
 
   const text = {
     bn: {
-      title: "ব্লগ",
+      title: "BdPrompt ব্লগ — AI ও প্রম্পট ইঞ্জিনিয়ারিং গাইড",
       subtitle: "AI, প্রম্পট ইঞ্জিনিয়ারিং এবং বাংলা কন্টেন্ট নিয়ে আর্টিকেল",
       readMore: "আরও পড়ুন",
       featured: "ফিচার্ড"
     },
     en: {
-      title: "Blog",
+      title: "BdPrompt Blog — AI & Prompt Engineering Guides",
       subtitle: "Articles about AI, prompt engineering, and Bengali content",
       readMore: "Read More",
       featured: "Featured"
