@@ -57,7 +57,7 @@ const PromptCategory = () => {
     category.prompts.map((prompt, index) => ({
       slug: `${category.slug}-${index + 1}`,
       title: prompt.title,
-      description: prompt.description ?? category.description,
+      description: prompt.usage || category.description,
       categorySlug: category.slug,
       categoryName: category.title,
       price: 0,
