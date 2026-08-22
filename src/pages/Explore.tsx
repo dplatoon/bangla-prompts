@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead } from "@/components/SEOHead";
+import { buildCategoryGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -16,43 +17,6 @@ import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompt
 import { useLazyLoad } from "@/hooks/useIntersectionObserver";
 import { trackCategoryFiltered, trackSearchPerformed } from "@/utils/analytics";
 import type { PromptData } from "@/data/mockPrompts";
-
-// Generate ItemList structured data for SEO
-const generateItemListSchema = (prompts: PromptData[], language: 'bn' | 'en') => {
-  return {
-    "@context": "https://schema.org",
-    "@type": "ItemList",
-    "name": language === 'bn' ? "বাংলা AI প্রম্পট তালিকা" : "Bangla AI Prompts Collection",
-    "description": language === 'bn' 
-      ? "bdprompt.com-এ ৬০+ বাংলা AI প্রম্পট এক্সপ্লোর করুন"
-      : "Explore 60+ Bangla AI prompts on bdprompt.com",
-    "numberOfItems": prompts.length,
-    "itemListElement": prompts.slice(0, 50).map((prompt, index) => ({
-      "@type": "ListItem",
-      "position": index + 1,
-      "item": {
-        "@type": "SoftwareApplication",
-        "@id": `https://bdprompt.com/prompt/${prompt.id}`,
-        "name": language === 'bn' ? prompt.titleBn : prompt.title,
-        "description": language === 'bn' ? prompt.descriptionBn : prompt.description,
-        "url": `https://bdprompt.com/prompt/${prompt.id}`,
-        "applicationCategory": "ProductivityApplication",
-        "offers": {
-          "@type": "Offer",
-          "price": prompt.price || 0,
-          "priceCurrency": "BDT"
-        },
-        ...(prompt.rating > 0 && {
-          "aggregateRating": {
-            "@type": "AggregateRating",
-            "ratingValue": prompt.rating.toFixed(1),
-            "ratingCount": 1
-          }
-        })
-      }
-    }))
-  };
-};
 
 // Section heading component for SEO
 interface SectionHeadingProps {
@@ -373,9 +337,27 @@ const Explore = () => {
   const currentText = text[language];
 
   // Generate ItemList schema for rich snippets
-  const itemListSchema = useMemo(() => {
-    return generateItemListSchema(filteredPrompts, language);
-  }, [filteredPrompts, language]);
+  const exploreGraph = useMemo(() => {
+    const catSlug = selectedCategory === "all" ? "" : selectedCategory;
+    const catName = selectedCategory === "all"
+      ? (language === 'bn' ? "সব প্রম্পট" : "All prompts")
+      : (currentCategoryLabelBn || currentCategoryLabel || selectedCategory);
+    return buildCategoryGraph(
+      catSlug,
+      catName,
+      seoDescription,
+      filteredPrompts.slice(0, 50).map((prompt) => ({
+        slug: String(prompt.id),
+        title: language === 'bn' ? prompt.titleBn : prompt.title,
+        description: language === 'bn' ? prompt.descriptionBn : prompt.description,
+        categorySlug: catSlug,
+        categoryName: catName,
+        price: prompt.price || 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }))
+    );
+  }, [filteredPrompts, language, selectedCategory, currentCategoryLabel, currentCategoryLabelBn, seoDescription]);
 
   // Generate canonical URL based on current category
   const canonicalUrl = selectedCategory === "all" 
@@ -424,7 +406,7 @@ const Explore = () => {
         description={seoDescription}
         canonicalUrl={canonicalUrl}
         language={language}
-        structuredData={itemListSchema}
+        graph={exploreGraph}
       />
       
       <div className="min-h-screen bg-background">
