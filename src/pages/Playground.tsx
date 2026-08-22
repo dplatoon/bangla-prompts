@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { buildPlaygroundGraph } from "@/lib/schema-helpers";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -328,6 +329,11 @@ const Playground = () => {
         description={language === 'bn' ? "AI প্লেগ্রাউন্ডে আপনার প্রম্পট টেস্ট করুন। বাংলা ও ইংরেজিতে কন্টেন্ট জেনারেট করুন।" : "Test your prompts in the AI Playground. Generate content in Bengali and English."}
         canonicalUrl="https://bdprompt.com/playground"
         language={language}
+        graph={buildPlaygroundGraph({
+          path: "/playground",
+          title: language === 'bn' ? "প্লেগ্রাউন্ড | AI প্রম্পট টেস্ট করুন | BdPrompt" : "Playground | Test AI Prompts | BdPrompt",
+          description: language === 'bn' ? "AI প্লেগ্রাউন্ডে আপনার প্রম্পট টেস্ট করুন। বাংলা ও ইংরেজিতে কন্টেন্ট জেনারেট করুন।" : "Test your prompts in the AI Playground. Generate content in Bengali and English.",
+        }) as unknown as Record<string, unknown>}
       />
       
       <div className="min-h-screen bg-background">

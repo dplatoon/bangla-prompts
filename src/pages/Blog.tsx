@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { buildBlogIndexGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -110,6 +111,17 @@ const Blog = () => {
 
   const currentPosts = posts[language];
 
+  const blogGraph = buildBlogIndexGraph(
+    currentPosts
+      .filter((post) => post.slug !== "#")
+      .map((post) => ({
+        slug: post.slug,
+        headline: post.title,
+        description: post.excerpt,
+        datePublished: "2026-01-23",
+      }))
+  ) as unknown as Record<string, unknown>;
+
   const text = {
     bn: {
       title: "ব্লগ",
@@ -134,6 +146,7 @@ const Blog = () => {
         description={language === 'bn' ? "AI, প্রম্পট ইঞ্জিনিয়ারিং এবং বাংলা কন্টেন্ট নিয়ে আর্টিকেল পড়ুন।" : "Read articles about AI, prompt engineering, and Bengali content."}
         canonicalUrl="https://bdprompt.com/blog"
         language={language}
+        graph={blogGraph}
       />
       
       <div className="min-h-screen bg-background">
