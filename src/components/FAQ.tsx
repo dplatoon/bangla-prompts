@@ -10,8 +10,7 @@ interface FAQProps {
   language: 'bn' | 'en';
 }
 
-export const FAQ = ({ language }: FAQProps) => {
-  const faqData = {
+const faqData = {
     bn: [
       {
         question: "ChatGPT বাংলায় কাজ করে কিভাবে?",
@@ -66,36 +65,16 @@ export const FAQ = ({ language }: FAQProps) => {
     ]
   };
 
-  const currentFAQ = faqData[language];
+export const getFaqData = (language: 'bn' | 'en') => faqData[language];
 
-  // Generate comprehensive FAQ structured data for SEO
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "@id": "https://bdprompt.com/#faq",
-    "mainEntity": currentFAQ.map((item, index) => ({
-      "@type": "Question",
-      "@id": `https://bdprompt.com/#faq-${index + 1}`,
-      "name": item.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": item.answer,
-        "dateCreated": "2024-01-01"
-      }
-    }))
-  };
+export const FAQ = ({ language }: FAQProps) => {
+  const currentFAQ = faqData[language];
 
   return (
     <section 
       className="py-16 lg:py-24 bg-muted/30"
       aria-labelledby="faq-heading"
     >
-      {/* Inject FAQ structured data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqStructuredData) }}
-      />
-      
       <div className="container mx-auto px-4">
         <header className="text-center mb-12">
           <h2 
