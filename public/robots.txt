@@ -36,23 +36,70 @@ Allow: /
 User-agent: LinkedInBot
 Allow: /
 
+# AI crawlers — public content allowed, private areas blocked.
+# Full guidance: https://bdprompt.com/llms.txt
+
 User-agent: GPTBot
 Allow: /
+Disallow: /auth
+Disallow: /api/
+Disallow: /account
+Disallow: /profile
+Disallow: /settings
+Disallow: /checkout
+Disallow: /admin
+Disallow: /private
 
 User-agent: ChatGPT-User
 Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
 
 User-agent: Google-Extended
 Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
 
 User-agent: anthropic-ai
 Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
 
 User-agent: ClaudeBot
 Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
+
+User-agent: cohere-ai
+Allow: /
+Disallow: /auth
+Disallow: /account
+Disallow: /admin
+Disallow: /private
 
 User-agent: DuckDuckBot
 Allow: /
+Disallow: /auth
+Disallow: /404
+Disallow: /api/
+Disallow: /account
+Disallow: /admin
+Disallow: /private
 
 User-agent: Yandex
 Allow: /
