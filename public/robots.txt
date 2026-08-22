@@ -6,6 +6,7 @@ Sitemap: https://bdprompt.com/sitemap.xml
 User-agent: Googlebot
 Allow: /
 Disallow: /auth
+Disallow: /404
 Disallow: /api/
 Disallow: /account
 Disallow: /profile
@@ -20,6 +21,7 @@ Allow: /
 User-agent: Bingbot
 Allow: /
 Disallow: /auth
+Disallow: /404
 Disallow: /api/
 Disallow: /account
 Disallow: /profile
@@ -58,6 +60,7 @@ Allow: /
 User-agent: *
 Allow: /
 Disallow: /auth
+Disallow: /404
 Disallow: /api/
 Disallow: /account
 Disallow: /profile

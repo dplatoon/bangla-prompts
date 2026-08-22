@@ -168,6 +168,35 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://bdprompt.com/prompts/education</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/education" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/prompts/education" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bdprompt.com/prompts/content</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/content" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/prompts/content" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bdprompt.com/prompts/code</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/code" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/prompts/code" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://bdprompt.com/prompts/image</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/image" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/prompts/image" />
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
+  </url>
+
+  <url>
     <loc>https://bdprompt.com/prompts/creative-art</loc>
     <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/prompts/creative-art" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/prompts/creative-art" />
