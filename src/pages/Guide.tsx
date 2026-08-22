@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { buildGuideGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -290,45 +291,14 @@ const Guide = () => {
     'productivity': Zap
   };
 
-  // Generate FAQ structured data
-  const faqStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    "mainEntity": t.faqs.map(faq => ({
-      "@type": "Question",
-      "name": faq.question,
-      "acceptedAnswer": {
-        "@type": "Answer",
-        "text": faq.answer
-      }
-    }))
-  };
-
-  // Generate HowTo structured data for CORE Method
-  const howToStructuredData = {
-    "@context": "https://schema.org",
-    "@type": "HowTo",
-    "name": language === 'bn' ? "কীভাবে নিখুঁত AI প্রম্পট লিখবেন" : "How to Write Perfect AI Prompts",
-    "description": language === 'bn' 
-      ? "CORE মেথড ব্যবহার করে ChatGPT, Claude এবং অন্যান্য AI-এর জন্য কার্যকর প্রম্পট লিখুন।"
-      : "Write effective prompts for ChatGPT, Claude and other AI using the CORE Method.",
-    "step": t.coreSteps.map((step, index) => ({
-      "@type": "HowToStep",
-      "position": index + 1,
-      "name": step.title,
-      "text": step.description,
-      "itemListElement": {
-        "@type": "HowToDirection",
-        "text": step.example
-      }
-    }))
-  };
-
-  // Combine structured data as object for SEOHead
-  const combinedStructuredData = {
-    "@context": "https://schema.org",
-    "@graph": [faqStructuredData, howToStructuredData]
-  };
+  const guideGraph = buildGuideGraph(
+    t.coreSteps.map((step) => ({
+      name: step.title,
+      text: step.description,
+      example: step.example,
+    })),
+    t.faqs.map((faq) => ({ q: faq.question, a: faq.answer }))
+  );
 
   return (
     <>
@@ -344,7 +314,7 @@ const Guide = () => {
           : "prompt engineering, ChatGPT Bengali, AI guide, CORE Method, Bangla AI prompts, Claude Bengali"}
         canonicalUrl="https://bdprompt.com/guide"
         language={language}
-        structuredData={combinedStructuredData}
+        graph={guideGraph}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={setLanguage} />
