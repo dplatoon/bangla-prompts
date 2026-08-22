@@ -337,27 +337,6 @@ const Explore = () => {
   const currentText = text[language];
 
   // Generate ItemList schema for rich snippets
-  const exploreGraph = useMemo(() => {
-    const catSlug = selectedCategory === "all" ? "" : selectedCategory;
-    const catName = selectedCategory === "all"
-      ? (language === 'bn' ? "সব প্রম্পট" : "All prompts")
-      : (currentCategoryLabelBn || currentCategoryLabel || selectedCategory);
-    return buildCategoryGraph(
-      catSlug,
-      catName,
-      seoDescription,
-      filteredPrompts.slice(0, 50).map((prompt) => ({
-        slug: String(prompt.id),
-        title: language === 'bn' ? prompt.titleBn : prompt.title,
-        description: language === 'bn' ? prompt.descriptionBn : prompt.description,
-        categorySlug: catSlug,
-        categoryName: catName,
-        price: prompt.price || 0,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }))
-    );
-  }, [filteredPrompts, language, selectedCategory, currentCategoryLabel, currentCategoryLabelBn, seoDescription]);
 
   // Generate canonical URL based on current category
   const canonicalUrl = selectedCategory === "all" 
@@ -398,6 +377,28 @@ const Explore = () => {
     
     return items;
   }, [selectedCategory, currentCategoryLabel, currentCategoryLabelBn]);
+
+  const exploreGraph = useMemo(() => {
+    const catSlug = selectedCategory === "all" ? "" : selectedCategory;
+    const catName = selectedCategory === "all"
+      ? (language === 'bn' ? "সব প্রম্পট" : "All prompts")
+      : (currentCategoryLabelBn || currentCategoryLabel || selectedCategory);
+    return buildCategoryGraph(
+      catSlug,
+      catName,
+      seoDescription,
+      filteredPrompts.slice(0, 50).map((prompt) => ({
+        slug: String(prompt.id),
+        title: language === 'bn' ? prompt.titleBn : prompt.title,
+        description: language === 'bn' ? prompt.descriptionBn : prompt.description,
+        categorySlug: catSlug,
+        categoryName: catName,
+        price: prompt.price || 0,
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      }))
+    );
+  }, [filteredPrompts, language, selectedCategory, currentCategoryLabel, currentCategoryLabelBn, seoDescription]);
 
   return (
     <>
