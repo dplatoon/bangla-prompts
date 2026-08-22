@@ -123,10 +123,6 @@ const Support = () => {
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
         language={language}
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'সাপোর্ট' : 'Support', url: 'https://bdprompt.com/support' }
-        ]}
         structuredData={faqStructuredData}
       />
       

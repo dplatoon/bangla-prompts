@@ -82,10 +82,6 @@ const Kobita = () => {
         keywords={currentSEO.keywords}
         language={language}
         canonicalUrl="https://bdprompt.com/kobita"
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'কবিতা ও গল্প' : 'Poetry & Stories', url: 'https://bdprompt.com/kobita' }
-        ]}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />

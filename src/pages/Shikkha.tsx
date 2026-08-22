@@ -82,10 +82,6 @@ const Shikkha = () => {
         keywords={currentSEO.keywords}
         language={language}
         canonicalUrl="https://bdprompt.com/shikkha"
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'শিক্ষা' : 'Education', url: 'https://bdprompt.com/shikkha' }
-        ]}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />

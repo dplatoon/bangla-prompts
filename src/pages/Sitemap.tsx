@@ -160,7 +160,6 @@ const Sitemap = () => {
         title={currentSeo.title}
         description={currentSeo.description}
         keywords="sitemap, সাইটম্যাপ, bdprompt pages, all pages"
-        breadcrumbs={breadcrumbsForSchema}
       />
       
       <div className="min-h-screen bg-background">
