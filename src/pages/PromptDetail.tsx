@@ -251,7 +251,7 @@ const PromptDetail = () => {
       categoryName: language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category,
       price: prompt.price || 0,
       createdAt: dbPrompt.created_at || now,
-      updatedAt: dbPrompt.updated_at || dbPrompt.created_at || now,
+      updatedAt: (dbPrompt as { updated_at?: string }).updated_at || dbPrompt.created_at || now,
       image: getOgImageUrl(),
     }) as unknown as Record<string, unknown>;
     // eslint-disable-next-line react-hooks/exhaustive-deps
