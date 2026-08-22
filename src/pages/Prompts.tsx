@@ -33,29 +33,6 @@ const Prompts = () => {
     { label: "Prompts", labelBn: "প্রম্পট", href: "/prompts" },
   ];
 
-  // TechArticle structured data
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "CollectionPage",
-    "name": "AI প্রম্পট ক্যাটাগরি | BD Prompt",
-    "description": "১০০+ প্রিমিয়াম ChatGPT ও AI প্রম্পট ক্যাটাগরি - SEO, মার্কেটিং, ফ্রিল্যান্সিং, কোডিং এবং আরও অনেক কিছু।",
-    "url": "https://bdprompt.com/prompts",
-    "publisher": {
-      "@type": "Organization",
-      "name": "BD Prompt",
-      "logo": "https://bdprompt.com/favicon.jpg"
-    },
-    "mainEntity": {
-      "@type": "ItemList",
-      "itemListElement": PROMPT_CATEGORIES.map((category, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": category.title,
-        "url": `https://bdprompt.com/prompts/${category.slug}`
-      }))
-    }
-  };
-
   return (
     <div className="min-h-screen bg-background">
       <SEOHead
@@ -63,7 +40,6 @@ const Prompts = () => {
         description="১০০+ প্রিমিয়াম ChatGPT ও AI প্রম্পট ক্যাটাগরি - SEO, মার্কেটিং, ফ্রিল্যান্সিং, কোডিং এবং আরও অনেক কিছু। এক ক্লিকে কপি করুন!"
         keywords="AI prompts, ChatGPT prompts, বাংলা প্রম্পট, BD Prompt, SEO prompts, মার্কেটিং প্রম্পট"
         canonicalUrl="https://bdprompt.com/prompts"
-        structuredData={structuredData}
       />
       
       <Header language={language} onLanguageChange={setLanguage} />

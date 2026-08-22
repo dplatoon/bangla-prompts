@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { buildArticleGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -323,31 +324,21 @@ const BlogPostChatGPTBanglaPrompt = () => {
     );
   };
 
-  // Article structured data
-  const articleSchema = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": currentContent.title,
-    "description": currentContent.intro.substring(0, 160),
-    "author": {
-      "@type": "Organization",
-      "name": "BD Prompt",
-      "url": "https://bdprompt.com"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "BD Prompt",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://bdprompt.com/og-image.png"
-      }
-    },
-    "datePublished": "2026-01-23",
-    "dateModified": "2026-01-23",
-    "mainEntityOfPage": "https://bdprompt.com/blog/chatgpt-bangla-prompt",
-    "inLanguage": language === 'bn' ? "bn-BD" : "en-US",
-    "keywords": ["ChatGPT বাংলা প্রম্পট", "বাংলা AI প্রম্পট", "ChatGPT Bangladesh", "AI prompts Bengali", "বাংলাদেশ ChatGPT"]
-  };
+  const articleGraph = buildArticleGraph({
+    path: "/blog/chatgpt-bangla-prompt",
+    headline: currentContent.title,
+    description: currentContent.intro.substring(0, 160),
+    image: "https://bdprompt.com/og-image.png",
+    datePublished: "2026-01-23",
+    dateModified: "2026-08-22",
+    section: "AI গাইড",
+    keywords: ["ChatGPT বাংলা প্রম্পট", "বাংলা AI প্রম্পট", "ChatGPT Bangladesh", "AI prompts Bengali"],
+    crumbs: [
+      { name: "হোম", path: "/" },
+      { name: "ব্লগ", path: "/blog" },
+      { name: "ChatGPT বাংলা প্রম্পট", path: "/blog/chatgpt-bangla-prompt" },
+    ],
+  });
 
   const breadcrumbItems = [
     { label: "Blog", labelBn: "ব্লগ", href: "/blog" },
@@ -369,7 +360,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
         canonicalUrl="https://bdprompt.com/blog/chatgpt-bangla-prompt"
         language={language}
         keywords="ChatGPT বাংলা প্রম্পট, বাংলা AI প্রম্পট, ChatGPT Bangladesh, AI prompts Bengali, ChatGPT tips Bangla, ছাত্রদের জন্য ChatGPT, প্রফেশনাল প্রম্পট"
-        structuredData={articleSchema}
+        graph={articleGraph}
       />
       
       <div className="min-h-screen bg-background">
