@@ -149,16 +149,6 @@ export default function YoutubeScriptPrompts() {
     }
   };
 
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
@@ -168,6 +158,7 @@ export default function YoutubeScriptPrompts() {
         canonicalUrl="https://bdprompt.com/youtube-script-prompts"
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
+        faqs={FAQS}
       />
 
       {/* NAV */}

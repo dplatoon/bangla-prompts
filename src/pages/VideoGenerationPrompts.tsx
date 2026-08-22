@@ -386,16 +386,6 @@ export default function VideoGenerationPrompts() {
     }
   };
 
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
@@ -405,6 +395,7 @@ export default function VideoGenerationPrompts() {
         canonicalUrl="https://bdprompt.com/video-generation-prompts"
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
+        faqs={FAQS}
       />
 
       {/* NAV */}
