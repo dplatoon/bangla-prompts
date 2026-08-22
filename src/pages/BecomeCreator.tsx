@@ -97,10 +97,6 @@ const BecomeCreator = () => {
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
         language={language}
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'ক্রিয়েটর হন' : 'Become Creator', url: 'https://bdprompt.com/become-creator' }
-        ]}
       />
       
       <div className="min-h-screen bg-background">

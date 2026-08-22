@@ -473,16 +473,6 @@ export default function SSCExamPrompts() {
     }
   };
 
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
@@ -492,6 +482,7 @@ export default function SSCExamPrompts() {
         canonicalUrl="https://bdprompt.com/ssc-exam-prompts"
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
+        faqs={FAQS}
       />
 
       {/* NAV */}
@@ -788,10 +779,6 @@ export default function SSCExamPrompts() {
               </details>
             ))}
           </div>
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-          />
         </div>
       </section>
 

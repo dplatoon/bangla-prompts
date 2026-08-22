@@ -24,35 +24,8 @@ interface BreadcrumbsProps {
 export const Breadcrumbs = ({ items, language = 'bn', className = '' }: BreadcrumbsProps) => {
   const homeLabel = language === 'bn' ? 'হোম' : 'Home';
   
-  // Generate structured data for SEO
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      {
-        "@type": "ListItem",
-        "position": 1,
-        "name": homeLabel,
-        "item": "https://bdprompt.com/"
-      },
-      ...items.map((item, index) => ({
-        "@type": "ListItem",
-        "position": index + 2,
-        "name": language === 'bn' && item.labelBn ? item.labelBn : item.label,
-        "item": item.href ? `https://bdprompt.com${item.href}` : undefined
-      }))
-    ].filter(item => item.item !== undefined)
-  };
-
   return (
     <>
-      {/* JSON-LD Structured Data - Use unique ID to prevent duplicates */}
-      <script
-        id="breadcrumb-ld-visual"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-      />
-      
       {/* Visual Breadcrumbs */}
       <Breadcrumb className={className}>
         <BreadcrumbList 

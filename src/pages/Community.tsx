@@ -96,10 +96,6 @@ const Community = () => {
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
         language={language}
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'কমিউনিটি' : 'Community', url: 'https://bdprompt.com/community' }
-        ]}
       />
       
       <div className="min-h-screen bg-background">

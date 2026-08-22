@@ -431,16 +431,6 @@ export default function FacebookPostPrompts() {
     }
   };
 
-  const faqLd = {
-    "@context": "https://schema.org",
-    "@type": "FAQPage",
-    mainEntity: FAQS.map((f) => ({
-      "@type": "Question",
-      name: f.q,
-      acceptedAnswer: { "@type": "Answer", text: f.a },
-    })),
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 font-bengali">
       <SEOHead
@@ -450,6 +440,7 @@ export default function FacebookPostPrompts() {
         canonicalUrl="https://bdprompt.com/facebook-post-prompts"
         ogImage="https://bdprompt.com/og-image.png"
         ogType="website"
+        faqs={FAQS}
       />
 
       {/* NAV */}
@@ -775,10 +766,6 @@ export default function FacebookPostPrompts() {
             </details>
           ))}
         </div>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }}
-        />
       </section>
 
       {/* CROSS-LINKS */}

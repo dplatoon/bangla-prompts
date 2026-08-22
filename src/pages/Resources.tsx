@@ -187,10 +187,6 @@ const Resources = () => {
         keywords={currentSEO.keywords}
         language={language}
         canonicalUrl="https://bdprompt.com/resources"
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'রিসোর্স' : 'Resources', url: 'https://bdprompt.com/resources' }
-        ]}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />

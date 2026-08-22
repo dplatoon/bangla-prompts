@@ -8,7 +8,8 @@ import { CTA } from "@/components/CTA";
 import { Footer } from "@/components/Footer";
 import { ChatAssistant } from "@/components/ChatAssistant";
 import { SEOHead } from "@/components/SEOHead";
-import { FAQ } from "@/components/FAQ";
+import { buildHomeGraph } from "@/lib/bdprompt-schema";
+import { FAQ, getFaqData } from "@/components/FAQ";
 import { PWAStatus } from "@/components/PWAStatus";
 import { PromptCategoryLinks } from "@/components/PromptCategoryLinks";
 
@@ -54,6 +55,9 @@ const Index = () => {
   };
 
   const currentSEO = seoContent[language];
+  const homeGraph = buildHomeGraph(
+    getFaqData(language).map((item) => ({ q: item.question, a: item.answer }))
+  ) as unknown as Record<string, unknown>;
 
   return (
     <>
@@ -64,6 +68,7 @@ const Index = () => {
         language={language}
         canonicalUrl="https://bdprompt.com/"
         ogImage="https://bdprompt.com/og-image.png"
+        graph={homeGraph}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />

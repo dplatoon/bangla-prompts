@@ -29,10 +29,6 @@ const Product = () => {
         title={language === 'bn' ? "প্রোডাক্ট | BdPrompt ফিচার | বাংলা AI প্রম্পট" : "Product | BdPrompt Features | Bangla AI Prompts"} 
         canonicalUrl="https://bdprompt.com/product" 
         language={language}
-        breadcrumbs={[
-          { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-          { name: language === 'bn' ? 'প্রোডাক্ট' : 'Product', url: 'https://bdprompt.com/product' }
-        ]}
       />
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />

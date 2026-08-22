@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { SEOHead } from "@/components/SEOHead";
+import { buildPacksGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -119,6 +120,16 @@ const PromptPacks = () => {
 
   const currentText = text[language];
 
+  const packsGraph = buildPacksGraph(
+    currentPacks.map((pack) => ({
+      slug: String(pack.id),
+      name: pack.name,
+      description: pack.description,
+      price: pack.price,
+      promptCount: pack.prompts,
+    }))
+  ) as unknown as Record<string, unknown>;
+
   return (
     <>
       <SEOHead 
@@ -126,6 +137,7 @@ const PromptPacks = () => {
         description={language === 'bn' ? "প্রিমিয়াম প্রম্পট প্যাক কিনুন। স্টার্টার, প্রো এবং এন্টারপ্রাইজ প্যাক উপলব্ধ।" : "Buy premium prompt packs. Starter, Pro, and Enterprise packs available."}
         canonicalUrl="https://bdprompt.com/packs"
         language={language}
+        graph={packsGraph}
       />
       
       <div className="min-h-screen bg-background">

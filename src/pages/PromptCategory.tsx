@@ -7,6 +7,7 @@ import {
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { SEOHead } from "@/components/SEOHead";
+import { buildCategoryGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { CategoryPromptCard } from "@/components/CategoryPromptCard";
 import { Header } from "@/components/Header";
@@ -49,41 +50,21 @@ const PromptCategory = () => {
     .filter(c => c.slug !== category.slug)
     .slice(0, 3);
 
-  // Article structured data with publisher info
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "Article",
-    "headline": category.title,
-    "description": category.description,
-    "url": `https://bdprompt.com/prompts/${category.slug}`,
-    "datePublished": "2026-01-20",
-    "dateModified": "2026-01-20",
-    "author": {
-      "@type": "Organization",
-      "name": "BD Prompt"
-    },
-    "publisher": {
-      "@type": "Organization",
-      "name": "BD Prompt",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://bdprompt.com/favicon.jpg"
-      }
-    },
-    "mainEntityOfPage": {
-      "@type": "WebPage",
-      "@id": `https://bdprompt.com/prompts/${category.slug}`
-    },
-    "about": {
-      "@type": "ItemList",
-      "numberOfItems": category.prompts.length,
-      "itemListElement": category.prompts.map((prompt, index) => ({
-        "@type": "ListItem",
-        "position": index + 1,
-        "name": prompt.title
-      }))
-    }
-  };
+  const categoryGraph = buildCategoryGraph(
+    category.slug,
+    category.title,
+    category.description,
+    category.prompts.map((prompt, index) => ({
+      slug: `${category.slug}-${index + 1}`,
+      title: prompt.title,
+      description: prompt.usage || category.description,
+      categorySlug: category.slug,
+      categoryName: category.title,
+      price: 0,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    }))
+  );
 
   return (
     <div className="min-h-screen bg-background">
@@ -92,7 +73,7 @@ const PromptCategory = () => {
         description={category.description}
         keywords={`${category.title}, ChatGPT prompts, AI prompts, বাংলা প্রম্পট, BD Prompt, ${category.slug}`}
         canonicalUrl={`https://bdprompt.com/prompts/${category.slug}`}
-        structuredData={structuredData}
+        graph={categoryGraph}
       />
       
       <Header language={language} onLanguageChange={setLanguage} />
