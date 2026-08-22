@@ -132,59 +132,34 @@ export const SEOHead = ({
     // when the UI language toggle flips to English for display.
     document.documentElement.lang = 'bn';
     
-    // Add breadcrumb structured data if provided
-    // Only add if visual Breadcrumbs component hasn't already added it
-    if (breadcrumbs && breadcrumbs.length > 0) {
-      const existingVisualBreadcrumb = document.getElementById('breadcrumb-ld-visual');
-      
-      // Skip if visual breadcrumb component already injected schema
-      if (!existingVisualBreadcrumb) {
-        const breadcrumbScript = document.getElementById('breadcrumb-ld');
-        const breadcrumbData = {
-          "@context": "https://schema.org",
-          "@type": "BreadcrumbList",
-          "itemListElement": breadcrumbs.map((item, index) => ({
-            "@type": "ListItem",
-            "position": index + 1,
-            "name": item.name,
-            "item": item.url
-          }))
-        };
-        
-        if (breadcrumbScript) {
-          breadcrumbScript.textContent = JSON.stringify(breadcrumbData);
-        } else {
-          const script = document.createElement('script');
-          script.id = 'breadcrumb-ld';
-          script.type = 'application/ld+json';
-          script.textContent = JSON.stringify(breadcrumbData);
-          document.head.appendChild(script);
-        }
-      }
+    // ---- Structured data: exactly ONE JSON-LD graph per page ----
+    // Everything (Organization, WebSite, WebPage, Breadcrumb, page-specific nodes)
+    // lives in a single @graph so entities consolidate by @id across all routes.
+    const graph = pageGraph ?? buildStaticGraph(
+      {
+        path: location.pathname,
+        title: finalTitle,
+        description: finalDescription,
+        crumbs: deriveCrumbs(location.pathname),
+      },
+      faqs
+    );
+
+    let graphScript = document.getElementById('ld-graph') as HTMLScriptElement | null;
+    if (!graphScript) {
+      graphScript = document.createElement('script');
+      graphScript.id = 'ld-graph';
+      graphScript.type = 'application/ld+json';
+      document.head.appendChild(graphScript);
     }
-    
-    // Add custom structured data if provided
-    if (structuredData) {
-      const customScript = document.getElementById('custom-ld');
-      if (customScript) {
-        customScript.textContent = JSON.stringify(structuredData);
-      } else {
-        const script = document.createElement('script');
-        script.id = 'custom-ld';
-        script.type = 'application/ld+json';
-        script.textContent = JSON.stringify(structuredData);
-        document.head.appendChild(script);
-      }
-    }
-    
+    graphScript.textContent = JSON.stringify(graph);
+
     // Cleanup function
     return () => {
-      const breadcrumbScript = document.getElementById('breadcrumb-ld');
-      const customScript = document.getElementById('custom-ld');
-      if (breadcrumbScript) breadcrumbScript.remove();
-      if (customScript) customScript.remove();
+      document.getElementById('ld-graph')?.remove();
     };
-  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, breadcrumbs, structuredData, noindex]);
+  }, [finalTitle, finalDescription, finalKeywords, finalCanonicalUrl, ogImage, ogType, language, author, publishedTime, modifiedTime, noindex, pageGraph, faqs, location.pathname]);
+
   
   return null;
 };
