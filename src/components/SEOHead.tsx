@@ -1,6 +1,8 @@
 import { useLayoutEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { getPageMetadata } from '@/config/pageMetadata';
+import { buildStaticGraph } from '@/lib/bdprompt-schema';
+import { deriveCrumbs } from '@/lib/schema-helpers';
 
 interface SEOHeadProps {
   title?: string;
@@ -13,8 +15,10 @@ interface SEOHeadProps {
   author?: string;
   publishedTime?: string;
   modifiedTime?: string;
-  breadcrumbs?: Array<{ name: string; url: string }>;
-  structuredData?: Record<string, unknown>;
+  /** Full JSON-LD @graph for this route (from src/lib/bdprompt-schema.ts). */
+  graph?: Record<string, unknown>;
+  /** FAQs to fold into the default static graph. */
+  faqs?: Array<{ q: string; a: string }>;
   noindex?: boolean;
 }
 
@@ -29,10 +33,11 @@ export const SEOHead = ({
   author = "bdprompt.com",
   publishedTime,
   modifiedTime,
-  breadcrumbs,
-  structuredData,
+  graph: pageGraph,
+  faqs,
   noindex = false,
 }: SEOHeadProps) => {
+
   const location = useLocation();
   
   // Get route-based metadata as fallback when props not provided
