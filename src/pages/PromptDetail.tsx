@@ -7,7 +7,8 @@ import { Separator } from "@/components/ui/separator";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
-import { SEOHead, generatePromptStructuredData } from "@/components/SEOHead";
+import { SEOHead } from "@/components/SEOHead";
+import { buildPromptDetailGraph } from "@/lib/bdprompt-schema";
 import { PromptCard } from "@/components/PromptCard";
 import { SocialShareButtons } from "@/components/SocialShareButtons";
 import { 
@@ -238,33 +239,23 @@ const PromptDetail = () => {
 
   const seoData = getSEOData();
 
-  // Generate structured data
-  const getStructuredData = () => {
-    if (!prompt) return null;
-    
-    return generatePromptStructuredData({
-      id: prompt.id,
-      title: prompt.title,
-      titleBn: prompt.titleBn,
+  // Single JSON-LD graph for this prompt
+  const promptGraph = useMemo(() => {
+    if (!prompt || !dbPrompt) return undefined;
+    const now = new Date().toISOString();
+    return buildPromptDetailGraph({
+      slug: String(id),
+      title: language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title,
       description: language === 'bn' && prompt.descriptionBn ? prompt.descriptionBn : prompt.description,
-      category: prompt.category,
-      author: prompt.author,
-      rating: prompt.rating,
-      ratingCount: prompt.usageCount,
-      price: prompt.price,
-      currency: 'BDT'
-    });
-  };
-
-  // Generate breadcrumbs
-  const getBreadcrumbs = () => {
-    if (!prompt) return [];
-    return [
-      { name: language === 'bn' ? 'হোম' : 'Home', url: 'https://bdprompt.com/' },
-      { name: language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category, url: `https://bdprompt.com/category/${prompt.category.toLowerCase().replace(' ', '-')}` },
-      { name: language === 'bn' && prompt.titleBn ? prompt.titleBn : prompt.title, url: `https://bdprompt.com/prompt/${id}` }
-    ];
-  };
+      categorySlug: prompt.category.toLowerCase().replace(/\s+/g, '-'),
+      categoryName: language === 'bn' && prompt.categoryBn ? prompt.categoryBn : prompt.category,
+      price: prompt.price || 0,
+      createdAt: dbPrompt.created_at || now,
+      updatedAt: dbPrompt.updated_at || dbPrompt.created_at || now,
+      image: getOgImageUrl(),
+    }) as unknown as Record<string, unknown>;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prompt, dbPrompt, id, language]);
 
   if (isLoading) {
     return (
@@ -307,8 +298,7 @@ const PromptDetail = () => {
           ogType="product"
           language={language}
           author={prompt.author}
-          breadcrumbs={getBreadcrumbs()}
-          structuredData={getStructuredData() || undefined}
+          graph={promptGraph}
         />
       )}
       
