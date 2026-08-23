@@ -13,11 +13,46 @@ import { PenTool, DollarSign, Users, TrendingUp, Check, ArrowRight } from "lucid
 
 const BecomeCreator = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
+  const [submitting, setSubmitting] = useState(false);
+  const [submitted, setSubmitted] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const savedLang = localStorage.getItem('bdprompt-language') as 'bn' | 'en' || 'bn';
     setLanguage(savedLang);
   }, []);
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.currentTarget;
+    const data = new FormData(form);
+    setSubmitting(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const { error } = await supabase.from('creator_applications').insert({
+        user_id: sessionData.session?.user.id ?? null,
+        name: String(data.get('name') ?? '').trim(),
+        email: String(data.get('email') ?? '').trim(),
+        expertise: String(data.get('expertise') ?? '').trim() || null,
+        portfolio: String(data.get('portfolio') ?? '').trim() || null,
+        why_join: String(data.get('whyJoin') ?? '').trim() || null,
+      });
+      if (error) throw error;
+      form.reset();
+      setSubmitted(true);
+    } catch {
+      toast({
+        variant: 'destructive',
+        title: language === 'bn' ? 'জমা দেওয়া যায়নি' : 'Could not submit',
+        description: language === 'bn'
+          ? 'আবার চেষ্টা করুন বা পরে ফিরে আসুন।'
+          : 'Please try again in a moment.',
+      });
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
 
   const handleLanguageChange = (lang: 'bn' | 'en') => {
     setLanguage(lang);
