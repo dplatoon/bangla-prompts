@@ -10,6 +10,9 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { PenTool, DollarSign, Users, TrendingUp, Check, ArrowRight } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
 
 const BecomeCreator = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
