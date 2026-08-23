@@ -197,43 +197,60 @@ const BecomeCreator = () => {
                 </CardDescription>
               </CardHeader>
               <CardContent>
-                <form className="space-y-4">
+                {submitted ? (
+                  <div
+                    role="status"
+                    className={`rounded-lg border border-primary/30 bg-primary/5 p-6 text-center ${language === 'bn' ? 'font-bengali' : ''}`}
+                  >
+                    <Check className="mx-auto mb-3 h-8 w-8 text-primary" aria-hidden="true" />
+                    <p className="font-medium">
+                      {language === 'bn'
+                        ? 'আপনার আবেদন জমা হয়েছে! আমরা শীঘ্রই ইমেইলে যোগাযোগ করব।'
+                        : 'Your application was submitted! We will reach out by email soon.'}
+                    </p>
+                  </div>
+                ) : (
+                <form className="space-y-4" onSubmit={handleSubmit}>
                   <div>
-                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <label htmlFor="creator-name" className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {currentText.name}
                     </label>
-                    <Input className="mt-1" placeholder={language === 'bn' ? 'আপনার নাম' : 'Your name'} />
+                    <Input id="creator-name" name="name" required maxLength={120} className="mt-1" placeholder={language === 'bn' ? 'আপনার নাম' : 'Your name'} />
                   </div>
                   <div>
-                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <label htmlFor="creator-email" className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {currentText.email}
                     </label>
-                    <Input type="email" className="mt-1" placeholder="email@example.com" />
+                    <Input id="creator-email" name="email" type="email" required maxLength={200} className="mt-1" placeholder="email@example.com" />
                   </div>
                   <div>
-                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <label htmlFor="creator-expertise" className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {currentText.expertise}
                     </label>
-                    <Input className="mt-1" placeholder={language === 'bn' ? 'যেমন: কন্টেন্ট, মার্কেটিং, কোড' : 'e.g., Content, Marketing, Code'} />
+                    <Input id="creator-expertise" name="expertise" maxLength={300} className="mt-1" placeholder={language === 'bn' ? 'যেমন: কন্টেন্ট, মার্কেটিং, কোড' : 'e.g., Content, Marketing, Code'} />
                   </div>
                   <div>
-                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <label htmlFor="creator-portfolio" className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {currentText.portfolio}
                     </label>
-                    <Input className="mt-1" placeholder="https://" />
+                    <Input id="creator-portfolio" name="portfolio" maxLength={500} className="mt-1" placeholder="https://" />
                   </div>
                   <div>
-                    <label className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    <label htmlFor="creator-why" className={`text-sm font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
                       {currentText.whyJoin}
                     </label>
-                    <Textarea className="mt-1" rows={4} />
+                    <Textarea id="creator-why" name="whyJoin" maxLength={2000} className="mt-1" rows={4} />
                   </div>
-                  <Button className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}>
-                    {currentText.submit}
+                  <Button type="submit" disabled={submitting} className={`w-full ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {submitting
+                      ? (language === 'bn' ? 'জমা হচ্ছে…' : 'Submitting…')
+                      : currentText.submit}
                   </Button>
                 </form>
+                )}
               </CardContent>
             </Card>
+
           </div>
         </main>
 
