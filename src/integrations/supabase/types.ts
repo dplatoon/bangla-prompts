@@ -101,6 +101,42 @@ export type Database = {
         }
         Relationships: []
       }
+      creator_applications: {
+        Row: {
+          created_at: string
+          email: string
+          expertise: string | null
+          id: string
+          name: string
+          portfolio: string | null
+          status: string
+          user_id: string | null
+          why_join: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          expertise?: string | null
+          id?: string
+          name: string
+          portfolio?: string | null
+          status?: string
+          user_id?: string | null
+          why_join?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          expertise?: string | null
+          id?: string
+          name?: string
+          portfolio?: string | null
+          status?: string
+          user_id?: string | null
+          why_join?: string | null
+        }
+        Relationships: []
+      }
       prompt_purchases: {
         Row: {
           amount: number
