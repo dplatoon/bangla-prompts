@@ -359,9 +359,11 @@ const BlogPostChatGPTBanglaPrompt = () => {
         description={currentContent.intro.substring(0, 155)}
         canonicalUrl="https://bdprompt.com/blog/chatgpt-bangla-prompt"
         language={language}
+        ogType="article"
         keywords="ChatGPT বাংলা প্রম্পট, বাংলা AI প্রম্পট, ChatGPT Bangladesh, AI prompts Bengali, ChatGPT tips Bangla, ছাত্রদের জন্য ChatGPT, প্রফেশনাল প্রম্পট"
         graph={articleGraph}
       />
+
       
       <div className="min-h-screen bg-background">
         <Header language={language} onLanguageChange={handleLanguageChange} />
