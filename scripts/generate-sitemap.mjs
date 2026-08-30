@@ -60,19 +60,25 @@ async function fetchPrompts() {
 
 let xml = readFileSync(sitemapPath, 'utf8');
 
-// Strip any previously-generated dynamic block, then re-append a fresh one.
-xml = xml.replace(/\s*<!-- BEGIN dynamic prompts -->[\s\S]*?<!-- END dynamic prompts -->/g, '');
-
-// Remove stale <lastmod> from static URLs. The hand-maintained static entries
-// do not have real page-specific timestamps, so keeping them violates the
-// sitemap-lastmod policy. Only dynamic /prompt/{slug} URLs keep their DB lastmod.
-xml = xml.replace(/<url>[\s\S]*?<\/url>/g, (match) => {
-  if (/<loc>https:\/\/bdprompt\.com\/prompt\//.test(match)) return match;
-  return match.replace(/\n\s*<lastmod>[^<]+<\/lastmod>/g, '');
-});
-
 const prompts = await fetchPrompts();
+
 if (prompts.length > 0) {
+  // Strip any previously-generated dynamic block, then re-append a fresh one.
+  xml = xml.replace(/\s*<!-- BEGIN dynamic prompts -->[\s\S]*?<!-- END dynamic prompts -->/g, '');
+
+  // Remove stale <lastmod> from static URLs. The hand-maintained static entries
+  // do not have real page-specific timestamps, so keeping them violates the
+  // sitemap-lastmod policy. Only dynamic /prompt/{slug} URLs keep their DB lastmod.
+  xml = xml.replace(/<url>[\s\S]*?<\/url>/g, (match) => {
+    if (/<loc>https:\/\/bdprompt\.com\/prompt\//.test(match)) return match;
+    return match.replace(/\n\s*<lastmod>[^<]+<\/lastmod>/g, '');
+  });
+} else {
+  // Fail-safe: when the database is unreachable (e.g. no network in the build
+  // sandbox), keep the existing committed dynamic block instead of dropping
+  // all /prompt/* URLs from the sitemap.
+  console.warn('[sitemap] fetch returned 0 prompts; keeping existing dynamic block');
+}
   const block = prompts
     .map((p) =>
       [
