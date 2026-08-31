@@ -12,6 +12,7 @@ import { buildHomeGraph } from "@/lib/bdprompt-schema";
 import { FAQ, getFaqData } from "@/components/FAQ";
 import { PWAStatus } from "@/components/PWAStatus";
 import { PromptCategoryLinks } from "@/components/PromptCategoryLinks";
+import { promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -41,16 +42,18 @@ const Index = () => {
     localStorage.setItem('bdprompt-language', lang);
   };
 
+  // Counts are derived from the build-time prompt list (siteStats) so the meta
+  // title always matches the hero section — no hardcoded numbers to drift.
   const seoContent = {
     bn: {
-      title: "বাংলা AI প্রম্পট — 60+ ChatGPT ও Claude প্রম্পট | BdPrompt",
-      description: "বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ৬০+ ready prompts। ChatGPT, Claude ও Gemini সাপোর্টেড।",
-      keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh, প্রম্পট টেমপ্লেট, বাংলা কন্টেন্ট, AI কন্টেন্ট রাইটিং, SSC প্রম্পট, HSC ChatGPT"
+      title: `বাংলা AI প্রম্পট — ${promptCountLabelBn} ChatGPT ও Claude প্রম্পট | BdPrompt`,
+      description: `বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ${promptCountLabelBn} ready prompts। ChatGPT, Claude ও Gemini সাপোর্টেড।`,
+      keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, শিক্ষা প্রম্পট, ফ্রিল্যান্সিং প্রম্পট, ব্যবসা প্রম্পট, AI prompts Bangladesh"
     },
     en: {
-      title: "Bangla AI Prompt Generator — 60+ ChatGPT Prompts | BdPrompt",
-      description: "Generate free Bangla AI prompts for ChatGPT, Claude & Gemini. 60+ ready-to-use prompts for students, freelancers & businesses. No signup needed.",
-      keywords: "Bangla AI prompts, Bangla prompts, ChatGPT Bangla, AI prompts Bangladesh, prompt templates, Bangla content writing, SSC prompts, HSC ChatGPT"
+      title: `Bangla AI Prompt Generator — ${promptCountLabel} ChatGPT Prompts | BdPrompt`,
+      description: `Generate free Bangla AI prompts for ChatGPT, Claude & Gemini. ${promptCountLabel} ready-to-use prompts for students, freelancers & businesses. No signup needed.`,
+      keywords: "Bangla AI prompts, education prompts Bangla, freelancer AI prompts, ChatGPT Bangla, AI prompts Bangladesh, business prompts, content prompts"
     }
   };
 

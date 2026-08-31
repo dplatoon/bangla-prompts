@@ -1,5 +1,8 @@
 // Centralized SEO metadata configuration for all pages
 // Each page should have unique title (50-60 chars) and description (140-155 chars)
+// The homepage count is derived from the build-time prompt list (siteStats) so
+// the title always matches the hero section instead of a hardcoded number.
+import { promptCountLabel, promptCountLabelBn } from '@/config/siteStats';
 
 export interface PageMetadata {
   title: string;
@@ -11,10 +14,10 @@ export interface PageMetadata {
 
 export const pageMetadata: Record<string, PageMetadata> = {
   '/': {
-    title: 'বাংলা AI প্রম্পট জেনারেটর | 60+ প্রম্পট | BdPrompt',
-    titleEn: 'Bangla AI Prompt Generator | 60+ Prompts | BdPrompt',
-    description: '60+ বাংলা AI প্রম্পট ChatGPT, Claude, Gemini-এর জন্য। শিক্ষা, ব্যবসা, কন্টেন্ট, কবিতা এবং আরও অনেক কিছু।',
-    descriptionEn: '60+ Bangla AI prompts for ChatGPT, Claude, Gemini. Education, business, content, poetry and more.',
+    title: `বাংলা AI প্রম্পট জেনারেটর | ${promptCountLabelBn} প্রম্পট | BdPrompt`,
+    titleEn: `Bangla AI Prompt Generator | ${promptCountLabel} Prompts | BdPrompt`,
+    description: `${promptCountLabelBn} বাংলা AI প্রম্পট ChatGPT, Claude, Gemini-এর জন্য। শিক্ষা, ব্যবসা, কন্টেন্ট, কবিতা এবং আরও অনেক কিছু।`,
+    descriptionEn: `${promptCountLabel} Bangla AI prompts for ChatGPT, Claude, Gemini. Education, business, content, poetry and more.`,
     keywords: 'বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh'
   },
   '/explore': {
