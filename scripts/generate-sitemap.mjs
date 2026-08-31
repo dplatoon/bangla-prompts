@@ -73,12 +73,7 @@ if (prompts.length > 0) {
     if (/<loc>https:\/\/bdprompt\.com\/prompt\//.test(match)) return match;
     return match.replace(/\n\s*<lastmod>[^<]+<\/lastmod>/g, '');
   });
-} else {
-  // Fail-safe: when the database is unreachable (e.g. no network in the build
-  // sandbox), keep the existing committed dynamic block instead of dropping
-  // all /prompt/* URLs from the sitemap.
-  console.warn('[sitemap] fetch returned 0 prompts; keeping existing dynamic block');
-}
+
   const block = prompts
     .map((p) =>
       [
@@ -95,6 +90,11 @@ if (prompts.length > 0) {
     .join('\n');
   const dynamic = `\n  <!-- BEGIN dynamic prompts -->\n${block}\n  <!-- END dynamic prompts -->\n`;
   xml = xml.replace('</urlset>', `${dynamic}</urlset>`);
+} else {
+  // Fail-safe: when the database is unreachable (e.g. no network in the build
+  // sandbox), keep the existing committed dynamic block instead of dropping
+  // all /prompt/* URLs from the sitemap.
+  console.warn('[sitemap] fetch returned 0 prompts; keeping existing dynamic block');
 }
 
 writeFileSync(sitemapPath, xml);
