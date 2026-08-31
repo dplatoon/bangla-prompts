@@ -46,7 +46,7 @@ export const SEOHead = ({
   // Use provided props or fallback to route-based metadata
   const finalTitle = title || routeMetadata.title;
   const finalDescription = description || routeMetadata.description;
-  const finalKeywords = keywords || routeMetadata.keywords || "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা";
+  const finalKeywords = keywords || routeMetadata.keywords || "বাংলা AI প্রম্পট, শিক্ষা প্রম্পট, ফ্রিল্যান্সিং প্রম্পট, ব্যবসা প্রম্পট, ChatGPT বাংলা, AI prompts Bangladesh";
   
   // Auto-generate canonical URL from current route if not explicitly provided
   // Homepage gets trailing slash, all other pages don't
