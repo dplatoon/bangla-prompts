@@ -58,24 +58,24 @@ const PROMPTS: YTPrompt[] = [
     category: "Faceless",
     title: "Faceless Channel Script",
     titleBn: "ফেসলেস চ্যানেল স্ক্রিপ্ট",
-    price: 49,
+    price: 0,
     ai: ["ChatGPT"],
     uses: 3100,
     rating: 4.9,
     prompt:
-      "[Premium prompt — purchase to unlock the full faceless channel script template with voice-over pacing, visual cue map, retention hooks every 30 seconds, and monetization-friendly structure.]",
+      "তুমি একজন faceless YouTube channel-এর script writer। [TOPIC]-এর উপর একটি ৬-৮ মিনিটের voice-over script লিখে দাও, যেখানে ক্যামেরার সামনে কেউ থাকবে না — শুধু voice-over + stock footage / motion graphics।\n\nStructure:\n1. Hook (০-১৫ সেকেন্ড): একটি counter-intuitive fact বা প্রশ্ন\n2. Promise (১৫-৩০ সেকেন্ড): এই ভিডিও শেষে viewer কী জানবে\n3. Body — ৪-৫ টি section, প্রতিটি ৬০-৯০ সেকেন্ড\n4. প্রতি ৩০ সেকেন্ডে একটি retention hook (\"কিন্তু এখানেই আসল ব্যাপার...\", \"এর পরের অংশটাই সবচেয়ে গুরুত্বপূর্ণ\")\n5. Recap + CTA\n\nআউটপুট format:\n- প্রতিটি লাইনের পাশে [VISUAL: ...] দিয়ে stock footage / graphic suggestion\n- [PAUSE] দিয়ে voice-over pacing mark করো\n- Advertiser-friendly ভাষা ব্যবহার করো (কোনো graphic বা controversial শব্দ নয়)\n\nটোন: calm, authoritative, storytelling-driven। ভাষা: সহজ বাংলা, প্রয়োজনে English technical term।",
   },
   {
     id: "product-review-affiliate",
     category: "Marketing",
     title: "Product Review Script (Affiliate)",
     titleBn: "প্রোডাক্ট রিভিউ স্ক্রিপ্ট (অ্যাফিলিয়েট)",
-    price: 79,
+    price: 0,
     ai: ["ChatGPT", "Claude", "Gemini"],
     uses: 2780,
     rating: 4.9,
     prompt:
-      "[Premium prompt — purchase to unlock the affiliate review template with FTC-safe disclosure, conversion-optimized CTA placement, comparison table generator, and link-stacking framework.]",
+      "তুমি একজন affiliate marketer এবং YouTube script writer। [PRODUCT NAME]-এর জন্য একটি ৭-৯ মিনিটের honest affiliate review script লিখে দাও [TARGET AUDIENCE]-এর জন্য।\n\nStructure:\n1. Hook: viewer-এর আসল problem — \"[PROBLEM] নিয়ে ভুগছেন?\"\n2. Disclosure: শুরুতেই স্পষ্ট affiliate disclosure লাইন (বাংলা ও English দুটোই দাও)\n3. কার জন্য এই product, কার জন্য নয় — honest filter\n4. ৩টি key feature, প্রতিটির সাথে real use case\n5. Honest cons — অন্তত ২টি সীমাবদ্ধতা\n6. Comparison: [ALTERNATIVE 1] ও [ALTERNATIVE 2]-এর সাথে একটি table (price, key feature, best for)\n7. Verdict + CTA — description-এর link-এ যাওয়ার natural reason\n\nনিয়ম:\n- কোনো অতিরঞ্জিত claim বা fake guarantee নয়\n- মূল্য BDT-তে, বাংলাদেশি availability উল্লেখ করো\n- CTA ভিডিওর মাঝে একবার ও শেষে একবার — spammy নয়",
   },
   {
     id: "news-commentary",
