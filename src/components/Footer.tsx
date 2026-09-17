@@ -50,7 +50,7 @@ export const Footer = ({ language }: FooterProps) => {
       },
       social: "সোশ্যাল মিডিয়া",
       copyright: `© ${yearBn} BD Prompt by Start BD। সকল অধিকার সংরক্ষিত।`,
-      madeWith: "💚 দিয়ে বাংলাদেশে তৈরি"
+      madeWith: "Start BD"
     },
     en: {
       tagline: "Bangla AI Prompts Hub — Your creativity companion",
