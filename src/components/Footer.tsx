@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Github, Twitter, Facebook, Mail } from "lucide-react";
+import { Mail } from "lucide-react";
 
 interface FooterProps {
   language: 'bn' | 'en';
