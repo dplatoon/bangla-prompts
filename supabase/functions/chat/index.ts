@@ -86,7 +86,8 @@ serve(async (req) => {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
       }
-      if (!msg.role || typeof msg.role !== 'string' || !['user', 'assistant', 'system'].includes(msg.role)) {
+      // Only user/assistant roles allowed from callers; the server defines the system prompt itself
+      if (!msg.role || typeof msg.role !== 'string' || !['user', 'assistant'].includes(msg.role)) {
         return new Response(JSON.stringify({ error: "Invalid request", code: "VALIDATION_ERROR" }), {
           status: 400,
           headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -148,7 +149,11 @@ Your responsibilities:
 
 Be concise, friendly, and culturally aware when dealing with Bangla users. If a user asks in Bangla (বাংলা), respond in Bangla. If they ask in English, respond in English.`
             },
-            ...messages.slice(-20),
+            // Rebuild message objects with only safe fields (role + content)
+            ...messages.slice(-20).map((msg: { role: string; content: string }) => ({
+              role: msg.role,
+              content: msg.content,
+            })),
           ],
           stream: true,
         }),
