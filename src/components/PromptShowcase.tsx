@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useLazyLoad } from "@/hooks/useIntersectionObserver";
 import type { PromptData } from "@/data/mockPrompts";
 import { TrendingUp, Search, Loader2, ArrowRight } from "lucide-react";
@@ -21,7 +22,7 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
 
-  const { data: prompts, isLoading: promptsLoading } = usePrompts();
+  const { data: prompts, isLoading: promptsLoading, isError: promptsError, refetch } = usePrompts();
   const { data: categories } = useCategories();
 
   const handleTryPrompt = (promptData: PromptData) => {
