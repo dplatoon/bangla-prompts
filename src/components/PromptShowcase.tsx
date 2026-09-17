@@ -48,7 +48,10 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       loading: "লোড হচ্ছে...",
       noResults: "কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।",
       resultsFound: "টি প্রম্পট পাওয়া গেছে",
-      tryPlayground: "প্লেগ্রাউন্ডে যান"
+      tryPlayground: "প্লেগ্রাউন্ডে যান",
+      errorTitle: "প্রম্পট লোড করা যায়নি",
+      errorBody: "ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।",
+      retry: "পুনরায় চেষ্টা করুন"
     },
     en: {
       title: "Popular Prompts",
@@ -67,7 +70,10 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       loading: "Loading...",
       noResults: "No prompts found. Try different search terms.",
       resultsFound: "prompts found",
-      tryPlayground: "Go to Playground"
+      tryPlayground: "Go to Playground",
+      errorTitle: "Couldn't load prompts",
+      errorBody: "Check your connection and try again.",
+      retry: "Try again"
     }
   };
 
