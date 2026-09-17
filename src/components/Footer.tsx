@@ -146,21 +146,6 @@ export const Footer = ({ language }: FooterProps) => {
                 </h4>
                 <div className="flex space-x-2">
                   <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
-                    <a href="https://twitter.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
-                      <Twitter className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
-                    <a href="https://facebook.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
-                      <Facebook className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
-                    <a href="https://github.com/bdprompt" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
-                      <Github className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
-                    </a>
-                  </Button>
-                  <Button variant="outline" size="sm" className="w-8 h-8 sm:w-10 sm:h-10 p-0" asChild>
                     <a href="mailto:hello@bdprompt.com" aria-label="Email">
                       <Mail className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                     </a>
