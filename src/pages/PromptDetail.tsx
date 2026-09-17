@@ -555,6 +555,28 @@ const PromptDetail = () => {
                 </Card>
               )}
 
+              {/* How to use */}
+              {(() => {
+                const useCase = language === 'bn'
+                  ? (dbPrompt?.use_case_bn || dbPrompt?.use_case_en)
+                  : (dbPrompt?.use_case_en || dbPrompt?.use_case_bn);
+                if (!useCase) return null;
+                return (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                        {language === 'bn' ? 'কীভাবে ব্যবহার করবেন' : 'How to use'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm text-muted-foreground whitespace-pre-line ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+                        {useCase}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })()}
+
               {/* Demo */}
               {prompt.demoInput && prompt.demoOutput && (
                 <Card>
