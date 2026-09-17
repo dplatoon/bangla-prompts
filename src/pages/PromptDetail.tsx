@@ -271,18 +271,39 @@ const PromptDetail = () => {
 
   if (!prompt) {
     return (
-      <div className="min-h-screen bg-background">
-        <Header language={language} onLanguageChange={handleLanguageChange} />
-        <div className="container mx-auto px-4 py-20 text-center">
-          <h1 className={`text-2xl font-bold ${language === 'bn' ? 'font-bengali' : ''}`}>
-            {currentText.notFound}
-          </h1>
-          <Button onClick={() => navigate('/')} className="mt-4">
-            {currentText.back}
-          </Button>
+      <>
+        <SEOHead
+          title={language === 'bn' ? 'প্রম্পট পাওয়া যায়নি | BdPrompt' : 'Prompt not found | BdPrompt'}
+          description={language === 'bn'
+            ? 'এই প্রম্পটটি আর উপলব্ধ নেই। অন্যান্য বাংলা AI প্রম্পট দেখুন।'
+            : 'This prompt is no longer available. Browse other Bangla AI prompts.'}
+          canonicalUrl={`https://bdprompt.com/prompt/${id}`}
+          language={language}
+          noindex
+        />
+        <div className="min-h-screen bg-background">
+          <Header language={language} onLanguageChange={handleLanguageChange} />
+          <div className="container mx-auto px-4 py-20 text-center space-y-4">
+            <h1 className={`text-2xl font-bold ${language === 'bn' ? 'font-bengali' : ''}`}>
+              {currentText.notFound}
+            </h1>
+            <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              {language === 'bn'
+                ? 'প্রম্পটটি মুছে ফেলা হয়েছে বা লিংকটি ভুল।'
+                : 'The prompt was removed or the link is incorrect.'}
+            </p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Button onClick={() => navigate('/explore')} className={language === 'bn' ? 'font-bengali' : ''}>
+                {language === 'bn' ? 'সব প্রম্পট দেখুন' : 'Browse all prompts'}
+              </Button>
+              <Button variant="outline" onClick={() => navigate('/')} className={language === 'bn' ? 'font-bengali' : ''}>
+                {currentText.back}
+              </Button>
+            </div>
+          </div>
+          <Footer language={language} />
         </div>
-        <Footer language={language} />
-      </div>
+      </>
     );
   }
 
@@ -533,6 +554,28 @@ const PromptDetail = () => {
                   </CardContent>
                 </Card>
               )}
+
+              {/* How to use */}
+              {(() => {
+                const useCase = language === 'bn'
+                  ? (dbPrompt?.use_case_bn || dbPrompt?.use_case_en)
+                  : (dbPrompt?.use_case_en || dbPrompt?.use_case_bn);
+                if (!useCase) return null;
+                return (
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className={language === 'bn' ? 'font-bengali' : ''}>
+                        {language === 'bn' ? 'কীভাবে ব্যবহার করবেন' : 'How to use'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <p className={`text-sm text-muted-foreground whitespace-pre-line ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+                        {useCase}
+                      </p>
+                    </CardContent>
+                  </Card>
+                );
+              })()}
 
               {/* Demo */}
               {prompt.demoInput && prompt.demoOutput && (

@@ -6,6 +6,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { PromptCard } from "./PromptCard";
 import { PlaygroundModal } from "./PlaygroundModal";
 import { usePrompts, useCategories, promptToPromptData } from "@/hooks/usePrompts";
+import { Skeleton } from "@/components/ui/skeleton";
 import { useLazyLoad } from "@/hooks/useIntersectionObserver";
 import type { PromptData } from "@/data/mockPrompts";
 import { TrendingUp, Search, Loader2, ArrowRight } from "lucide-react";
@@ -21,7 +22,7 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
   const [selectedCategory, setSelectedCategory] = useState('all');
   const [sortBy, setSortBy] = useState('popular');
 
-  const { data: prompts, isLoading: promptsLoading } = usePrompts();
+  const { data: prompts, isLoading: promptsLoading, isError: promptsError, refetch } = usePrompts();
   const { data: categories } = useCategories();
 
   const handleTryPrompt = (promptData: PromptData) => {
@@ -47,7 +48,10 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       loading: "লোড হচ্ছে...",
       noResults: "কোনো প্রম্পট পাওয়া যায়নি। অন্য কিছু খুঁজে দেখুন।",
       resultsFound: "টি প্রম্পট পাওয়া গেছে",
-      tryPlayground: "প্লেগ্রাউন্ডে যান"
+      tryPlayground: "প্লেগ্রাউন্ডে যান",
+      errorTitle: "প্রম্পট লোড করা যায়নি",
+      errorBody: "ইন্টারনেট সংযোগ চেক করে আবার চেষ্টা করুন।",
+      retry: "পুনরায় চেষ্টা করুন"
     },
     en: {
       title: "Popular Prompts",
@@ -66,7 +70,10 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
       loading: "Loading...",
       noResults: "No prompts found. Try different search terms.",
       resultsFound: "prompts found",
-      tryPlayground: "Go to Playground"
+      tryPlayground: "Go to Playground",
+      errorTitle: "Couldn't load prompts",
+      errorBody: "Check your connection and try again.",
+      retry: "Try again"
     }
   };
 
@@ -197,16 +204,45 @@ export const PromptShowcase = ({ language }: PromptShowcaseProps) => {
         </div>
 
         {/* Results Info */}
-        <div className="text-center mb-6">
-          <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-            {promptsLoading ? currentText.loading : `${filteredAndSortedPrompts.length} ${currentText.resultsFound}`}
-          </p>
-        </div>
+        {!promptsError && (
+          <div className="text-center mb-6">
+            <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+              {promptsLoading ? currentText.loading : `${filteredAndSortedPrompts.length} ${currentText.resultsFound}`}
+            </p>
+          </div>
+        )}
 
         {/* Prompt Grid */}
-        {promptsLoading ? (
-          <div className="flex justify-center items-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary" />
+        {promptsError ? (
+          <div className="max-w-md mx-auto text-center border border-border rounded-xl p-8 space-y-3">
+            <h3 className={`text-lg font-semibold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+              {currentText.errorTitle}
+            </h3>
+            <p className={`text-muted-foreground ${language === 'bn' ? 'font-bengali text-bengali' : ''}`}>
+              {currentText.errorBody}
+            </p>
+            <Button onClick={() => refetch()} className={language === 'bn' ? 'font-bengali' : ''}>
+              {currentText.retry}
+            </Button>
+          </div>
+        ) : promptsLoading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="border border-border rounded-xl p-6 space-y-4">
+                <div className="flex items-center justify-between">
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-5 w-12" />
+                </div>
+                <Skeleton className="h-6 w-3/4" />
+                <Skeleton className="h-4 w-full" />
+                <Skeleton className="h-4 w-5/6" />
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-16" />
+                </div>
+                <Skeleton className="h-10 w-full" />
+              </div>
+            ))}
           </div>
         ) : (
           <>
