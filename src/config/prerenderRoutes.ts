@@ -17,10 +17,6 @@ export const prerenderRoutes = [
   // Prompt category landing pages
   '/prompts',
   '/prompts/business',
-  '/prompts/education',
-  '/prompts/content',
-  '/prompts/code',
-  '/prompts/image',
   '/prompts/marketing',
 
   // Additional prompt cluster landing pages (audit fix — were falling back to homepage)
