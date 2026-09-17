@@ -149,7 +149,11 @@ Your responsibilities:
 
 Be concise, friendly, and culturally aware when dealing with Bangla users. If a user asks in Bangla (বাংলা), respond in Bangla. If they ask in English, respond in English.`
             },
-            ...messages.slice(-20),
+            // Rebuild message objects with only safe fields (role + content)
+            ...messages.slice(-20).map((msg: { role: string; content: string }) => ({
+              role: msg.role,
+              content: msg.content,
+            })),
           ],
           stream: true,
         }),
