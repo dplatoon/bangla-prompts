@@ -28,10 +28,23 @@ const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   Clock,
 };
 
+// Legacy/alias slugs that used to be advertised in the sitemap
+const SLUG_ALIASES: Record<string, string> = {
+  education: "students",
+  content: "bangla-writing",
+  code: "coding",
+  image: "creative-art",
+};
+
 const PromptCategory = () => {
   const [language, setLanguage] = useState<"bn" | "en">("bn");
   const { category: slug } = useParams<{ category: string }>();
   const category = slug ? getCategoryBySlug(slug) : undefined;
+
+  // Redirect legacy slugs to their current category page
+  if (!category && slug && SLUG_ALIASES[slug]) {
+    return <Navigate to={`/prompts/${SLUG_ALIASES[slug]}`} replace />;
+  }
 
   // Redirect to 404 if category not found
   if (!category) {
