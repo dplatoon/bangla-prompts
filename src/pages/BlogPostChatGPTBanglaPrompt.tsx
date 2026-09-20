@@ -50,6 +50,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
     bn: {
       title: "ChatGPT বাংলা প্রম্পট: ছাত্র ও পেশাদারদের জন্য সেরা ২০+ প্রম্পট গাইড",
       subtitle: "বাংলায় ChatGPT ব্যবহার করে পড়াশোনা, কাজ ও সৃজনশীলতায় এগিয়ে যান",
+      metaDescription: "ছাত্র, চাকরিজীবী ও ক্রিয়েটরদের জন্য ২০+ কপি-রেডি ChatGPT বাংলা প্রম্পট। পড়াশোনা, অফিস, ফ্রিল্যান্সিং ও কন্টেন্টের ব্যবহারিক টিপসসহ দেখুন।",
       author: "BD Prompt টিম",
       date: "২৩ জানুয়ারি, ২০২৬",
       readTime: "১২ মিনিট পড়া",
@@ -73,6 +74,9 @@ const BlogPostChatGPTBanglaPrompt = () => {
       
       creativeSectionTitle: "সৃজনশীল কাজের জন্য প্রম্পট",
       creativeSectionDesc: "কন্টেন্ট তৈরি, লেখালেখি ও সোশ্যাল মিডিয়ার জন্য",
+
+      everydaySectionTitle: "দৈনন্দিন কাজ ও ফ্রিল্যান্সিং প্রম্পট",
+      everydaySectionDesc: "চাকরি, ক্লায়েন্ট, অনুবাদ, তথ্য যাচাই ও ব্যক্তিগত পরিকল্পনার জন্য",
       
       tipsTitle: "প্রম্পট লেখার সোনালী নিয়ম",
       tipsContent: [
@@ -90,7 +94,15 @@ const BlogPostChatGPTBanglaPrompt = () => {
         },
         {
           title: "ধাপে ধাপে বলুন",
-          desc: "বড় কাজ ছোট ছোট ধাপে ভাগ করে বলুন।"
+          desc: "বড় কাজ ছোট ধাপে ভাগ করুন এবং প্রথম খসড়ার পর ChatGPT-কে একবারে একটি অংশ উন্নত করতে বলুন।"
+        },
+        {
+          title: "প্লেসহোল্ডার বদলান",
+          desc: "কপি করার পর [বিষয়], [শ্রোতা] ও [সময়]-এর মতো অংশ নিজের তথ্য দিয়ে পূরণ করুন।"
+        },
+        {
+          title: "আউটপুট যাচাই করুন",
+          desc: "তারিখ, পরিসংখ্যান, আইন বা চিকিৎসাবিষয়ক তথ্য নির্ভরযোগ্য উৎস থেকে মিলিয়ে নিন; প্রয়োজনে সূত্র চাইুন।"
         }
       ],
       
@@ -106,6 +118,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
     en: {
       title: "ChatGPT Bangla Prompts: Ultimate Guide for Students & Professionals",
       subtitle: "Master ChatGPT in Bengali for studies, work, and creativity",
+      metaDescription: "Explore 20+ copy-ready ChatGPT Bangla prompts for students, professionals and creators, with practical tips for study, work, freelancing and content.",
       author: "BD Prompt Team",
       date: "January 23, 2026",
       readTime: "12 min read",
@@ -129,6 +142,9 @@ const BlogPostChatGPTBanglaPrompt = () => {
       
       creativeSectionTitle: "Prompts for Creative Work",
       creativeSectionDesc: "For content creation, writing, and social media",
+
+      everydaySectionTitle: "Everyday and Freelancing Prompts",
+      everydaySectionDesc: "For jobs, clients, translation, fact-checking, and personal planning",
       
       tipsTitle: "Golden Rules for Writing Prompts",
       tipsContent: [
@@ -146,7 +162,15 @@ const BlogPostChatGPTBanglaPrompt = () => {
         },
         {
           title: "Break It Down",
-          desc: "Divide big tasks into smaller steps."
+          desc: "Divide a big task into small steps, then ask ChatGPT to improve one part at a time after the first draft."
+        },
+        {
+          title: "Replace Placeholders",
+          desc: "After copying, replace fields such as [topic], [audience], and [deadline] with your own details."
+        },
+        {
+          title: "Verify the Output",
+          desc: "Cross-check dates, statistics, legal, or medical claims with reliable sources and ask for citations when needed."
         }
       ],
       
@@ -278,6 +302,73 @@ const BlogPostChatGPTBanglaPrompt = () => {
     }
   ];
 
+  const everydayPrompts = [
+    {
+      id: "everyday-1",
+      titleBn: "চাকরির কভার লেটার",
+      titleEn: "Job Cover Letter",
+      promptBn: `আমি [পদের নাম] পদে [প্রতিষ্ঠানের নাম]-এ আবেদন করছি। চাকরির বিবরণ এবং আমার অভিজ্ঞতা বিশ্লেষণ করে ২৫০ শব্দের একটি স্বাভাবিক, প্রফেশনাল কভার লেটার লেখো। আমার প্রাসঙ্গিক দক্ষতার প্রমাণ দাও, অতিরঞ্জিত দাবি কোরো না এবং বাংলাদেশি চাকরির বাজার উপযোগী ভাষা ব্যবহার করো।\n\nচাকরির বিবরণ: [পেস্ট করুন]\nআমার অভিজ্ঞতা: [পেস্ট করুন]`,
+      promptEn: `I am applying for the [job title] role at [company]. Analyze the job description and my experience, then write a natural, professional 250-word cover letter. Demonstrate relevant skills without exaggeration and use language suitable for the Bangladeshi job market.\n\nJob description: [paste]\nMy experience: [paste]`,
+      icon: Briefcase
+    },
+    {
+      id: "everyday-2",
+      titleBn: "ফ্রিল্যান্সিং প্রপোজাল",
+      titleEn: "Freelancing Proposal",
+      promptBn: `এই ফ্রিল্যান্সিং কাজের জন্য ১৫০ শব্দের একটি ব্যক্তিগত প্রপোজাল লেখো। প্রথম দুই লাইনে ক্লায়েন্টের সমস্যাটি বুঝেছি তা দেখাও, এরপর আমার [দক্ষতা/অভিজ্ঞতা] কীভাবে সমাধান দেবে বলো। একটি বাস্তবসম্মত ডেলিভারি পরিকল্পনা ও শেষে একটি প্রাসঙ্গিক প্রশ্ন যোগ করো। জেনেরিক প্রশংসা বাদ দাও।\n\nজব পোস্ট: [পেস্ট করুন]`,
+      promptEn: `Write a personalized 150-word proposal for this freelance job. In the first two lines, show that I understand the client's problem. Explain how my [skills/experience] will solve it, include a realistic delivery plan, and end with one relevant question. Avoid generic praise.\n\nJob post: [paste]`,
+      icon: Briefcase
+    },
+    {
+      id: "everyday-3",
+      titleBn: "কাস্টমার অভিযোগের উত্তর",
+      titleEn: "Customer Complaint Reply",
+      promptBn: `নিচের গ্রাহকের অভিযোগের একটি সংক্ষিপ্ত বাংলা উত্তর লেখো। প্রথমে সমস্যাটি স্বীকার করো, আন্তরিকভাবে দুঃখ প্রকাশ করো, যা নিশ্চিতভাবে করা সম্ভব শুধু সেটিই প্রতিশ্রুতি দাও এবং পরবর্তী পদক্ষেপ ও সম্ভাব্য সময়সীমা পরিষ্কার করো। টোন হবে শান্ত ও সম্মানজনক।\n\nঅভিযোগ: [পেস্ট করুন]\nআমাদের সমাধান নীতি: [লিখুন]`,
+      promptEn: `Write a concise Bengali response to the customer complaint below. Acknowledge the problem, apologize sincerely, promise only what can be delivered, and clearly state the next step and expected timeline. Keep the tone calm and respectful.\n\nComplaint: [paste]\nOur resolution policy: [add]`,
+      icon: Briefcase
+    },
+    {
+      id: "everyday-4",
+      titleBn: "স্বাভাবিক বাংলা অনুবাদ",
+      titleEn: "Natural Bangla Translation",
+      promptBn: `নিচের লেখাটি প্রমিত কিন্তু স্বাভাবিক বাংলায় অনুবাদ করো। আক্ষরিক অনুবাদ এড়িয়ে মূল অর্থ, টোন ও উদ্দেশ্য ঠিক রাখো। বাংলাদেশের পাঠকের কাছে অপরিচিত উদাহরণ থাকলে অর্থ না বদলে স্থানীয়ভাবে বোধগম্য করো। শেষে ৩টি কঠিন শব্দের সহজ বিকল্প দাও।\n\nলেখা: [পেস্ট করুন]`,
+      promptEn: `Translate the following text into standard but natural Bengali. Avoid literal translation while preserving meaning, tone, and intent. Make unfamiliar examples understandable to Bangladeshi readers without changing the meaning. End with simpler alternatives for three difficult words.\n\nText: [paste]`,
+      icon: PenTool
+    },
+    {
+      id: "everyday-5",
+      titleBn: "তথ্য ও দাবি যাচাই",
+      titleEn: "Fact and Claim Check",
+      promptBn: `নিচের লেখার প্রতিটি যাচাইযোগ্য দাবিকে আলাদা তালিকায় দাও। প্রতিটির পাশে “যাচাই করা দরকার”, “সম্ভবত সঠিক” বা “প্রসঙ্গ দরকার” লিখো এবং কেন তা সংক্ষেপে বোঝাও। কোনো তথ্য বানাবে না। নির্ভরযোগ্য সরকারি, বিশ্ববিদ্যালয় বা প্রতিষ্ঠিত সংবাদ উৎসে কী খুঁজতে হবে তার সার্চ টার্ম দাও।\n\nলেখা: [পেস্ট করুন]`,
+      promptEn: `List every verifiable claim in the text below. Label each as “needs verification,” “likely accurate,” or “needs context,” and briefly explain why. Do not invent facts. Suggest search terms for reliable government, university, or established news sources.\n\nText: [paste]`,
+      icon: CheckCircle
+    },
+    {
+      id: "everyday-6",
+      titleBn: "মাসিক বাজেট পরিকল্পনা",
+      titleEn: "Monthly Budget Plan",
+      promptBn: `আমার মাসিক আয় [টাকা] এবং নিচে খরচের তালিকা দেওয়া আছে। বাংলাদেশি টাকায় প্রয়োজন, সঞ্চয় ও ঐচ্ছিক খরচ—এই তিন ভাগে একটি বাস্তবসম্মত বাজেট বানাও। কোথায় খরচ কমানো যায় দেখাও এবং ৩ মাসের জরুরি তহবিল লক্ষ্য দাও। এটি আর্থিক পরামর্শ নয়—অনুমানগুলো স্পষ্টভাবে লেখো।\n\nখরচ: [তালিকা দিন]`,
+      promptEn: `My monthly income is [amount] and my expenses are listed below. Create a realistic budget in Bangladeshi taka split into needs, savings, and optional spending. Show where costs can be reduced and set a three-month emergency-fund goal. State assumptions clearly and note this is not financial advice.\n\nExpenses: [list]`,
+      icon: Lightbulb
+    },
+    {
+      id: "everyday-7",
+      titleBn: "৭ দিনের পড়ার পরিকল্পনা",
+      titleEn: "Seven-Day Study Plan",
+      promptBn: `আমার [পরীক্ষা/বিষয়]-এর জন্য ৭ দিনের পড়ার পরিকল্পনা বানাও। প্রতিদিন আমার হাতে [সময়] আছে। কঠিন বিষয় আগে রাখো, ২৫ মিনিটের ফোকাস ব্লক, ছোট বিরতি, সক্রিয় স্মরণ এবং দৈনিক অনুশীলন পরীক্ষা যোগ করো। শেষ দিনে শুধু রিভিশন ও দুর্বল অংশ রাখো।\n\nসিলেবাস: [পেস্ট করুন]`,
+      promptEn: `Create a seven-day study plan for my [exam/subject]. I have [time] each day. Prioritize difficult topics and include 25-minute focus blocks, short breaks, active recall, and a daily practice quiz. Reserve the final day for revision and weak areas.\n\nSyllabus: [paste]`,
+      icon: GraduationCap
+    },
+    {
+      id: "everyday-8",
+      titleBn: "উত্তর উন্নত করার ফলো-আপ",
+      titleEn: "Improve an Answer with Follow-Ups",
+      promptBn: `তোমার আগের উত্তরটি নিচের মানদণ্ডে রিভিউ করো: নির্ভুলতা, স্পষ্টতা, অপ্রয়োজনীয় কথা, বাংলাদেশের প্রেক্ষাপট এবং ব্যবহারযোগ্যতা। প্রথমে ৫টি দুর্বলতা দেখাও, তারপর তথ্য না বানিয়ে উন্নত সংস্করণ লেখো। যেসব দাবির উৎস দরকার সেগুলোর পাশে [সূত্র যাচাই করুন] লিখো।\n\nআগের উত্তর: [পেস্ট করুন]`,
+      promptEn: `Review your previous answer for accuracy, clarity, unnecessary wording, Bangladeshi context, and usefulness. First list five weaknesses, then write an improved version without inventing information. Mark claims that need a source with [verify source].\n\nPrevious answer: [paste]`,
+      icon: CheckCircle
+    }
+  ];
+
   const currentContent = content[language];
 
   const PromptCard = ({ prompt, language }: { prompt: typeof studentPrompts[0], language: 'bn' | 'en' }) => {
@@ -327,10 +418,10 @@ const BlogPostChatGPTBanglaPrompt = () => {
   const articleGraph = buildArticleGraph({
     path: "/blog/chatgpt-bangla-prompt",
     headline: currentContent.title,
-    description: currentContent.intro.substring(0, 160),
+    description: currentContent.metaDescription,
     image: "https://bdprompt.com/og-image.png",
     datePublished: "2026-01-23",
-    dateModified: "2026-08-22",
+    dateModified: "2026-09-20",
     section: "AI গাইড",
     keywords: ["ChatGPT বাংলা প্রম্পট", "বাংলা AI প্রম্পট", "ChatGPT Bangladesh", "AI prompts Bengali"],
     crumbs: [
@@ -356,7 +447,7 @@ const BlogPostChatGPTBanglaPrompt = () => {
     <>
       <SEOHead 
         title={currentContent.title}
-        description={currentContent.intro.substring(0, 155)}
+        description={currentContent.metaDescription}
         canonicalUrl="https://bdprompt.com/blog/chatgpt-bangla-prompt"
         language={language}
         ogType="article"
@@ -471,6 +562,24 @@ const BlogPostChatGPTBanglaPrompt = () => {
               </p>
               <div className="grid md:grid-cols-2 gap-6">
                 {creativePrompts.map((prompt) => (
+                  <PromptCard key={prompt.id} prompt={prompt} language={language} />
+                ))}
+              </div>
+            </section>
+
+            {/* Everyday and Freelancing Prompts Section */}
+            <section className="mb-12">
+              <div className="flex items-center gap-3 mb-2">
+                <Briefcase className="w-8 h-8 text-primary" />
+                <h2 className={`text-2xl lg:text-3xl font-bold text-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
+                  {currentContent.everydaySectionTitle}
+                </h2>
+              </div>
+              <p className={`text-muted-foreground mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                {currentContent.everydaySectionDesc}
+              </p>
+              <div className="grid md:grid-cols-2 gap-6">
+                {everydayPrompts.map((prompt) => (
                   <PromptCard key={prompt.id} prompt={prompt} language={language} />
                 ))}
               </div>

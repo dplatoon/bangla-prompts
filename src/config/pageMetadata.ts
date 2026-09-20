@@ -233,8 +233,8 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/blog/chatgpt-bangla-prompt': {
     title: 'ChatGPT বাংলা প্রম্পট: ছাত্র ও পেশাদারদের জন্য সেরা ২০+ প্রম্পট গাইড | BdPrompt',
     titleEn: 'ChatGPT Bangla Prompts: Ultimate Guide for Students & Professionals | BdPrompt',
-    description: 'বাংলায় ChatGPT ব্যবহার করে পড়াশোনা, কাজ ও সৃজনশীলতায় এগিয়ে যান। ছাত্র ও পেশাদারদের জন্য সেরা প্রম্পট কপি করুন।',
-    descriptionEn: 'Master ChatGPT in Bengali for studies, work, and creativity. Copy the best prompts for students and professionals.',
+    description: 'ছাত্র, চাকরিজীবী ও ক্রিয়েটরদের জন্য ২০+ কপি-রেডি ChatGPT বাংলা প্রম্পট। পড়াশোনা, অফিস, ফ্রিল্যান্সিং ও কন্টেন্টের ব্যবহারিক টিপসসহ দেখুন।',
+    descriptionEn: 'Explore 20+ copy-ready ChatGPT Bangla prompts for students, professionals and creators, with practical tips for study, work, freelancing and content.',
     keywords: 'ChatGPT বাংলা প্রম্পট, বাংলা AI প্রম্পট, ChatGPT Bangladesh, AI prompts Bengali, ছাত্রদের জন্য ChatGPT'
   },
   '/youtube-script-prompts': {
