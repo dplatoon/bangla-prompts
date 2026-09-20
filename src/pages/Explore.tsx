@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead } from "@/components/SEOHead";
+import { getPageMetadata } from "@/config/pageMetadata";
 import { buildCategoryGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Input } from "@/components/ui/input";
