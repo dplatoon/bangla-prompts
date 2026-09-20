@@ -21,11 +21,11 @@ export const pageMetadata: Record<string, PageMetadata> = {
     keywords: 'বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh'
   },
   '/explore': {
-    title: 'প্রম্পট এক্সপ্লোর করুন | 60+ বাংলা AI প্রম্পট | BdPrompt',
-    titleEn: 'Explore Prompts | 60+ Bangla AI Prompts | BdPrompt',
-    description: 'বিভিন্ন ক্যাটাগরিতে 60+ বাংলা AI প্রম্পট ব্রাউজ করুন — ব্যবসা, শিক্ষা, কন্টেন্ট, কোড, ইমেজ, মার্কেটিং। ChatGPT, Claude ও Gemini-এর জন্য বাংলায় প্রস্তুত।',
-    descriptionEn: 'Browse 60+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.',
-    keywords: 'AI প্রম্পট এক্সপ্লোর, browse prompts, বাংলা প্রম্পট ক্যাটাগরি'
+    title: `বাংলা AI প্রম্পট ব্রাউজ করুন | ${promptCountLabelBn} ফ্রি প্রম্পট | BdPrompt`,
+    titleEn: `Browse Bangla AI Prompts | ${promptCountLabel} Free Prompts | BdPrompt`,
+    description: `${promptCountLabelBn} ফ্রি বাংলা AI প্রম্পট এক জায়গায় — ব্যবসা, শিক্ষা, কন্টেন্ট, কোড, ইমেজ ও মার্কেটিং। কপি করে সরাসরি ChatGPT, Claude ও Gemini-তে ব্যবহার করুন।`,
+    descriptionEn: `Browse ${promptCountLabel} free Bangla AI prompts — business, education, content, code, image and marketing. Copy and use directly in ChatGPT, Claude and Gemini.`,
+    keywords: 'ফ্রি বাংলা AI প্রম্পট, browse prompts, বাংলা প্রম্পট ক্যাটাগরি'
   },
   '/explore/business': {
     title: 'ব্যবসা প্রম্পট | বাংলা AI প্রম্পট | BdPrompt',

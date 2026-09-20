@@ -5,6 +5,7 @@ import { Footer } from "@/components/Footer";
 import { PromptCard } from "@/components/PromptCard";
 import { PlaygroundModal } from "@/components/PlaygroundModal";
 import { SEOHead } from "@/components/SEOHead";
+import { getPageMetadata } from "@/config/pageMetadata";
 import { buildCategoryGraph } from "@/lib/bdprompt-schema";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Input } from "@/components/ui/input";
@@ -347,21 +348,18 @@ const Explore = () => {
   const currentCategoryLabel = categoryList.find(c => c.value === selectedCategory)?.label;
   const currentCategoryLabelBn = categories?.find(c => c.name_en.toLowerCase() === selectedCategory)?.name_bn;
   
+  const exploreMeta = getPageMetadata('/explore', language);
   const seoTitle = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn' 
       ? `${currentCategoryLabelBn || currentCategoryLabel} প্রম্পট | বাংলা AI প্রম্পট | BdPrompt`
       : `${currentCategoryLabel} Prompts | Bangla AI Prompts | BdPrompt`
-    : language === 'bn' 
-      ? "প্রম্পট এক্সপ্লোর করুন | 60+ বাংলা AI প্রম্পট | BdPrompt" 
-      : "Explore Prompts | 60+ Bangla AI Prompts | BdPrompt";
+    : exploreMeta.title;
 
   const seoDescription = selectedCategory !== "all" && currentCategoryLabel
     ? language === 'bn'
       ? `${currentCategoryLabelBn || currentCategoryLabel} ক্যাটাগরির বাংলা AI প্রম্পট এক্সপ্লোর করুন। ChatGPT, Claude, Gemini-এর জন্য।`
       : `Explore ${currentCategoryLabel} Bangla AI prompts. For ChatGPT, Claude, Gemini.`
-    : language === 'bn' 
-      ? "বিভিন্ন ক্যাটাগরিতে 60+ বাংলা AI প্রম্পট ব্রাউজ করুন। ChatGPT, Claude, Gemini-এর জন্য।" 
-      : "Browse 60+ Bangla AI prompts across categories. For ChatGPT, Claude, Gemini.";
+    : exploreMeta.description;
 
   // Build breadcrumb items dynamically based on current category
   const breadcrumbItems = useMemo(() => {
