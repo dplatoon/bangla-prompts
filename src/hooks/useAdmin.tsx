@@ -31,7 +31,8 @@ export const useAdmin = () => {
       }
 
       try {
-        const { data, error } = await supabase.rpc('is_admin');
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const { data, error } = await (supabase.rpc as any)('current_user_is_admin');
         if (error) {
           // Log errors only in development to prevent information leakage in production
           if (import.meta.env.DEV) {
