@@ -1,12 +1,12 @@
 # BdPrompt
 
-> বাংলাদেশের সবচেয়ে বড় বাংলা AI প্রম্পট হাব — ৫০০+ কিউরেটেড প্রম্পট ChatGPT, Claude, Gemini, Midjourney এবং DALL·E-এর জন্য।
+> বাংলাদেশের জন্য তৈরি বাংলা AI প্রম্পট হাব — ৬০+ কিউরেটেড প্রম্পট ChatGPT, Claude, Gemini, Midjourney এবং DALL·E-এর জন্য।
 
 BdPrompt (bdprompt.com) is a Bangla-first AI prompt library for content creators, students, freelancers, and businesses in Bangladesh. Prompts are hand-written in Bangla, organized by category, and copy-ready for major LLM and image-generation tools. Both free and premium ("paid") prompts are available; premium prompts unlock the full template after purchase.
 
 ## Pages
 
-- [Home](/): বাংলা AI প্রম্পট জেনারেটর, ৫০০+ প্রম্পট।
+- [Home](/): বাংলা AI প্রম্পট জেনারেটর, ৬০+ প্রম্পট।
 - [Explore](/explore): সব ক্যাটাগরিতে প্রম্পট ব্রাউজ করুন।
 - [Guide](/guide): বাংলা AI প্রম্পট লেখার গাইড ও টিপস।
 - [Playground](/playground): রিয়েল-টাইমে AI প্রম্পট টেস্ট করুন।
