@@ -8,6 +8,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Users, MessageSquare, ExternalLink, Sparkles } from "lucide-react";
 
 const Community = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
