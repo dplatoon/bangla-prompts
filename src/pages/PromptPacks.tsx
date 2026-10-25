@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Check, Package, Sparkles, Zap, Crown } from "lucide-react";
+import { promptCount, promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 
 const PromptPacks = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -22,17 +23,19 @@ const PromptPacks = () => {
     localStorage.setItem('bdprompt-language', lang);
   };
 
+  // Library counts come from the build-time prompt list (siteStats) so every
+  // pack card and the JSON-LD stay in sync with the real published catalog.
   const packs = {
     bn: [
       {
         id: 1,
         name: "স্টার্টার প্যাক",
-        description: "নতুনদের জন্য আদর্শ - বেসিক প্রম্পট সংগ্রহ",
+        description: "নতুনদের জন্য আদর্শ - ফ্রি প্রম্পট সংগ্রহ",
         price: 0,
         originalPrice: 0,
-        prompts: 25,
+        library: `ফ্রি লাইব্রেরি — ${promptCountLabelBn} প্রম্পট`,
         icon: Package,
-        features: ["২৫টি বেসিক প্রম্পট", "কন্টেন্ট ক্যাটাগরি", "বাংলা ও ইংরেজি", "ফ্রি আপডেট"],
+        features: ["সম্পূর্ণ ফ্রি লাইব্রেরি", "সব বেসিক ক্যাটাগরি", "বাংলা ও ইংরেজি", "ফ্রি আপডেট"],
         popular: false
       },
       {
@@ -41,20 +44,20 @@ const PromptPacks = () => {
         description: "প্রফেশনালদের জন্য - সম্পূর্ণ প্রম্পট সংগ্রহ",
         price: 499,
         originalPrice: 999,
-        prompts: 100,
+        library: `সম্পূর্ণ লাইব্রেরি — ${promptCountLabelBn}+ প্রম্পট`,
         icon: Zap,
-        features: ["১০০+ প্রিমিয়াম প্রম্পট", "সব ক্যাটাগরি অ্যাক্সেস", "এক্সক্লুসিভ টেমপ্লেট", "প্রায়োরিটি সাপোর্ট", "মাসিক নতুন প্রম্পট"],
+        features: ["সব প্রিমিয়াম প্রম্পট", "সব ক্যাটাগরি অ্যাক্সেস", "এক্সক্লুসিভ টেমপ্লেট", "প্রায়োরিটি সাপোর্ট", "মাসিক নতুন প্রম্পট"],
         popular: true
       },
       {
         id: 3,
         name: "এন্টারপ্রাইজ প্যাক",
-        description: "টিম ও ব্যবসার জন্য - আনলিমিটেড অ্যাক্সেস",
+        description: "টিম ও ব্যবসার জন্য - সম্পূর্ণ অ্যাক্সেস",
         price: 1999,
         originalPrice: 3999,
-        prompts: 500,
+        library: `সব ${promptCountLabelBn}+ প্রম্পট + টিম অ্যাক্সেস`,
         icon: Crown,
-        features: ["৬০+ প্রম্পট", "টিম অ্যাক্সেস", "কাস্টম প্রম্পট রিকোয়েস্ট", "API অ্যাক্সেস", "ডেডিকেটেড সাপোর্ট", "হোয়াইট লেবেল অপশন"],
+        features: ["টিম অ্যাক্সেস", "কাস্টম প্রম্পট রিকোয়েস্ট", "API অ্যাক্সেস", "ডেডিকেটেড সাপোর্ট", "হোয়াইট লেবেল অপশন"],
         popular: false
       }
     ],
@@ -62,12 +65,12 @@ const PromptPacks = () => {
       {
         id: 1,
         name: "Starter Pack",
-        description: "Perfect for beginners - Basic prompt collection",
+        description: "Perfect for beginners - Free prompt collection",
         price: 0,
         originalPrice: 0,
-        prompts: 25,
+        library: `Free library — ${promptCountLabel} prompts`,
         icon: Package,
-        features: ["25 Basic Prompts", "Content Category", "Bengali & English", "Free Updates"],
+        features: ["Full free library", "All basic categories", "Bengali & English", "Free Updates"],
         popular: false
       },
       {
@@ -76,20 +79,20 @@ const PromptPacks = () => {
         description: "For professionals - Complete prompt collection",
         price: 499,
         originalPrice: 999,
-        prompts: 100,
+        library: `Full library — ${promptCountLabel}+ prompts`,
         icon: Zap,
-        features: ["100+ Premium Prompts", "All Category Access", "Exclusive Templates", "Priority Support", "Monthly New Prompts"],
+        features: ["All premium prompts", "All category access", "Exclusive templates", "Priority support", "Monthly new prompts"],
         popular: true
       },
       {
         id: 3,
         name: "Enterprise Pack",
-        description: "For teams & businesses - Unlimited access",
+        description: "For teams & businesses - Complete access",
         price: 1999,
         originalPrice: 3999,
-        prompts: 500,
+        library: `All ${promptCountLabel}+ prompts + team access`,
         icon: Crown,
-        features: ["60+ Prompts", "Team Access", "Custom Prompt Requests", "API Access", "Dedicated Support", "White Label Option"],
+        features: ["Team Access", "Custom Prompt Requests", "API Access", "Dedicated Support", "White Label Option"],
         popular: false
       }
     ]
@@ -101,7 +104,6 @@ const PromptPacks = () => {
     bn: {
       title: "প্রম্পট প্যাক",
       subtitle: "আপনার প্রয়োজন অনুযায়ী সেরা প্রম্পট প্যাক বেছে নিন",
-      prompts: "টি প্রম্পট",
       getStarted: "শুরু করুন",
       popular: "জনপ্রিয়",
       free: "ফ্রি",
@@ -110,7 +112,6 @@ const PromptPacks = () => {
     en: {
       title: "Prompt Packs",
       subtitle: "Choose the best prompt pack according to your needs",
-      prompts: "Prompts",
       getStarted: "Get Started",
       popular: "Popular",
       free: "Free",
@@ -126,7 +127,7 @@ const PromptPacks = () => {
       name: pack.name,
       description: pack.description,
       price: pack.price,
-      promptCount: pack.prompts,
+      promptCount,
     }))
   ) as unknown as Record<string, unknown>;
 
@@ -206,7 +207,7 @@ const PromptPacks = () => {
                         </div>
                       )}
                       <p className={`text-sm text-muted-foreground mt-2 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                        {pack.prompts} {currentText.prompts}
+                        {pack.library}
                       </p>
                     </div>
                     <ul className="space-y-3 text-left">

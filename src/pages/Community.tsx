@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { promptCountLabel, promptCountLabelBn, categoryCountLabel, categoryCountLabelBn } from "@/config/siteStats";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -6,9 +7,8 @@ import { SEOHead } from "@/components/SEOHead";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { Users, MessageSquare, Heart, Award, ExternalLink } from "lucide-react";
+import { Users, MessageSquare, ExternalLink, Sparkles } from "lucide-react";
 
 const Community = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -23,14 +23,6 @@ const Community = () => {
     localStorage.setItem('bdprompt-language', lang);
   };
 
-  const topContributors = [
-    { name: "রাহুল শর্মা", prompts: 45, likes: 1250 },
-    { name: "প্রিয়া দাস", prompts: 38, likes: 980 },
-    { name: "আহমেদ খান", prompts: 32, likes: 875 },
-    { name: "ফাতেমা বেগম", prompts: 28, likes: 720 },
-    { name: "রবি মেহতা", prompts: 25, likes: 650 }
-  ];
-
   const text = {
     bn: {
       title: "কমিউনিটি",
@@ -43,9 +35,6 @@ const Community = () => {
         discussions: "৭০%",
         discussionsLabel: "ক্রিয়েটর কমিশন"
       },
-      topContributors: "শীর্ষ অবদানকারী",
-      prompts: "টি প্রম্পট",
-      likes: "লাইক",
       joinDiscord: "Discord এ যোগ দিন",
       joinFacebook: "Facebook গ্রুপে যোগ দিন",
       joinTelegram: "Telegram এ যোগ দিন",
@@ -68,9 +57,6 @@ const Community = () => {
         discussions: "70%",
         discussionsLabel: "Creator Commission"
       },
-      topContributors: "Top Contributors",
-      prompts: "prompts",
-      likes: "likes",
       joinDiscord: "Join Discord",
       joinFacebook: "Join Facebook Group",
       joinTelegram: "Join Telegram",
@@ -187,40 +173,26 @@ const Community = () => {
               </Card>
             </section>
 
-            {/* Top Contributors */}
+            {/* Creator program CTA — no fabricated contributor stats */}
             <section>
               <h2 className={`text-2xl font-bold mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
-                {currentText.topContributors}
+                {language === 'bn' ? 'নিজের প্রম্পট পাবলিশ করুন' : 'Publish Your Own Prompts'}
               </h2>
-              <div className="space-y-4">
-                {topContributors.map((contributor, idx) => (
-                  <Card key={idx}>
-                    <CardContent className="flex items-center gap-4 py-4">
-                      <Badge variant="outline" className="w-8 h-8 rounded-full p-0 justify-center font-bold">
-                        {idx + 1}
-                      </Badge>
-                      <Avatar>
-                        <AvatarFallback className="bg-primary/10 text-primary">
-                          {contributor.name.charAt(0)}
-                        </AvatarFallback>
-                      </Avatar>
-                      <div className="flex-1">
-                        <p className={`font-medium ${language === 'bn' ? 'font-bengali' : ''}`}>
-                          {contributor.name}
-                        </p>
-                        <p className={`text-sm text-muted-foreground ${language === 'bn' ? 'font-bengali' : ''}`}>
-                          {contributor.prompts} {currentText.prompts}
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-1 text-muted-foreground">
-                        <Heart className="w-4 h-4" />
-                        <span className="text-sm">{contributor.likes}</span>
-                      </div>
-                      {idx === 0 && <Award className="w-5 h-5 text-yellow-500" />}
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
+              <Card>
+                <CardContent className="py-8 text-center">
+                  <Sparkles className="w-10 h-10 text-primary mx-auto mb-4" />
+                  <p className={`text-muted-foreground mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {language === 'bn'
+                      ? 'আপনার বাংলা প্রম্পট শেয়ার করুন এবং ক্রিয়েটর কমিশনে আয় করুন।'
+                      : 'Share your Bangla prompts and earn through the creator commission.'}
+                  </p>
+                  <Button asChild className={language === 'bn' ? 'font-bengali' : ''}>
+                    <Link to="/become-creator">
+                      {language === 'bn' ? 'ক্রিয়েটর হন' : 'Become a Creator'}
+                    </Link>
+                  </Button>
+                </CardContent>
+              </Card>
             </section>
           </div>
         </main>
