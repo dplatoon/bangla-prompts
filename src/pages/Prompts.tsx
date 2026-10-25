@@ -7,6 +7,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SEOHead } from "@/components/SEOHead";
+import { promptCountLabelBn } from "@/config/siteStats";
 import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -37,7 +38,7 @@ const Prompts = () => {
     <div className="min-h-screen bg-background">
       <SEOHead
         title="AI প্রম্পট ক্যাটাগরি | BD Prompt"
-        description="১০০+ প্রিমিয়াম ChatGPT ও AI প্রম্পট ক্যাটাগরি - SEO, মার্কেটিং, ফ্রিল্যান্সিং, কোডিং এবং আরও অনেক কিছু। এক ক্লিকে কপি করুন!"
+        description={`বাংলা ChatGPT ও AI প্রম্পট ক্যাটাগরি — ${promptCountLabelBn} ফ্রি প্রম্পট। SEO, মার্কেটিং, ফ্রিল্যান্সিং, কোডিং এবং আরও অনেক কিছু। এক ক্লিকে কপি করুন!`}
         keywords="AI prompts, ChatGPT prompts, বাংলা প্রম্পট, BD Prompt, SEO prompts, মার্কেটিং প্রম্পট"
         canonicalUrl="https://bdprompt.com/prompts"
       />
@@ -54,7 +55,7 @@ const Prompts = () => {
             🎯 AI প্রম্পট ক্যাটাগরি
           </h1>
           <p className="text-sm sm:text-base lg:text-lg text-muted-foreground max-w-2xl mx-auto px-2">
-            ১০০+ প্রিমিয়াম ChatGPT প্রম্পট বিভিন্ন ক্যাটাগরিতে সাজানো। 
+            {promptCountLabelBn} ফ্রি বাংলা ChatGPT প্রম্পট বিভিন্ন ক্যাটাগরিতে সাজানো।
             আপনার প্রয়োজন অনুযায়ী ক্যাটাগরি বেছে নিন এবং এক ক্লিকে প্রম্পট কপি করুন।
           </p>
         </section>
