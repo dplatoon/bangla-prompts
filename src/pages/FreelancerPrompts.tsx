@@ -545,6 +545,12 @@ const AIS: AIPlatform[] = ["ChatGPT", "Claude", "Gemini"];
 const AI_FILTER = ["All AI", ...AIS] as const;
 type AIFilter = (typeof AI_FILTER)[number];
 
+const AI_BADGE: Record<string, string> = {
+  ChatGPT: "bg-green-100 text-green-800 border-green-200",
+  Claude: "bg-orange-100 text-orange-800 border-orange-200",
+  Gemini: "bg-blue-100 text-blue-800 border-blue-200",
+};
+
 const formatNumber = (n: number) =>
   n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : String(n);
 
@@ -782,7 +788,7 @@ export default function FreelancerPrompts() {
                   <p className="text-xs text-cyan-700 font-medium mb-3">{p.tag}</p>
                   <div className="flex flex-wrap gap-1.5 mb-3">
                     {p.ai.map((a) => (
-                      <span key={a} className="text-[11px] font-medium bg-gray-100 text-gray-700 px-2 py-0.5 rounded">{a}</span>
+                      <span key={a} className={`text-[11px] font-semibold px-2 py-0.5 rounded border ${AI_BADGE[a] ?? "bg-gray-100 text-gray-700 border-gray-200"}`}>{a}</span>
                     ))}
                   </div>
                   <div className="relative mb-1">
@@ -808,6 +814,52 @@ export default function FreelancerPrompts() {
             })}
           </div>
         )}
+      </section>
+
+      {/* MODEL GUIDE & USAGE RULES */}
+      <section className="bg-white py-16" aria-labelledby="fl-model-guide">
+        <div className="max-w-6xl mx-auto px-4">
+          <h2 id="fl-model-guide" className="text-3xl md:text-4xl font-bold text-center text-teal-900 mb-4">
+            মডেল গাইড ও ব্যবহারের নিয়ম
+          </h2>
+          <p className="text-center text-gray-600 max-w-2xl mx-auto mb-12">
+            সঠিক AI মডেল বেছে নিলে এবং নিয়মগুলো মানলে এই prompts থেকে সবচেয়ে ভালো ফল পাবেন।
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-14">
+            {[
+              { name: "ChatGPT", badge: "bg-green-100 text-green-800 border-green-300", best: "Gig description, proposal, cold email", why: "Structure ও instruction follow করতে সবচেয়ে ভালো — দীর্ঘ, বিন্যাসযুক্ত লেখায় ধারাবাহিক থাকে।" },
+              { name: "Claude", badge: "bg-orange-100 text-orange-800 border-orange-300", best: "Cover letter, client message", why: "বাংলা লেখায় natural ও মানবিক সুর — negotiation বা client communication-এর মতো সূক্ষ্ম লেখায় সেরা।" },
+              { name: "Gemini", badge: "bg-blue-100 text-blue-800 border-blue-300", best: "Skill building, research", why: "দ্রুত ও বিনামূল্যে — research, skill planning এবং তুলনামূলক বিশ্লেষণের কাজে ভালো।" },
+            ].map((m) => (
+              <div key={m.name} className="bg-gray-50 rounded-xl p-6 border border-gray-100">
+                <span className={`inline-block text-sm font-bold px-3 py-1 rounded-full border mb-3 ${m.badge}`}>{m.name}</span>
+                <p className="text-sm font-semibold text-gray-900 mb-2">সেরা কাজ: {m.best}</p>
+                <p className="text-sm text-gray-600">{m.why}</p>
+              </div>
+            ))}
+          </div>
+
+          <h3 className="text-2xl font-bold text-gray-900 mb-6">ব্যবহারের ৬টি নিয়ম</h3>
+          <ol className="space-y-4 max-w-3xl mx-auto">
+            {[
+              { title: "[BRACKETS] পূরণ করুন", detail: "প্রতিটি [PLACEHOLDER]-এর জায়গায় নিজের তথ্য বসান। খালি bracket মানে generic লেখা, আর generic proposal মানে reject।" },
+              { title: "Job post থেকে specific detail নিন", detail: "Client-এর requirement-এর শব্দ ও প্রয়োজন prompt-এ ঢুকিয়ে দিন — এটাই AI লেখাকে personalized করে।" },
+              { title: "Output নিজের voice-এ edit করুন", detail: "AI লেখা starting point, শেষ কপি নয়। পুরোটা নিজে পড়ে দরকারমতো বাংলা-English মেশান।" },
+              { title: "Fact-check করুন", detail: "Income, tax, pricing সংক্রান্ত সংখ্যা AI ভুল দিতে পারে — ক্লায়েন্টের সামনে পাঠানোর আগে যাচাই করুন।" },
+              { title: "স্বচ্ছ থাকুন", detail: "Service delivery-তে AI ব্যবহার করলে client-কে জানান। Gig-এ AI use-এর বিরুদ্ধে নিয়ম নেই, তবে সততাই professional practice।" },
+              { title: "এক প্রম্পট, এক কাজ", detail: "Gig-এর জন্য gig prompt, proposal-এর জন্য proposal prompt — প্রতিটি prompt নির্দিষ্ট কাজের জন্য তৈরি।" },
+            ].map((r, i) => (
+              <li key={i} className="flex gap-4 items-start bg-gray-50 rounded-lg p-4">
+                <span className="w-8 h-8 rounded-full bg-teal-900 text-white text-sm font-bold flex items-center justify-center shrink-0">{i + 1}</span>
+                <div>
+                  <p className="font-semibold text-gray-900 text-sm mb-0.5">{r.title}</p>
+                  <p className="text-sm text-gray-600">{r.detail}</p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
       </section>
 
       {/* FAQ */}
