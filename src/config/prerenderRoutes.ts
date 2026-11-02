@@ -57,6 +57,7 @@ export const prerenderRoutes = [
   '/community',
   '/become-creator',
   '/guidelines',
+  '/about',
   '/support',
   '/sitemap',
   

@@ -103,6 +103,7 @@ const App = () => {
                 <Route path="/community" element={<Community />} />
                 <Route path="/become-creator" element={<BecomeCreator />} />
                 <Route path="/guidelines" element={<Guidelines />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/chatgpt-bangla-prompt" element={<BlogPostChatGPTBanglaPrompt />} />
