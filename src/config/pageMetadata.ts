@@ -167,6 +167,13 @@ export const pageMetadata: Record<string, PageMetadata> = {
     descriptionEn: 'Guidelines for submitting prompts and community rules on BdPrompt.',
     keywords: 'গাইডলাইন, submission rules, community guidelines'
   },
+  '/about': {
+    title: 'আমাদের সম্পর্কে | প্রম্পট তৈরির পদ্ধতি | BdPrompt',
+    titleEn: 'About Us | Prompt Creation Methodology | BdPrompt',
+    description: 'BdPrompt কীভাবে কাজ করে — প্রম্পট কীভাবে বাছাই, লেখা, টেস্ট ও আপডেট করা হয়, মান নিয়ন্ত্রণ চেকলিস্ট এবং আমাদের সততার নীতি। Start BD-এর বাংলা AI প্রম্পট হাব।',
+    descriptionEn: 'How BdPrompt selects, writes, tests and updates Bangla AI prompts — quality control checklist and honesty policy.',
+    keywords: 'আমাদের সম্পর্কে, about, methodology, prompt quality'
+  },
   '/dmca': {
     title: 'DMCA | কপিরাইট নীতি | BdPrompt',
     titleEn: 'DMCA | Copyright Policy | BdPrompt',

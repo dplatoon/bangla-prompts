@@ -336,6 +336,13 @@
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>
   </url>
+  <url>
+    <loc>https://bdprompt.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="bn" href="https://bdprompt.com/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://bdprompt.com/about" />
+    <changefreq>monthly</changefreq>
+    <priority>0.4</priority>
+  </url>
 
   <!-- BEGIN dynamic prompts -->
   <url>

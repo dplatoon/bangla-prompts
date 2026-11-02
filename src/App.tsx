@@ -25,6 +25,7 @@ const API = lazy(() => import("./pages/API"));
 const Community = lazy(() => import("./pages/Community"));
 const BecomeCreator = lazy(() => import("./pages/BecomeCreator"));
 const Guidelines = lazy(() => import("./pages/Guidelines"));
+const About = lazy(() => import("./pages/About"));
 const Support = lazy(() => import("./pages/Support"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPostChatGPTBanglaPrompt = lazy(() => import("./pages/BlogPostChatGPTBanglaPrompt"));
@@ -103,6 +104,7 @@ const App = () => {
                 <Route path="/community" element={<Community />} />
                 <Route path="/become-creator" element={<BecomeCreator />} />
                 <Route path="/guidelines" element={<Guidelines />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/support" element={<Support />} />
                 <Route path="/blog" element={<Blog />} />
                 <Route path="/blog/chatgpt-bangla-prompt" element={<BlogPostChatGPTBanglaPrompt />} />

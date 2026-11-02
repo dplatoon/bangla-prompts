@@ -551,8 +551,6 @@ const AI_BADGE: Record<string, string> = {
   Gemini: "bg-blue-100 text-blue-800 border-blue-200",
 };
 
-const formatNumber = (n: number) =>
-  n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : String(n);
 
 const INCOME_STATS = [
   { label: "Fiverr শুরুর income", value: "$200–500/mo", note: "প্রথম ৩ মাস" },
@@ -657,7 +655,7 @@ export default function FreelancerPrompts() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-cyan-400" />
             </span>
-            <span>৬৩,০০০+ বাংলাদেশি freelancer এই prompts ব্যবহার করছেন</span>
+            <span>প্রতিটি prompt টেস্ট করা — Fiverr ও Upwork-এর বাস্তব কাজের ধারায় তৈরি</span>
           </div>
 
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-5">
@@ -779,8 +777,7 @@ export default function FreelancerPrompts() {
                       )}
                     </div>
                     <div className="text-xs text-gray-500 text-right shrink-0">
-                      <div>⭐ {p.rating}</div>
-                      <div>{formatNumber(p.uses)} uses</div>
+                      <div>✓ টেস্ট করা</div>
                     </div>
                   </div>
                   <h3 className="text-lg font-bold text-gray-900 leading-snug">{p.title}</h3>
@@ -907,7 +904,7 @@ export default function FreelancerPrompts() {
             <span className="text-amber-400">Freelancing Career</span> শুরু করুন
           </h2>
           <p className="text-cyan-100 max-w-2xl mx-auto mb-8">
-            ৬৩,০০০+ বাংলাদেশি freelancer এই prompts দিয়ে Fiverr ও Upwork-এ সফল হচ্ছেন। আপনিও পারবেন।
+            Fiverr ও Upwork-এর জন্য তৈরি ও টেস্ট-করা বাংলা prompt — বিনামূল্যে কপি করে আজই শুরু করুন।
           </p>
           <div className="flex flex-col sm:flex-row gap-3 justify-center">
             <a href="#prompts" className="bg-amber-400 hover:bg-amber-500 text-teal-950 font-bold px-6 py-3 rounded-lg transition">

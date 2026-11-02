@@ -119,8 +119,6 @@ const FAQS = [
   },
 ];
 
-const formatNumber = (n: number) =>
-  n >= 1000 ? `${(n / 1000).toFixed(n % 1000 === 0 ? 0 : 1)}K` : String(n);
 
 export default function YoutubeScriptPrompts() {
   const [selectedCategory, setSelectedCategory] = useState<(typeof CATEGORIES)[number]>("All");
@@ -197,7 +195,7 @@ export default function YoutubeScriptPrompts() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75" />
               <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500" />
             </span>
-            <span>১,৮৯০+ বাংলাদেশি YouTuber ব্যবহার করছেন</span>
+            <span>প্রতিটি prompt নিজেরা টেস্ট করা — ChatGPT, Claude ও Gemini-তে যাচাই</span>
           </div>
           <h1 className="text-4xl md:text-6xl font-bold leading-tight mb-5">
             YouTube Script লেখার <span className="text-amber-400">বাংলা AI Prompt</span>
@@ -241,8 +239,8 @@ export default function YoutubeScriptPrompts() {
         <div className="max-w-5xl mx-auto px-4 py-8 grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
           {[
             { v: "6+", l: "Prompts" },
-            { v: "13K+", l: "Copies" },
-            { v: "4.9★", l: "Rating" },
+            { v: "১০০%", l: "বিনামূল্যে" },
+            { v: "✓", l: "টেস্ট-করা prompt" },
             { v: "3", l: "AI Platforms" },
           ].map((s) => (
             <div key={s.l}>
@@ -338,8 +336,7 @@ export default function YoutubeScriptPrompts() {
                       )}
                     </div>
                     <div className="text-xs text-gray-500 text-right shrink-0">
-                      <div>⭐ {p.rating}</div>
-                      <div>{formatNumber(p.uses)} uses</div>
+                      <div>✓ টেস্ট করা</div>
                     </div>
                   </div>
 

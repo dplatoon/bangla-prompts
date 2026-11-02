@@ -27,6 +27,7 @@ export const Footer = ({ language }: FooterProps) => {
           title: "কমিউনিটি",
           links: [
             { label: "ক্রিয়েটর হন", href: "/become-creator" },
+            { label: "আমাদের সম্পর্কে", href: "/about" },
             { label: "গাইডলাইনস", href: "/guidelines" },
             { label: "সাপোর্ট", href: "/support" },
             { label: "ব্লগ", href: "/blog" }
@@ -68,6 +69,7 @@ export const Footer = ({ language }: FooterProps) => {
           title: "Community",
           links: [
             { label: "Become Creator", href: "/become-creator" },
+            { label: "About Us", href: "/about" },
             { label: "Guidelines", href: "/guidelines" },
             { label: "Support", href: "/support" },
             { label: "Blog", href: "/blog" }
