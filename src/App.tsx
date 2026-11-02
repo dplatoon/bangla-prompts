@@ -25,6 +25,7 @@ const API = lazy(() => import("./pages/API"));
 const Community = lazy(() => import("./pages/Community"));
 const BecomeCreator = lazy(() => import("./pages/BecomeCreator"));
 const Guidelines = lazy(() => import("./pages/Guidelines"));
+const About = lazy(() => import("./pages/About"));
 const Support = lazy(() => import("./pages/Support"));
 const Blog = lazy(() => import("./pages/Blog"));
 const BlogPostChatGPTBanglaPrompt = lazy(() => import("./pages/BlogPostChatGPTBanglaPrompt"));
