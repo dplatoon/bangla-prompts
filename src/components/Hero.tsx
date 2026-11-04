@@ -190,6 +190,23 @@ export const Hero = ({ language }: HeroProps) => {
               ))}
             </nav>
 
+            {/* Quick access to top 3 landing pages */}
+            <nav className="grid grid-cols-1 sm:grid-cols-3 gap-3" aria-label={currentText.featuredLabel}>
+              {currentText.featured.map((f) => (
+                <Link
+                  key={f.to}
+                  to={f.to}
+                  className={`group rounded-xl border border-primary-foreground/20 bg-primary-foreground/10 backdrop-blur-sm px-4 py-3 hover:bg-primary-foreground/20 hover:border-primary-foreground/35 transition-colors ${language === 'bn' ? 'font-bengali' : ''}`}
+                >
+                  <span className="flex items-center justify-between text-sm font-semibold text-primary-foreground">
+                    {f.label}
+                    <ArrowRight className="w-4 h-4 opacity-60 group-hover:translate-x-0.5 group-hover:opacity-100 transition-all" aria-hidden="true" />
+                  </span>
+                  <span className="block text-xs text-primary-foreground/65 mt-0.5">{f.desc}</span>
+                </Link>
+              ))}
+            </nav>
+
             {/* CTAs */}
             <nav className="flex flex-col sm:flex-row gap-3 sm:gap-4" aria-label={language === 'bn' ? 'প্রধান অ্যাকশন' : 'Main actions'}>
               <Button size="lg" className={`group bg-primary-foreground text-primary hover:bg-primary-foreground/90 font-semibold text-base px-8 h-12 rounded-xl shadow-lg ${language === 'bn' ? 'font-bengali' : ''}`} asChild>
