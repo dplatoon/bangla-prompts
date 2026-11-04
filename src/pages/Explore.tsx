@@ -577,6 +577,14 @@ const Explore = () => {
                 {language === 'bn' ? '🧪 প্লেগ্রাউন্ডে টেস্ট করুন' : '🧪 Test in Playground'}
               </a>
               <span className="text-muted-foreground">•</span>
+              <a href="/video-generation-prompts" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '🎬 AI ভিডিও প্রম্পট' : '🎬 AI Video Prompts'}
+              </a>
+              <span className="text-muted-foreground">•</span>
+              <a href="/image-generation-prompts" className="text-sm text-primary hover:underline">
+                {language === 'bn' ? '🎨 AI ইমেজ প্রম্পট' : '🎨 AI Image Prompts'}
+              </a>
+              <span className="text-muted-foreground">•</span>
               <a href="/packs" className="text-sm text-primary hover:underline">
                 {language === 'bn' ? '📦 প্রম্পট প্যাক দেখুন' : '📦 View Prompt Packs'}
               </a>
