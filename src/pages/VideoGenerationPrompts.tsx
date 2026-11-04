@@ -645,9 +645,11 @@ export default function VideoGenerationPrompts() {
       <section className="bg-white border-t border-gray-100 py-10">
         <div className="max-w-5xl mx-auto px-4">
           <h3 className="text-lg font-bold text-gray-800 mb-5 text-center">আরও Prompt দেখুন</h3>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
             {[
+              { label: "🧭 সব প্রম্পট এক্সপ্লোর করুন", href: "/explore" },
               { label: "🖼️ Image Generation", href: "/image-generation-prompts" },
+              { label: "📦 প্রিমিয়াম প্যাক", href: "/packs" },
               { label: "🎬 YouTube Script", href: "/youtube-script-prompts" },
               { label: "📱 Facebook Post", href: "/facebook-post-prompts" },
               { label: "📢 Ad Copy", href: "/ad-copy-prompts" },
