@@ -275,7 +275,7 @@ export default function ImageGenerationPrompts() {
           </Link>
           <div className="hidden md:flex items-center gap-6 text-sm">
             <Link to="/explore" className="hover:text-amber-400 transition">Explore</Link>
-            <Link to="/prompts" className="hover:text-amber-400 transition">Prompts</Link>
+            <Link to="/video-generation-prompts" className="hover:text-amber-400 transition">Video AI</Link>
             <Link to="/youtube-script-prompts" className="hover:text-amber-400 transition">YouTube</Link>
             <Link to="/packs" className="hover:text-amber-400 transition">Packs</Link>
           </div>

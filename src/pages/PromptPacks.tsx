@@ -7,6 +7,7 @@ import { Breadcrumbs } from "@/components/Breadcrumbs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Link } from "react-router-dom";
 import { Check, Package, Sparkles, Zap, Crown } from "lucide-react";
 import { promptCount, promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
 
@@ -231,6 +232,59 @@ const PromptPacks = () => {
               );
             })}
           </div>
+
+          {/* Cross-Links to Prompt Pages for SEO */}
+          <section className="mt-12 max-w-6xl mx-auto border-t border-border pt-8">
+            <h2 className={`text-xl sm:text-2xl font-bold text-foreground mb-3 ${language === 'bn' ? 'font-bengali' : ''}`}>
+              {language === 'bn' ? 'প্যাক কেনার আগে প্রম্পটগুলো দেখে নিন' : 'Browse the prompts before you buy'}
+            </h2>
+            <p className={`text-sm text-muted-foreground mb-6 ${language === 'bn' ? 'font-bengali' : ''}`}>
+              {language === 'bn'
+                ? 'প্রতিটি প্যাকের প্রম্পট কীভাবে কাজ করে তা দেখতে নিচের পেজগুলোতে যান — বিনামূল্যে কপি করে টেস্ট করা যায়।'
+                : 'See how the prompts in each pack work — free to copy and test on these pages.'}
+            </p>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+              {[
+                {
+                  href: "/explore",
+                  icon: "🧭",
+                  titleBn: "সব প্রম্পট এক্সপ্লোর করুন",
+                  titleEn: "Explore All Prompts",
+                  descBn: "সব ক্যাটাগরির ফ্রি ও প্রিমিয়াম প্রম্পট এক জায়গায়।",
+                  descEn: "Free and premium prompts from every category in one place.",
+                },
+                {
+                  href: "/video-generation-prompts",
+                  icon: "🎬",
+                  titleBn: "AI ভিডিও প্রম্পট",
+                  titleEn: "AI Video Prompts",
+                  descBn: "Sora, Runway, Pika, CapCut AI-এর জন্য ready-made ভিডিও প্রম্পট।",
+                  descEn: "Ready-made video prompts for Sora, Runway, Pika, and CapCut AI.",
+                },
+                {
+                  href: "/image-generation-prompts",
+                  icon: "🎨",
+                  titleBn: "AI ইমেজ প্রম্পট",
+                  titleEn: "AI Image Prompts",
+                  descBn: "Midjourney, DALL-E 3, Stable Diffusion-এর জন্য ইমেজ প্রম্পট।",
+                  descEn: "Image prompts for Midjourney, DALL-E 3, and Stable Diffusion.",
+                },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  to={link.href}
+                  className="block p-4 rounded-xl border border-border hover:border-primary/50 hover:bg-accent/5 transition-all"
+                >
+                  <p className={`font-medium text-foreground text-sm ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {language === 'bn' ? `${link.icon} ${link.titleBn}` : `${link.icon} ${link.titleEn}`}
+                  </p>
+                  <p className={`text-xs text-muted-foreground mt-1 ${language === 'bn' ? 'font-bengali' : ''}`}>
+                    {language === 'bn' ? link.descBn : link.descEn}
+                  </p>
+                </Link>
+              ))}
+            </div>
+          </section>
         </main>
 
         <Footer language={language} />
