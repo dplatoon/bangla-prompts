@@ -149,9 +149,10 @@ Your responsibilities:
 
 Be concise, friendly, and culturally aware when dealing with Bangla users. If a user asks in Bangla (বাংলা), respond in Bangla. If they ask in English, respond in English.`
             },
-            // Rebuild message objects with only safe fields (role + content)
+            // Conversation history is caller-controlled, so never grant it the
+            // assistant role. Treat every supplied turn as untrusted user context.
             ...messages.slice(-20).map((msg: { role: string; content: string }) => ({
-              role: msg.role,
+              role: "user",
               content: msg.content,
             })),
           ],
