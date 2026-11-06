@@ -16,9 +16,9 @@ export const pageMetadata: Record<string, PageMetadata> = {
   '/': {
     title: `বাংলা AI প্রম্পট জেনারেটর | ${promptCountLabelBn} প্রম্পট | BdPrompt`,
     titleEn: `Bangla AI Prompt Generator | ${promptCountLabel} Prompts | BdPrompt`,
-    description: `${promptCountLabelBn} বাংলা AI প্রম্পট ChatGPT, Claude, Gemini-এর জন্য। শিক্ষা, ব্যবসা, কন্টেন্ট, কবিতা এবং আরও অনেক কিছু।`,
-    descriptionEn: `${promptCountLabel} Bangla AI prompts for ChatGPT, Claude, Gemini. Education, business, content, poetry and more.`,
-    keywords: 'বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, AI prompts Bangladesh'
+    description: `SSC পরীক্ষার প্রস্তুতি, ফ্রিল্যান্সিং কাজ এবং ChatGPT বাংলা ব্যবহারের জন্য ${promptCountLabelBn} বাংলা AI প্রম্পট খুঁজুন। ChatGPT, Claude ও Gemini-তে ব্যবহার করুন—সাইনআপ ছাড়াই কপি করুন।`,
+    descriptionEn: `Find ${promptCountLabel} Bangla AI prompts for SSC exam preparation, freelancing work and using ChatGPT in Bangla. Copy for ChatGPT, Claude or Gemini without signing up.`,
+    keywords: 'বাংলা AI প্রম্পট, SSC পরীক্ষার প্রম্পট, ফ্রিল্যান্সার প্রম্পট, ChatGPT বাংলা, Bangla AI prompts, AI prompts Bangladesh'
   },
   '/explore': {
     title: `বাংলা AI প্রম্পট ব্রাউজ করুন | ${promptCountLabelBn} ফ্রি প্রম্পট | BdPrompt`,

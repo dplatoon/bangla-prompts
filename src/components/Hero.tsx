@@ -12,6 +12,19 @@ interface HeroProps {
   language: 'bn' | 'en';
 }
 
+export const homepageQuickLinks = {
+  bn: [
+    { label: "SSC পরীক্ষার প্রম্পট", desc: "পড়াশোনা ও প্রস্তুতি", to: "/ssc-exam-prompts" },
+    { label: "ফ্রিল্যান্সার প্রম্পট", desc: "Fiverr ও Upwork-এর কাজের ধারায়", to: "/freelancer-prompts" },
+    { label: "ChatGPT বাংলা গাইড", desc: "২০+ কপি-রেডি প্রম্পট টিপসসহ", to: "/blog/chatgpt-bangla-prompt" },
+  ],
+  en: [
+    { label: "SSC exam prompts", desc: "Study & exam preparation", to: "/ssc-exam-prompts" },
+    { label: "Freelancer prompts", desc: "Built for Fiverr & Upwork work", to: "/freelancer-prompts" },
+    { label: "ChatGPT Bangla guide", desc: "20+ copy-ready prompts with tips", to: "/blog/chatgpt-bangla-prompt" },
+  ],
+} as const;
+
 export const Hero = ({ language }: HeroProps) => {
   const [translitInput, setTranslitInput] = useState("");
   const [banglaOutput, setBanglaOutput] = useState("");
@@ -50,11 +63,6 @@ export const Hero = ({ language }: HeroProps) => {
         { label: "কন্টেন্ট ক্রিয়েটর", to: "/explore/content" },
       ],
       featuredLabel: "জনপ্রিয় বিষয়",
-      featured: [
-        { label: "SSC পরীক্ষার প্রম্পট", desc: "পড়াশোনা ও প্রস্তুতি", to: "/ssc-exam-prompts" },
-        { label: "ফ্রিল্যান্সার প্রম্পট", desc: "Fiverr ও Upwork-এর কাজের ধারায়", to: "/freelancer-prompts" },
-        { label: "ChatGPT বাংলা গাইড", desc: "২০+ কপি-রেডি প্রম্পট টিপসসহ", to: "/blog/chatgpt-bangla-prompt" },
-      ],
       tryPrompt: "এখনই চেষ্টা করুন",
       placeholder: "আপনার প্রম্পট লিখুন...",
       translitTitle: "লাইভ ট্রান্সলিটেরেশন",
@@ -86,11 +94,6 @@ export const Hero = ({ language }: HeroProps) => {
         { label: "Content Creator", to: "/explore/content" },
       ],
       featuredLabel: "Popular topics",
-      featured: [
-        { label: "SSC exam prompts", desc: "Study & exam preparation", to: "/ssc-exam-prompts" },
-        { label: "Freelancer prompts", desc: "Built for Fiverr & Upwork work", to: "/freelancer-prompts" },
-        { label: "ChatGPT Bangla guide", desc: "20+ copy-ready prompts with tips", to: "/blog/chatgpt-bangla-prompt" },
-      ],
       tryPrompt: "Try Now",
       placeholder: "Write your prompt...",
       translitTitle: "Live Transliteration",
@@ -192,7 +195,7 @@ export const Hero = ({ language }: HeroProps) => {
 
             {/* Quick access to top 3 landing pages */}
             <nav className="grid grid-cols-1 sm:grid-cols-3 gap-3" aria-label={currentText.featuredLabel}>
-              {currentText.featured.map((f) => (
+              {homepageQuickLinks[language].map((f) => (
                 <Link
                   key={f.to}
                   to={f.to}

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { Header } from "@/components/Header";
-import { Hero } from "@/components/Hero";
+import { Hero, homepageQuickLinks } from "@/components/Hero";
 import { FeatureGrid } from "@/components/FeatureGrid";
 import { PromptShowcase } from "@/components/PromptShowcase";
 import { MostCopiedSection } from "@/components/MostCopiedSection";
@@ -12,7 +12,7 @@ import { buildHomeGraph } from "@/lib/bdprompt-schema";
 import { FAQ, getFaqData } from "@/components/FAQ";
 import { PWAStatus } from "@/components/PWAStatus";
 import { PromptCategoryLinks } from "@/components/PromptCategoryLinks";
-import { promptCountLabel, promptCountLabelBn } from "@/config/siteStats";
+import { getPageMetadata } from "@/config/pageMetadata";
 
 const Index = () => {
   const [language, setLanguage] = useState<'bn' | 'en'>('bn');
@@ -42,24 +42,18 @@ const Index = () => {
     localStorage.setItem('bdprompt-language', lang);
   };
 
-  // Counts are derived from the build-time prompt list (siteStats) so the meta
-  // title always matches the hero section — no hardcoded numbers to drift.
-  const seoContent = {
-    bn: {
-      title: `বাংলা AI প্রম্পট — ${promptCountLabelBn} ChatGPT ও Claude প্রম্পট | BdPrompt`,
-      description: `বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ${promptCountLabelBn} ready prompts। ChatGPT, Claude ও Gemini সাপোর্টেড।`,
-      keywords: "বাংলা AI প্রম্পট, Bangla prompts, ChatGPT বাংলা, শিক্ষা প্রম্পট, ফ্রিল্যান্সিং প্রম্পট, ব্যবসা প্রম্পট, AI prompts Bangladesh"
-    },
-    en: {
-      title: `Bangla AI Prompt Generator — ${promptCountLabel} ChatGPT Prompts | BdPrompt`,
-      description: `Generate free Bangla AI prompts for ChatGPT, Claude & Gemini. ${promptCountLabel} ready-to-use prompts for students, freelancers & businesses. No signup needed.`,
-      keywords: "Bangla AI prompts, education prompts Bangla, freelancer AI prompts, ChatGPT Bangla, AI prompts Bangladesh, business prompts, content prompts"
-    }
-  };
-
-  const currentSEO = seoContent[language];
+  const currentSEO = getPageMetadata('/', language);
   const homeGraph = buildHomeGraph(
-    getFaqData(language).map((item) => ({ q: item.question, a: item.answer }))
+    getFaqData(language).map((item) => ({ q: item.question, a: item.answer })),
+    {
+      title: currentSEO.title,
+      description: currentSEO.description,
+      featuredPages: homepageQuickLinks.bn.map((link) => ({
+        name: link.label,
+        description: link.desc,
+        url: `https://bdprompt.com${link.to}`,
+      })),
+    }
   ) as unknown as Record<string, unknown>;
 
   return (
