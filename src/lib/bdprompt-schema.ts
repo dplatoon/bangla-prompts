@@ -225,12 +225,18 @@ export function buildGraph(meta: PageMeta, extra: unknown[] = []) {
 /* PAGE TYPE 1 — HOMEPAGE                                              */
 /* ------------------------------------------------------------------ */
 
-export function buildHomeGraph(faqs: { q: string; a: string }[]) {
+export function buildHomeGraph(
+  faqs: { q: string; a: string }[],
+  options: {
+    title: string;
+    description: string;
+    featuredPages: Array<{ name: string; description: string; url: string }>;
+  }
+) {
   const meta: PageMeta = {
     path: "/",
-    title: "বাংলা AI প্রম্পট — 60+ ChatGPT ও Claude প্রম্পট | BdPrompt",
-    description:
-      "বাংলায় AI prompt তৈরি করুন — সম্পূর্ণ বিনামূল্যে। Students, freelancers ও businesses-এর জন্য ৬০+ ready prompts।",
+    title: options.title,
+    description: options.description,
     crumbs: [{ name: "হোম", path: "/" }],
   };
 
@@ -277,7 +283,27 @@ export function buildHomeGraph(faqs: { q: string; a: string }[]) {
     inLanguage: "bn",
   };
 
-  return buildGraph(meta, [webApp, faqPage]);
+  const quickLinks = {
+    "@type": "ItemList",
+    "@id": `${SITE}/#featured-guides`,
+    name: "জনপ্রিয় বাংলা AI প্রম্পট গাইড",
+    description: "SSC পরীক্ষার প্রস্তুতি, ফ্রিল্যান্সিং এবং ChatGPT বাংলা ব্যবহারের জন্য BdPrompt-এর নির্বাচিত গাইড।",
+    numberOfItems: options.featuredPages.length,
+    itemListElement: options.featuredPages.map((page, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      item: {
+        "@type": "WebPage",
+        "@id": page.url,
+        url: page.url,
+        name: page.name,
+        description: page.description,
+        inLanguage: "bn",
+      },
+    })),
+  };
+
+  return buildGraph(meta, [webApp, faqPage, quickLinks]);
 }
 
 /* ------------------------------------------------------------------ */
